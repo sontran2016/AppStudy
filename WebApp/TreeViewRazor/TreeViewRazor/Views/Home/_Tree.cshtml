@@ -1,0 +1,64 @@
+﻿@using WebApplication1.Models
+@model IEnumerable<TreeModel>
+@{
+    Layout = null;
+}
+<link href="/Content/jquery.treeview.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.treeview.js"></script>
+   
+    @helper DrawTree(TreeModel node, IEnumerable<TreeModel> nodes)
+    {
+        var childNodes = nodes.Where(x => x.ParentId == node.Id);
+        string iconPath = "";
+        switch (node.NodeType)
+        {
+            case NodeType.Server:
+                iconPath = "/Images/server1.ico";
+                break;
+            case NodeType.Computer:
+                iconPath = "/Images/settings.ico";
+                break;
+            case NodeType.Tag:
+                iconPath = "/Images/edit.ico";
+                break;
+            default:
+                iconPath = "/Images/file.gif";
+                break;
+        }
+        <li>
+            <img src="@iconPath" />
+            <span>@node.Name</span>
+            @if (childNodes.Any())
+            {
+                <ul>
+                    @foreach (var n in childNodes)
+                    {
+                        @DrawTree(n, Model)
+                    }
+                </ul>
+            }
+        </li>
+    }
+    @{
+        if (Model == null)
+        {
+            return;
+        }
+        var parentNodes = Model.Where(x => x.ParentId == null);
+        <ul id="treeView1">
+            @foreach (var n in parentNodes)
+            {
+                @DrawTree(n, Model)
+            }
+        </ul>
+    }
+
+<script>
+    $(document).ready(function () {
+        $("#treeView1").treeview();
+        $('#treeView1 li span').click(function () {
+            var txt = $(this).text();
+            alert(txt);
+        });
+    });
+</script>

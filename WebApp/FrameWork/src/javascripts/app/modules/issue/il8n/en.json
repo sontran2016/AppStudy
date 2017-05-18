@@ -1,0 +1,33 @@
+{
+  "ISSUE": {
+    "HEADING": "ISSUES MANAGEMENT",
+    "ADD_HEADING": "ADD NEW ISSUE",
+    "EDIT_HEADING": "EDIT ISSUE",
+    "DETAIL_HEADING": "ISSUE DETAILS",
+    "ADD_TROUBLESHOOT_HEADING": "ADD NEW TROUBLESHOOT",
+    "STATUS": "Issue Status",
+    "BTN_ADD": "New Issue",
+    "ONLY_MY_ISSUES": "Only My Issue(s)",
+    "ISSUE_DATE": "Issue Date",
+    "CREATED_BY": "Created By",
+    "ADD_NEW_POTENTIAL_CAUSE": "Add New Potential Cause",
+    "TROUBLESHOOT_DETAIL": "Troubleshoot Detail",
+    "ENTER_KEYWORD": "- Enter the issue keyword -",
+    "ISSUE_REJECTED": "This issue has been rejected due to reason(s): ",
+    "ADD_TROUBLESHOOT": " to add new troubleshoot",
+    "CONFIRM_CHANGE_SYMPTOM": "Change symptom or potential cause will remove the existing binding troubleshoot from issue. Do you want to continue?",
+    "TROUBLE_NOT_APPROVED": "(This trouble has no confirmed shooting)",
+    "TROUBLE_APPROVED": "(This trouble has an confirmed shooting)",
+    "TROUBLE_INACTIVE": "(This trouble has been deactivated)",
+    "CHANGE_TROUBLESHOOT": "Change Another Troubleshoot",
+    "BTN_ADD_TROUBLESHOOT": "Add New Troubleshoot",
+    "BTN_VIEW_TROUBLESHOOT": "View Troubleshoot",
+    "NOT_HAVE_TROUBLE": "Not Have Troubleshoot",
+    "ADD_SHOOTING": "Add Version",
+    "VIEW_SHOOTING": "View Version",
+    "LIST_ISSUE_SUGGEST": "List Issue Suggest",
+    "DETAIL_INFORMATION": "Issue Detail Information",
+    "NO_SUGGEST_ISSUE": "There is no issue(s) suggested for this issue",
+    "SUSSGEST_ISSUE_DETAIL": "Suggest Issue Detail"
+  }
+}

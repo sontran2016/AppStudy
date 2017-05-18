@@ -1,0 +1,57 @@
+<div class="panel panel-filter">
+  <div class="panel-heading" ng-click="vm.isCollapsed = !vm.isCollapsed">
+    <div class="row">
+      <div class="col-sm-12 text-left">
+        <i class="fa fa-filter"></i> <span translate="GENERAL.SEARCH_FILTER"></span>
+        <i ng-if="!vm.isCollapsed" class="fa fa-caret-up pull-right"></i>
+        <i ng-if="vm.isCollapsed" class="fa fa-caret-down pull-right"></i>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body" uib-collapse="vm.isCollapsed">
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="form-group">
+          <label translate="GENERAL.AREA"></label>
+          <select class="form-control"
+                  kendo-multi-select
+                  k-data-text-field="'name'" k-data-value-field="'id'"
+                  k-data-source="vm.areas"
+                  k-placeholder="'- Any Areas -'"
+                  k-value-primitive="true"
+                  k-auto-bind="false"
+                  ng-model="vm.areaIds"
+                  ng-change="vm.search()">
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label translate="USER.ROLE"></label>
+          <select class="form-control"
+                  ng-model="vm.role"
+                  ng-change="vm.search()"
+                  kendo-drop-down-list
+                  k-options="{optionLabel: '- Any Roles -'}"
+                  k-data-text-field="'label'"
+                  k-data-value-field="'value'"
+                  k-auto-bind="false"
+                  k-data-source="vm.roles">
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label translate="USER.NAME_EMAIL"></label>
+          <input type="text" class="form-control"
+                 name="keyword" ng-model="vm.keyword"
+                 ng-model-options="{debounce: { 'default': 500} }" ng-change="vm.search()"
+                 placeholder="{{'USER.ENTER_KEYWORD' | translate}}"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

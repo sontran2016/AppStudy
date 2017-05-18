@@ -1,0 +1,14 @@
+<div class="top-troubleshoot-panel">
+	<div class="row m-n my-trouble-item" ng-repeat="troubleshoot in vm.myTroubles">
+	  <div class="col-sm-12 no-padder">
+	    <span class="pointer" ng-bind="troubleshoot.title" ui-sref="app.troubleshootDetails({id: troubleshoot.id})"></span>
+	  </div>
+	</div>
+	<div class="row">
+	  <div class="col-sm-12 text-right">
+	    <button type="button" class="btn btn-view-more m-t" ui-sref="app.troubleshoot">
+	      <span translate="HOME.VIEW_MORE"></span>
+	    </button>
+	  </div>
+	</div>
+</div>

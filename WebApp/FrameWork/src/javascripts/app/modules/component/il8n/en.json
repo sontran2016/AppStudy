@@ -1,0 +1,12 @@
+{
+  "COMPONENT": {
+    "HEADING": "COMPONENTS MANAGEMENT",
+    "ADD_HEADING": "ADD NEW COMPONENT",
+    "EDIT_HEADING": "EDIT COMPONENT",
+    "BTN_ADD": "New Component",
+    "NAME": "Component Name",
+    "CODE": "Component Code",
+    "MACHINE_NAME": "Machine Name",
+    "ENTER_KEYWORD": "- Enter the component name keyword -"
+  }
+}

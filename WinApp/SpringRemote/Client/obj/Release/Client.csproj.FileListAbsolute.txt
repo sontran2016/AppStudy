@@ -1,0 +1,10 @@
+C:\SonTran\Example\SpringRemote\Client\bin\Release\Client.exe.config
+C:\SonTran\Example\SpringRemote\Client\bin\Release\Client.exe
+C:\SonTran\Example\SpringRemote\Client\bin\Release\Client.pdb
+C:\SonTran\Example\SpringRemote\Client\bin\Release\RemoteObject.dll
+C:\SonTran\Example\SpringRemote\Client\bin\Release\RemoteObject.pdb
+C:\SonTran\Example\SpringRemote\Client\obj\Release\Sample.Client.Client.resources
+C:\SonTran\Example\SpringRemote\Client\obj\Release\Client.Properties.Resources.resources
+C:\SonTran\Example\SpringRemote\Client\obj\Release\Client.csproj.GenerateResource.Cache
+C:\SonTran\Example\SpringRemote\Client\obj\Release\Client.exe
+C:\SonTran\Example\SpringRemote\Client\obj\Release\Client.pdb

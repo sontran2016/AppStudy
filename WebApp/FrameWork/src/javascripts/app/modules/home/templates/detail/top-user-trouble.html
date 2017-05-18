@@ -1,0 +1,11 @@
+<div class="top-user-troubleshoot-panel">
+	<div class="row m-t m-l-none m-r-none">
+	  <div class="col-sm-3" ng-repeat="user in vm.topUserCreatedTroubles">
+	    <div class="top-user-item">
+	      <span ng-bind="user.userCreated.firstName"></span> 
+	      <span ng-bind="user.userCreated.lastName"></span>
+	      (<em ng-bind="user.count"></em>)
+	    </div>
+	  </div>
+	</div>
+</div>

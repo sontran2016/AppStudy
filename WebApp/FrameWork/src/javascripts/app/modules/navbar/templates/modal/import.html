@@ -1,0 +1,74 @@
+<div class="panel panel-filter panel-import">
+  <div class="panel-heading" ng-if="vm.data.dataType === 'master'" translate="NAVBAR.IMPORT_MASTER_DATA"></div>
+  <div class="panel-body">
+
+    <div ng-if="vm.data.dataType === 'master'">
+      <div class="row m-b" ng-if="!vm.selectedFile">
+        <div class="col-sm-12">
+          <span translate="NAVBAR.UPLOAD_FILE_MASTER"></span>
+          <button type="button" class="btn btn-primary btn-sm m-l"
+              ngf-select="vm.uploadFile()" ngf-multiple="false"
+              ngf-keep="'distinct'" ngf-accept="'.xls,.xlsx'" ng-model="vm.file">
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+            <span translate="GENERAL.BROWSE_FILES"></span>
+          </button>
+        </div>
+      </div>
+      <div class="row m-b" ng-if="vm.selectedFile">
+        <div class="col-sm-6">
+          <span translate="NAVBAR.UPLOAD_FILE_MASTER"></span>
+        </div>
+        <div class="col-sm-6">
+          <span class="file-name" ng-bind="vm.selectedFile.name"></span><br /><br />
+          <button class="btn btn-primary btn-sm" type="button"
+              ngf-select="vm.uploadFile()" ngf-multiple="false"
+              ngf-keep="'distinct'" ngf-accept="'.xls,.xlsx'" ng-model="vm.file">
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+            <span translate="GENERAL.CHANGE_FILE"></span>
+          </button>
+          <button class="btn btn-danger btn-sm" type="button" ng-click="vm.removeFile()">
+            <i class="fa fa-times" aria-hidden="true"></i>
+            <span translate="GENERAL.REMOVE"></span>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <em><span translate="NAVBAR.NOTICE_IMPORT_MASTER_DATA"></span></em>
+        </div>
+      </div>
+    </div>
+
+    <hr ng-if="vm.errorList.length" />
+    <div ng-if="vm.errorList.length" class="error-container">
+      <h5 translate="GENERAL.ERROR"></h5>
+      <div class="row" ng-repeat="item in vm.errorList">
+        <div class="col-sm-12">
+          <span ng-bind="'- ' + item"></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <div class="form-group">
+      <div class="col-sm-12 text-right">
+        <button type="button" class="btn btn-info btn-sm m-l-xs" ng-click="vm.downloadTemplate()">
+          <i class="fa fa-cloud-download" aria-hidden="true"></i>
+          <span translate="GENERAL.DOWNLOAD_TEMPLATE"></span>
+        </button>
+        <button class="btn btn-success btn-sm" type="button" ng-click="vm.importFile(vm.data.dataType)" ng-disabled="!vm.selectedFile">
+          <i class="fa fa-floppy-o" aria-hidden="true"></i>
+          <span translate="GENERAL.IMPORT"></span>
+        </button>
+        <button class="btn btn-danger btn-sm" type="button" ng-click="vm.close()">
+          <i class="fa fa-ban" aria-hidden="true"></i>
+          <span translate="GENERAL.CANCEL"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

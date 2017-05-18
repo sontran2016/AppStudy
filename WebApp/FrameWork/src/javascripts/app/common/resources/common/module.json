@@ -1,0 +1,17 @@
+{
+	"TAG": "tags",
+	"AREA": "areas",
+	"USER": "users",
+	"ISSUE": "issues",
+	"TROUBLESHOOT": "troubles",
+	"LINE": "lines",
+	"MACHINE": "machines",
+	"COMPONENT": "components",
+	"SYMPTOM": "symptoms",
+	"POTENTIAL_CAUSE": "potentialCauses",
+	"DASHBOARD_ISSUE": "dashboard_issue",
+	"DASHBOARD_TROUBLESHOOT": "dashboard_troubleshoot",
+	"SHOOTING": "shooting",
+	"ISSUE_TROUBLES": "issue_troubles",
+	"FAVORITES": "favorites"
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 0,
+    "name": "Opened"
+  },
+  {
+    "id": 1,
+    "name": "Maintained"
+  },
+  {
+    "id": 5,
+    "name": "Closed"
+  }
+]

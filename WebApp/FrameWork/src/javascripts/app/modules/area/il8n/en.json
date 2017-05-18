@@ -1,0 +1,10 @@
+{
+  "AREA": {
+    "HEADING": "AREAS MANAGEMENT",
+    "ADD_HEADING": "ADD NEW AREA",
+    "EDIT_HEADING": "EDIT AREA",
+    "BTN_ADD": "New Area",
+    "SEARCH_NAME": "Area Name",
+    "ENTER_KEYWORD": "- Enter the area name keyword -"
+  }
+}

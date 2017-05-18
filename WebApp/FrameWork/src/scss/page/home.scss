@@ -1,0 +1,186 @@
+.home {
+
+  .widget-container {
+    float: left;
+    display: inline-block;
+
+    .panel-default>.panel-heading {
+      background-color: #3F9BB0;
+      color: white;
+      min-height: 15px;
+    }
+
+    .widget-header .glyphicon {
+      float: right;
+      cursor: pointer;
+      opacity: 0.5;
+      margin-left: 5px;
+    }
+
+    .widget {
+      margin: 0 1em 20px 0;
+    }
+  }
+
+  h4 {
+    font-weight: bold;
+    margin: 0px !important;
+  }
+
+  .lasted-issue-panel, .recently-troubleshoot-panel, .top-troubleshoot-panel, .top-user-troubleshoot-panel,
+  .issue-tracking-panel, .issue-solved-panel {
+    border: 1px solid #e5e5e5;
+    padding: 20px 5px 0px 5px;
+    background-color: #f5f5f5;
+  }
+
+  .issue-panel {
+    border: 1px solid #e5e5e5;
+
+    .issue-heading {
+      background-color: #5FB7CD;
+      color: white;
+      height: 20px;
+      padding: 10px;
+    }
+
+    .issue-content {
+      background-color: #f5f5f5;
+      min-height: 200px;
+
+      .total, .solved, .unsolved, .not-have-trouble {
+        text-align: center;
+        padding: 10px;
+        font-weight: bold;
+
+        .number {
+          font-size: 3em;
+        }
+      }
+
+      .total {
+        color: #1C4A5E;
+      }
+
+      .solved {
+        color: #099A16;
+      }
+
+      .unsolved {
+        color: #B10809;
+      }
+
+      .not-have-trouble {
+        color: #5FB7CD;
+      }
+    }
+  }
+
+  .troubleshoot-panel {
+    border: 1px solid #e5e5e5;
+
+    .troubleshoot-heading {
+      background-color: #5FB7CD;
+      color: white;
+      height: 20px;
+      padding: 10px;
+    }
+
+    .troubleshoot-content {
+      background-color: #f5f5f5;
+      min-height: 200px;
+
+      .total, .need-approve, .rejected {
+        text-align: center;
+        padding: 10px;
+        font-weight: bold;
+
+        .number {
+          font-size: 3em;
+        }
+      }
+
+      .total {
+        color: #1C4A5E;
+      }
+
+      .need-approve {
+        color: #BC8D0A;
+      }
+
+      .rejected {
+        color: #B10809;
+      }
+    }
+  }
+
+  .lasted-issue-panel {
+
+    .table tbody tr td {
+      padding: 0px 5px !important;
+    }
+  }
+
+  .top-troubleshoot-panel {
+    padding-bottom: 5px;
+
+    .top-rating-item {
+      margin-top: 10px !important;
+    }
+
+    .my-trouble-item {
+      border-bottom: 1px solid #e5e5e5;
+      padding: 10px 0px;
+    }
+  }
+
+  .top-user-troubleshoot-panel {
+
+    .top-user-item {
+      background-color: #EDF3EF;
+      padding: 5px;
+      margin: 5px 0px;
+      min-height: 45px;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .btn-create {
+    border-radius: 5px;
+    border: 1px solid white;
+    background: transparent;
+    height: 16px;
+  }
+
+  .btn-view-more {
+    background-color: #009D0D;
+    color: white;
+  }
+
+  table thead tr {
+    background-color: #7CC6E1 !important;
+
+    th:first-child {
+      text-align: left !important;
+    }
+  }
+
+  .table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #f5f5f5;
+  }
+
+  .table-striped>tbody>tr:nth-of-type(even) {
+    background-color: white;
+  }
+
+  .ng-table-pager {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .home .widget-container {
+    width: 100% !important;
+  }
+}

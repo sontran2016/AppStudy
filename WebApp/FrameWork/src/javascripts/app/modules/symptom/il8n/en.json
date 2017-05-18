@@ -1,0 +1,15 @@
+{
+  "SYMPTOM": {
+    "CHOOSE_SYMPTOM": "New Issue - Choose Symptom",
+    "HEADING": "SYMPTOMS MANAGEMENT",
+    "ADD_HEADING": "ADD NEW SYMPTOM",
+    "EDIT_HEADING": "EDIT SYMPTOM",
+    "BTN_ADD": "New Symptom",
+    "DESCRIPTION": "Symptom Description",
+    "SELECT_LINE": "- Select Line(s) -",
+    "SELECT_AREA": "- Select Area(s) -",
+    "SELECT_MACHINE": "- Select Machine(s) -",
+    "SELECT_COMPONENT": "- Select Component(s) -",
+    "ENTER_KEYWORD": "- Enter the symptom keyword -"
+  }
+}

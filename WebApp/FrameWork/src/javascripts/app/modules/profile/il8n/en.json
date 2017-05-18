@@ -1,0 +1,20 @@
+{
+  "PROFILE": {
+    "HEADING": "PROFILE",
+    "USERNAME": "Username",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "CURRENT_PASSWORD": "Current Password",
+    "NEW_PASSWORD": "New Password",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "CHANGE_PASSWORD": "Change Password",
+    "GENERAL_INFO": "General info",
+    "ENTER_EMAIL": "Please enter email",
+    "EMAIL_INCORRECT": "Email incorrect",
+    "UPDATE_PW_SUCCESS": "Your password has been updated successful",
+    "TYPE_TO_SELECT_AREAS": "Type or select area",
+    "CHANGE_AVATAR": "Change Avatar"
+  }
+}

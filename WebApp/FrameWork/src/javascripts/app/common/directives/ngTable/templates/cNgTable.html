@@ -1,0 +1,347 @@
+  <div class="page-header" ng-if="vm.conf.showHeading">
+    <h1 ng-bind="vm.conf.heading"></h1>
+  </div>
+
+<!--START: Filter -->
+<ng-include src="'filter/tag.html'" ng-if="vm.conf.module === vm.modules.TAG"></ng-include>  
+<ng-include src="'filter/area.html'" ng-if="vm.conf.module === vm.modules.AREA"></ng-include>
+<ng-include src="'filter/line.html'" ng-if="vm.conf.module === vm.modules.LINE"></ng-include>  
+<ng-include src="'filter/machine.html'" ng-if="vm.conf.module === vm.modules.MACHINE"></ng-include>
+<ng-include src="'filter/component.html'" ng-if="vm.conf.module === vm.modules.COMPONENT"></ng-include>
+<ng-include src="'filter/user.html'" ng-if="vm.conf.module === vm.modules.USER"></ng-include>
+<ng-include src="'filter/symptom.html'" ng-if="vm.conf.module === vm.modules.SYMPTOM"></ng-include>  
+<ng-include src="'filter/potentialCause.html'" ng-if="vm.conf.module === vm.modules.POTENTIAL_CAUSE"></ng-include>
+<ng-include src="'filter/issue.html'" ng-if="vm.conf.module === vm.modules.ISSUE"></ng-include>
+<ng-include src="'filter/troubleshoot.html'" ng-if="vm.conf.module === vm.modules.TROUBLESHOOT"></ng-include> 
+<!--END: Filter -->
+
+<!-- start: page actions -->
+<div class="row row-option flex align-center" ng-if="vm.conf.showHeading">
+  <div class="col-xs-8 option-left">
+    <a ng-if="vm.conf.addLink" ui-sref="{{vm.conf.addLink}}" class="btn btn-info m-r">
+      <i class="fa fa-plus-circle" aria-hidden="true"></i>
+      <span ng-bind="vm.conf.addLabel"></span>
+    </a>
+    <label class="radio-inline" ng-if="vm.conf.module !== vm.modules.ISSUE && vm.conf.module !== vm.modules.SYMPTOM && vm.conf.module !== vm.modules.POTENTIAL_CAUSE">
+        <input type="radio" name="isActive1" ng-value="null" icheck ng-model="vm.isActive" ng-change="vm.search()"> 
+        <span translate="GENERAL.SHOW_ALL" class="m-l-xs"></span>
+    </label>
+    <label class="radio-inline m-l" ng-if="vm.conf.module !== vm.modules.ISSUE && vm.conf.module !== vm.modules.SYMPTOM && vm.conf.module !== vm.modules.POTENTIAL_CAUSE">
+        <input type="radio" name="isActive1" ng-value="true" icheck ng-model="vm.isActive" checked="true" ng-change="vm.search()"> 
+        <span translate="GENERAL.ONLY_ACTIVE" class="m-l-xs"></span>
+    </label>
+    <label class="radio-inline m-l" ng-if="vm.conf.module !== vm.modules.ISSUE && vm.conf.module !== vm.modules.SYMPTOM && vm.conf.module !== vm.modules.POTENTIAL_CAUSE">
+        <input type="radio" name="isActive1" ng-value="false" icheck ng-model="vm.isActive" ng-change="vm.search()"> 
+        <span translate="GENERAL.ONLY_INACTIVE" class="m-l-xs"></span>
+    </label>
+
+    <label class="m-l" ng-if="vm.conf.module === vm.modules.ISSUE">
+      <input type="checkbox" icheck
+             ng-change="vm.search()"
+             ng-checked="vm.listModel.isOnlyMe"
+             ng-model="vm.listModel.isOnlyMe"
+             name="isOnlyMe"/>
+      <span translate="ISSUE.ONLY_MY_ISSUES"></span>
+    </label>
+    <label class="m-l" ng-if="vm.conf.module === vm.modules.TROUBLESHOOT">
+      <input type="checkbox" icheck
+             ng-change="vm.search()"
+             ng-checked="vm.listModel.isOnlyMe"
+             ng-model="vm.listModel.isOnlyMe"
+             name="isOnlyMe"/>
+      <span translate="TROUBLESHOOT.ONLY_MY_TROUBLESHOOTS"></span>
+    </label>
+    <label class="m-l" ng-if="vm.conf.module === vm.modules.ISSUE">
+      <input type="checkbox" icheck
+             ng-change="vm.search()"
+             ng-checked="vm.listModel.notHaveTrouble"
+             ng-model="vm.listModel.notHaveTrouble"
+             name="notHaveTrouble"/>
+      <span translate="ISSUE.NOT_HAVE_TROUBLE"></span>
+    </label>
+  </div>
+
+  <div class="col-xs-6 show-option">
+    <a ng-if="vm.conf.addLink" ui-sref="{{vm.conf.addLink}}" class="btn btn-info m-r">
+      <i class="fa fa-plus-circle" aria-hidden="true"></i>
+      <span ng-bind="vm.conf.addLabel"></span>
+    </a>
+    <div class="btn-group" on-toggle="toggled(open)" uib-dropdown>
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" uib-dropdown-toggle>
+        <span class="glyphicon glyphicon-menu-hamburger"></span>
+        Show option <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right">
+        <li><a ng-if="vm.conf.module !== vm.modules.ISSUE && vm.conf.module !== vm.modules.SYMPTOM && vm.conf.module !== vm.modules.POTENTIAL_CAUSE">
+          <input type="radio" name="isActive2" ng-value="null" icheck ng-model="vm.isActive" ng-change="vm.search()">
+          <span translate="GENERAL.SHOW_ALL"></span>
+        </a></li>
+        <li><a ng-if="vm.conf.module !== vm.modules.ISSUE && vm.conf.module !== vm.modules.SYMPTOM && vm.conf.module !== vm.modules.POTENTIAL_CAUSE">
+          <input type="radio" name="isActive2" ng-value="true" icheck ng-model="vm.isActive" ng-change="vm.search()"> 
+          <span translate="GENERAL.ONLY_ACTIVE"></span>
+        </a></li>
+        <li><a ng-if="vm.conf.module !== vm.modules.ISSUE && vm.conf.module !== vm.modules.SYMPTOM && vm.conf.module !== vm.modules.POTENTIAL_CAUSE">
+          <input type="radio" name="isActive2" ng-value="false" icheck ng-model="vm.isActive" ng-change="vm.search()"> 
+          <span translate="GENERAL.ONLY_INACTIVE"></span>
+        </a></li>
+        <li><a ng-if="vm.conf.module === vm.modules.ISSUE">
+          <input type="checkbox" icheck
+             ng-change="vm.search()"
+             ng-checked="vm.listModel.isOnlyMe"
+             ng-model="vm.listModel.isOnlyMe"
+             name="isOnlyMe"/>
+          <span translate="ISSUE.ONLY_MY_ISSUES"></span>
+        </a></li>
+        <li><a ng-if="vm.conf.module === vm.modules.ISSUE">
+          <input type="checkbox" icheck
+             ng-change="vm.search()"
+             ng-checked="vm.listModel.notHaveTrouble"
+             ng-model="vm.listModel.notHaveTrouble"
+             name="notHaveTrouble"/>
+          <span translate="ISSUE.NOT_HAVE_TROUBLE"></span>
+        </a></li>
+        <li><a ng-if="vm.conf.module === vm.modules.TROUBLESHOOT">
+          <input type="checkbox" icheck
+             ng-change="vm.search()"
+             ng-checked="vm.listModel.isOnlyMe"
+             ng-model="vm.listModel.isOnlyMe"
+             name="isOnlyMe"/>
+          <span translate="TROUBLESHOOT.ONLY_MY_TROUBLESHOOTS"></span>
+        </a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-xs-4 text-right option-right">
+    <span class="total-record">
+      <span translate="GENERAL.TOTAL" class="colon"></span>
+      <span ng-bind="vm.totalRecords"></span>
+      <span translate="GENERAL.ITEMS"></span>
+    </span>
+
+    <button type="button" class="btn btn-primary m-l" ng-if="vm.conf.module === vm.modules.ISSUE && vm.conf.exportFn" ng-disabled="!vm.listModel.isCheckAllItems && !vm.listModel.itemsChecked.length" ng-click="vm.conf.exportFn(vm.listModel.itemsChecked)">
+      <i class="fa fa-trash-o" aria-hidden="true"></i>
+      <span translate="GENERAL.EXPORT"></span>
+      (<b ng-bind="vm.listModel.itemsChecked.length"></b>)
+    </button>
+
+    <button ng-disabled="!vm.listModel.isCheckAllItems && !vm.listModel.itemsChecked.length"
+            type="button" class="btn btn-danger m-l" confirm-delete action="Deactivate selected item(s) will automatically deactivate involving information. Are you sure?" on-ok="vm.remove()"
+            ng-if="vm.permission === vm.roleList.ADMIN.value && vm.isActive !== false && vm.conf.removeFn">
+      <i class="fa fa-trash-o" aria-hidden="true"></i>
+      <span translate="GENERAL.DEACTIVATE"></span>
+      (<b ng-bind="vm.listModel.itemsChecked.length"></b>)
+    </button>
+
+    <button ng-disabled="!vm.listModel.isCheckAllItems && !vm.listModel.itemsChecked.length"
+            type="button" class="btn btn-danger m-l" confirm-delete action="Selected item(s) will be deleted forever. Are you sure?" on-ok="vm.deleteInactiveItem()"
+            ng-if="vm.permission === vm.roleList.ADMIN.value && vm.isActive === false && vm.conf.deleteInactiveFn">
+      <i class="fa fa-trash-o" aria-hidden="true"></i>
+      <span translate="GENERAL.DELETE"></span>
+      (<b ng-bind="vm.listModel.itemsChecked.length"></b>)
+    </button>
+  </div>
+
+  <div class="col-sm-8 total-record-container">
+    <span class="total-record m-r">
+      <span translate="GENERAL.TOTAL" class="colon"></span>
+      <span ng-bind="vm.totalRecords"></span>
+      <span translate="GENERAL.ITEMS"></span>
+    </span>
+  </div>
+  <div class="col-sm-4 text-right btn-action">
+    <div class="btn-group" on-toggle="toggled(open)" uib-dropdown>
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" uib-dropdown-toggle>
+        <span class="glyphicon glyphicon-menu-hamburger"></span>
+        Action <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right">
+        <li><a ng-if="vm.conf.addLink" ui-sref="{{vm.conf.addLink}}">
+          <i class="fa fa-plus-circle" aria-hidden="true"></i>
+          <span ng-bind="vm.conf.addLabel"></span>
+        </a></li>
+        <li role="separator" class="divider" ng-if="vm.conf.addLink"></li>
+        <li><a ng-if="vm.conf.module !== vm.modules.ISSUE && vm.conf.module !== vm.modules.SYMPTOM && vm.conf.module !== vm.modules.POTENTIAL_CAUSE">
+          <input type="radio" name="isActive3" ng-value="null" icheck ng-model="vm.isActive" ng-change="vm.search()">
+          <span translate="GENERAL.SHOW_ALL"></span>
+        </a></li>
+        <li><a ng-if="vm.conf.module !== vm.modules.ISSUE && vm.conf.module !== vm.modules.SYMPTOM && vm.conf.module !== vm.modules.POTENTIAL_CAUSE">
+          <input type="radio" name="isActive3" ng-value="true" icheck ng-model="vm.isActive" ng-change="vm.search()"> 
+          <span translate="GENERAL.ONLY_ACTIVE"></span>
+        </a></li>
+        <li><a ng-if="vm.conf.module !== vm.modules.ISSUE && vm.conf.module !== vm.modules.SYMPTOM && vm.conf.module !== vm.modules.POTENTIAL_CAUSE">
+          <input type="radio" name="isActive3" ng-value="false" icheck ng-model="vm.isActive" ng-change="vm.search()"> 
+          <span translate="GENERAL.ONLY_INACTIVE"></span>
+        </a></li>
+        <li><a ng-if="vm.conf.module === vm.modules.ISSUE">
+          <input type="checkbox" icheck
+             ng-change="vm.search()"
+             ng-checked="vm.listModel.isOnlyMe"
+             ng-model="vm.listModel.isOnlyMe"
+             name="isOnlyMe"/>
+          <span translate="ISSUE.ONLY_MY_ISSUES"></span>
+        </a></li>
+        <li><a ng-if="vm.conf.module === vm.modules.ISSUE">
+          <input type="checkbox" icheck
+             ng-change="vm.search()"
+             ng-checked="vm.listModel.notHaveTrouble"
+             ng-model="vm.listModel.notHaveTrouble"
+             name="notHaveTrouble"/>
+          <span translate="ISSUE.NOT_HAVE_TROUBLE"></span>
+        </a></li>
+        <li><a ng-if="vm.conf.module === vm.modules.TROUBLESHOOT">
+          <input type="checkbox" icheck
+             ng-change="vm.search()"
+             ng-checked="vm.listModel.isOnlyMe"
+             ng-model="vm.listModel.isOnlyMe"
+             name="isOnlyMe"/>
+          <span translate="TROUBLESHOOT.ONLY_MY_TROUBLESHOOTS"></span>
+        </a></li>
+        <li role="separator" class="divider" ng-if="(vm.conf.removeFn || vm.conf.deleteInactiveFn) && (vm.listModel.isCheckAllItems || vm.listModel.itemsChecked.length)"></li>
+        <li><a confirm-delete action="Deactivate selected item(s) will automatically deactivate involving information. Are you sure?" on-ok="vm.remove()"
+            ng-if="vm.permission === vm.roleList.ADMIN.value && vm.isActive !== false && vm.conf.removeFn && (vm.listModel.isCheckAllItems || vm.listModel.itemsChecked.length)">
+          <i class="fa fa-trash-o" aria-hidden="true"></i>
+          <span translate="GENERAL.DEACTIVATE"></span>
+          (<b ng-bind="vm.listModel.itemsChecked.length"></b>)
+        </a></li>
+        <li><a confirm-delete action="Selected item(s) will be deleted forever. Are you sure?" on-ok="vm.deleteInactiveItem()"
+            ng-if="vm.permission === vm.roleList.ADMIN.value && vm.isActive === false && vm.conf.deleteInactiveFn && (vm.listModel.isCheckAllItems || vm.listModel.itemsChecked.length)">
+          <i class="fa fa-trash-o" aria-hidden="true"></i>
+          <span translate="GENERAL.DELETE"></span>
+          (<b ng-bind="vm.listModel.itemsChecked.length"></b>)
+        </a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- end: page actions -->
+
+<div ng-if="vm.rows.length !== 0"> 
+  <table ng-table-dynamic="vm.tableParams with vm.cols" class="table table-content table-bordered table-striped custom-list">
+    <colgroup>
+      <col ng-repeat="col in vm.cols" width="{{col.width}}" />
+    </colgroup>
+    <tr ng-repeat="row in vm.rows" ng-click="vm.conf.rowClickable && vm.viewDetail(row)"
+        ng-class="{'active-row': vm.conf.module === vm.modules.SHOOTING && row.isActive === true, 'pointer': vm.conf.rowClickable}"
+        ng-hide="vm.conf.module === vm.modules.SHOOTING && row.status.id === vm.shootingStatus.REJECTED">
+      <td ng-repeat="col in $columns">
+        <div ng-if="col.dataType === 'selector'" class="text-center">
+          <input type="checkbox" icheck
+                 ng-change="vm.checkItem(row)"
+                 ng-checked="row.selector"
+                 name="selector" ng-model="row.selector"/>
+        </div>
+        <div ng-if="col.dataType === 'selector-radio'" class="text-center">
+          <input type="radio" icheck
+                 value="{{row.id}}"
+                 ng-change="vm.checkItem(row)"
+                 ng-checked="row.selector"
+                 name="selector" ng-model="row.selector"/>
+        </div>
+
+        <div ng-if="col.dataType === 'text'" ng-bind-html="(row[col.field] | newLines | cut:true:100:' ...') || 'N/A'"></div>
+        <span ng-if="col.dataType === 'option'" ng-bind="row[col.field] === true ? 'Yes' : 'No'"></span>
+        <div ng-if="col.dataType === 'number'" class="text-center" ng-bind="row[col.field]"></div>
+        <span class="sub-info" ng-if="col.dataType === 'date'" ng-bind="row[col.field] | date: 'dd/MM/yyyy hh:mm a'"></span>
+        <span ng-if="col.dataType === 'issueShooting'" ng-bind="row[col.field].title || 'N/A'"></span>
+        <span class="sub-info" ng-if="col.dataType === 'issueSymptom'" ng-bind="(row[col.field] | newLines | cut:true:100:' ...') || 'N/A'"></span>
+        <div ng-if="col.dataType === 'userRole'">
+          <span ng-bind="row[col.field] | capitalize"></span>
+        </div>
+        <div class="sub-info" ng-if="col.dataType === 'userDepartment'">
+          <div ng-if="row.role === 'admin' || (row.role === 'user' && row.areas.length === vm.areas.length)" ng-bind="'All Department'"></div>
+          <div ng-if="row.role === 'user' && row.areas.length !== vm.areas.length" ng-repeat="item in row[col.field]" ng-bind="item.name"></div>
+        </div>
+        <div class="sub-info" ng-if="col.dataType === 'componentLabel'">
+          <label class="label label-info custom-label" ng-repeat="component in row.components"
+                   ng-bind="component.name"></label>
+          <span ng-bind="'N/A'" ng-if="!row.components.length"></span>
+        </div>
+        <div class="sub-info" ng-if="col.dataType === 'machineLabel'">
+          <label class="label label-primary custom-label" ng-repeat="machine in row.machines"
+                   ng-bind="machine.name"></label>
+          <span ng-bind="'N/A'" ng-if="!row.machines.length"></span>
+        </div>
+        <div class="sub-info" ng-if="col.dataType === 'lineLabel'">
+          <label class="label label-warning custom-label" ng-repeat="line in row.lines"
+                   ng-bind="line.name"></label>
+          <span ng-bind="'N/A'" ng-if="!row.lines.length"></span>
+        </div>
+        <div class="sub-info" ng-if="col.dataType === 'areaLabel'">
+          <label class="label label-success custom-label" ng-repeat="area in row.areas"
+                   ng-bind="area.name"></label>
+          <span ng-bind="'N/A'" ng-if="!row.areas.length"></span>
+        </div>
+        <div class="sub-info" ng-if="col.dataType === 'issueLineLabel'">
+          <label class="label label-warning custom-label" ng-bind="row.line || row.lineName"></label>
+        </div>
+        <div class="sub-info" ng-if="col.dataType === 'issueAreaLabel'">
+          <label class="label label-success custom-label" ng-bind="row.area || row.areaName"></label>
+        </div>
+        <div class="sub-info" ng-if="col.dataType === 'ownerName'">
+          <span ng-bind="row[col.field].firstName"></span> 
+          <span ng-bind="row[col.field].lastName"></span>
+        </div>
+        <div ng-if="col.dataType === 'shootingDate'">
+          <span ng-bind="row.approvedDate | date: 'dd/MM/yyyy hh:mm a'" ng-if="row.approvedDate"></span>
+          <span ng-bind="row.rejectedDate | date: 'dd/MM/yyyy hh:mm a'" ng-if="row.rejectedDate && !row.approvedDate"></span> 
+        </div>
+        <div ng-if="col.dataType === 'versionShooting'" class="version">
+          <span ng-bind="row.version" class="pointer" ng-if="row.version !== 0" ng-click="vm.conf.viewDetailModalFn(vm.rows, row)"></span>
+          <span ng-if="row.version === 0"><i class="fa fa-info-circle pointer" aria-hidden="true" ng-click="vm.conf.viewDetailModalFn(vm.rows, row)"></i></span> 
+        </div>
+        <div ng-if="col.dataType === 'issueStatusLabel'">
+          <div ng-bind="row.status.statusName" ng-class="{ 'status-opened-state' : row.status.id == 0,
+                         'status-maintained-state': row.status.id == 1,
+                         'status-needtoapproved-state': row.status.id == 2,
+                         'status-approved-state': row.status.id == 3,
+                         'status-rejected-state': row.status.id == 4,
+                         'status-closed-state': row.status.id == 5}"></div>
+        </div>
+        <div ng-if="col.dataType === 'troubleshootStatus'">
+          <div ng-bind="row.status.name || 'Created'" ng-class="{ 'status-opened-state' : (row.status.id == 0 || !row.status),
+                         'status-needtoapproved-state': row.status.id == 1,
+                         'status-approved-state': row.status.id == 2,
+                         'status-rejected-state': row.status.id == 3}"></div>
+        </div>
+        <div ng-if="vm.conf.editLink && col.dataType === 'command'" class="action">
+          <i class="fa fa-pencil-square-o pointer" aria-hidden="true" ui-sref="{{vm.conf.editLink}}({id: row.id})"></i>
+        </div>
+        <div ng-if="col.dataType === 'favoriteCommand'" class="action">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </div>
+        <div ng-if="vm.conf.editLink && col.dataType === 'troubleCommand'" class="action">
+          <div class="col-xs-6 text-right">
+            <i ng-if="vm.permission === 'admin' || (row.canEdit && row.createdBy.id === vm.currentUser.id && vm.permission === 'user' && row.isActive === true)" class="fa fa-pencil-square-o pointer" aria-hidden="true" ui-sref="{{vm.conf.editLink}}({id: row.id})"></i>
+          </div>
+          <div class="col-xs-6">
+            <i class="fa fa-gratipay pointer" aria-hidden="true" ng-show="!row.isFavorited" ng-click="$event.stopPropagation(); vm.conf.addToFavoriteFn(vm.rows, row.id)"></i>
+          </div>
+        </div>
+        <div ng-if="vm.conf.editLink && col.dataType === 'issueCommand' && ((row.status.id === vm.issueStatus.OPENED && vm.permission !== 'admin' && row.createdBy.id === vm.currentUser.id) || vm.permission === 'admin')" class="action">
+          <i class="fa fa-pencil-square-o pointer" aria-hidden="true" ui-sref="{{vm.conf.editLink}}({id: row.id})"></i>
+        </div>
+        <div ng-if="col.dataType === 'shootingCommand'" class="shooting-action">
+          <span ng-if="row.version !== 0 && row.isActive === false"><i class="fa fa-trash pointer" aria-hidden="true" confirm-delete on-ok="vm.remove(row)"></i></span>
+          <span ng-if="row.version === 0">
+            <i class="fa fa-check pointer" aria-hidden="true" ng-click="vm.conf.approveFn(vm.rows, row)"></i>
+            <i class="fa fa-ban pointer" ng-if="row.createdBy.id !== vm.currentUser.id" aria-hidden="true" ng-click="vm.conf.rejectFn(vm.rows, row)"></i>
+            <i class="fa fa-trash pointer" ng-if="row.createdBy.id === vm.currentUser.id" aria-hidden="true" confirm-delete on-ok="vm.remove(row)"></i>
+          </span>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<p ng-if="!vm.rows.length && vm.conf.module !== vm.modules.SHOOTING" class="text-center">
+  <em translate="GENERAL.NOT_FOUND_ITEMS"></em>
+</p>
+
+<script type="text/ng-template" id="ng-table/headers/checkbox.html">
+  <input type="checkbox" icheck
+          ng-change="vm.checkAll(!vm.listModel.isCheckAllItems)"
+          ng-model="vm.listModel.isCheckAllItems"
+          indeterminate="{{vm.indeterminate}}"
+          name="isCheckAllItems" value="true"/>
+</script>

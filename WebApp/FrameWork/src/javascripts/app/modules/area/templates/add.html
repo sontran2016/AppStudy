@@ -1,0 +1,64 @@
+<div class="page-area" ng-init="vm.init()">
+
+  <div class="page-header">
+    <h1 translate="AREA.ADD_HEADING"></h1>
+  </div>
+
+  <form class="form-horizontal" name="vm.formAdd" ng-submit="vm.save()">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.name.$invalid && vm.formAdd.name.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.NAME"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="name" ng-model="vm.addModel.name" placeholder="{{'GENERAL.NAME' | translate}}" required>
+            <div class="input-errors" ng-show="vm.formAdd.name.$invalid && vm.formAdd.name.$dirty">
+              <span ng-show="vm.formAdd.name.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.shortName.$invalid && vm.formAdd.shortName.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.SHORT_NAME"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="shortName" ng-model="vm.addModel.shortName" placeholder="{{'GENERAL.SHORT_NAME' | translate}}" required>
+            <div class="input-errors" ng-show="vm.formAdd.shortName.$invalid && vm.formAdd.shortName.$dirty">
+              <span ng-show="vm.formAdd.shortName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.DESCRIPTION"></label>
+          <div class="col-sm-10">
+            <textarea rows="3" class="form-control no-resize" name="description" placeholder="{{'GENERAL.DESCRIPTION' | translate}}" 
+                      ng-model="vm.addModel.description"></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-6">
+            <a ui-sref="app.area" class="btn btn-default">
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+              <span translate="GENERAL.BACK"></span>
+            </a>
+          </div>
+
+          <div class="col-sm-6 text-right">
+            <input type="checkbox" icheck name="isAnother" ng-model="vm.isAnother" value="true">
+            <span translate="GENERAL.ADD_ANOTHER"></span>
+
+            <button type="submit" class="btn btn-success btn-have-left" ng-disabled="vm.formAdd.$invalid">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              <span translate="GENERAL.SAVE"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+</div>

@@ -1,0 +1,273 @@
+<div class="page-user">
+
+  <div class="page-header">
+    <h1 translate="USER.ADD_HEADING"></h1>
+  </div>
+
+  <form class="form-horizontal" name="vm.formAdd" ng-submit="vm.save()">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.email.$invalid && vm.formAdd.email.$dirty)}">
+          <label class="col-sm-2 control-label req">
+            <span translate="USER.EMAIL"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <input type="email" class="form-control" autocomplete="off"
+                   placeholder="{{'USER.EMAIL' | translate}}"
+                   name="email" ng-model="vm.addModel.email" required>
+
+            <div class="input-errors" ng-show="vm.formAdd.email.$invalid && vm.formAdd.email.$dirty">
+              <span ng-show="vm.formAdd.email.$error.required" translate="VALIDATION.REQUIRED"></span>
+              <span ng-show="vm.formAdd.email.$error.email" translate="VALIDATION.EMAIL_INVALID"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.password.$invalid && vm.formAdd.password.$dirty)}">
+          <label class="col-sm-2 control-label req">
+            <span translate="USER.PASSWORD"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <input type="password" class="form-control"
+                   placeholder="{{'USER.PASSWORD' | translate}}"
+                   name="password" ng-model="vm.addModel.password" required
+                   ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$/">
+
+            <div class="input-errors" ng-show="vm.formAdd.password.$invalid && vm.formAdd.password.$dirty">
+              <span ng-show="vm.formAdd.password.$error.required" translate="VALIDATION.REQUIRED"></span>
+              <span ng-show="vm.formAdd.password.$error.pattern" translate="VALIDATION.PATTERN_PASSWORD"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.confirmPassword.$invalid && vm.formAdd.confirmPassword.$dirty)}">
+          <label class="col-sm-2 control-label req">
+            <span translate="USER.CONFIRM_PASSWORD"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <input type="password" class="form-control"
+                   placeholder="{{'USER.CONFIRM_PASSWORD' | translate}}"
+                   name="confirmPassword" ng-model="vm.addModel.confirmPassword"
+                   compare-to="vm.addModel.password"
+                   required
+                   ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$/">
+
+            <div class="input-errors" ng-show="vm.formAdd.confirmPassword.$invalid && vm.formAdd.confirmPassword.$dirty">
+              <span ng-show="vm.formAdd.confirmPassword.$error.required" translate="VALIDATION.REQUIRED"></span>
+              <span ng-show="!vm.formAdd.confirmPassword.$error.required && !vm.formAdd.confirmPassword.$error.pattern && vm.formAdd.confirmPassword.$error.compareTo" translate="VALIDATION.CONFIRM_PASSWORD"></span>
+              <span ng-show="vm.formAdd.confirmPassword.$error.pattern" translate="VALIDATION.PATTERN_PASSWORD"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.firstName.$invalid && vm.formAdd.firstName.$dirty)}">
+          <label class="col-sm-2 control-label req">
+            <span translate="USER.FIRST_NAME"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <input type="text" class="form-control"
+                   placeholder="{{'USER.FIRST_NAME' | translate}}"
+                   name="firstName" ng-model="vm.addModel.firstName" required>
+
+            <div class="input-errors" ng-show="vm.formAdd.firstName.$invalid && vm.formAdd.firstName.$dirty">
+              <span ng-show="vm.formAdd.firstName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.lastName.$invalid && vm.formAdd.lastName.$dirty)}">
+          <label class="col-sm-2 control-label req">
+            <span translate="USER.LAST_NAME"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <input type="text" class="form-control"
+                   placeholder="{{'USER.LAST_NAME' | translate}}"
+                   name="lastName" ng-model="vm.addModel.lastName" required>
+
+            <div class="input-errors" ng-show="vm.formAdd.lastName.$invalid && vm.formAdd.lastName.$dirty">
+              <span ng-show="vm.formAdd.lastName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">
+            <span translate="USER.PHONE"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <input type="text" numeric-only class="form-control"
+                   placeholder="{{'USER.PHONE' | translate}}"
+                   name="phone" ng-model="vm.addModel.phone">
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.role.$invalid && vm.formAdd.role.$dirty)}">
+          <label class="col-sm-2 control-label req">
+            <span translate="USER.ROLE"></span>
+          </label>
+
+          <div class="col-sm-10">
+
+            <select class="form-control" required
+                    ng-model="vm.addModel.role"
+                    ng-change="vm.changeRole()"
+                    name="role"
+                    kendo-drop-down-list="vm.roleInstance"
+                    k-option-label="'{{'USER.TYPE_TO_SELECT_ROLE' | translate}}'"
+                    k-data-text-field="'label'"
+                    k-data-value-field="'value'"
+                    k-data-source="vm.roleList">
+            </select>
+
+            <div class="input-errors" ng-show="vm.formAdd.role.$invalid && vm.formAdd.role.$dirty">
+              <span ng-show="vm.formAdd.role.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (!vm.addModel.areaIds.length && vm.formAdd.area.$dirty)}">
+          <label class="col-sm-2 control-label req">
+            <span translate="USER.AREAS"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <div ng-if="!vm.addModel.areaIds.length" class="line-height-md">
+              <span translate="USER.NO_SELECTED_AREA" ng-if="vm.addModel.role !== 'admin'"></span>
+              <div ng-if="vm.addModel.role === 'user'">
+                <span class="red-text" translate="TROUBLESHOOT.CLICK"></span>
+                <span class="word-has-function" translate="TROUBLESHOOT.HERE" ng-click="vm.openAreaModal()"></span> 
+                <span class="red-text" translate="USER.CHOOSE_AREA"></span>
+              </div>
+              <div ng-if="vm.addModel.role === 'admin'"> 
+                <label class="label label-default m-r-xs" translate="USER.ALL_AREAS" ></label>
+              </div>
+            </div>
+
+            <div class="m-b" ng-if="vm.addModel.areaIds.length">
+              <div class="user-label label label-default m-r-xs" ng-repeat="area in vm.addModel.areaIds | limitTo: 10" ng-bind="area.name"></div>
+              <div class="user-label label label-default m-r-xs" ng-repeat="area in vm.addModel.areaIds | startFrom: 10" ng-bind="area.name" ng-if="vm.showFullArea"></div>
+              <div class="user-label label label-primary m-r-xs pointer" ng-if="vm.addModel.areaIds.length > 10" ng-click="vm.showFullArea = !vm.showFullArea">
+                <span ng-bind="'.......'" ng-if="!vm.showFullArea"></span>
+                <span ng-bind="'- - - -'" ng-if="vm.showFullArea"></span>
+              </div>
+            </div>
+
+            <div class="row" ng-if="vm.addModel.areaIds.length">
+              <div class="col-sm-12 text-right">
+                <button type="button" class="btn btn-small btn-warning" ng-click="vm.openAreaModal()">
+                  <i class="fa fa-list"></i> 
+                  <span translate="GENERAL.CHANGE"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">
+            <span translate="USER.LINES"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <div ng-if="!vm.addModel.lineIds.length" class="line-height-md">
+              <span translate="USER.NO_SELECTED_LINE" ng-if="vm.addModel.role !== 'admin'"></span>
+              <div ng-if="vm.addModel.areaIds.length && !vm.addModel.lineIds.length && vm.addModel.role === 'user'">
+                <span class="red-text" translate="TROUBLESHOOT.CLICK"></span>
+                <span class="word-has-function" translate="TROUBLESHOOT.HERE" ng-click="vm.openLineModal()"></span> 
+                <span class="red-text" translate="USER.CHOOSE_LINE"></span>
+              </div>
+              <div ng-if="vm.addModel.role === 'admin'"> 
+                <label class="label label-default m-r-xs" translate="USER.ALL_LINES" ></label>
+              </div>
+            </div>
+
+            <div class="m-b" ng-if="vm.addModel.lineIds.length">
+              <div class="user-label label label-default m-r-xs" ng-repeat="line in vm.addModel.lineIds | limitTo: 10" ng-bind="line.name"></div>
+              <div class="user-label label label-default m-r-xs" ng-repeat="line in vm.addModel.lineIds | startFrom: 10" ng-bind="line.name" ng-if="vm.showFullLine"></div>
+              <div class="user-label label label-primary m-r-xs pointer" ng-if="vm.addModel.lineIds.length > 10" ng-click="vm.showFullLine = !vm.showFullLine">
+                <span ng-bind="'.......'" ng-if="!vm.showFullLine"></span>
+                <span ng-bind="'- - - -'" ng-if="vm.showFullLine"></span>
+              </div>
+            </div>
+
+            <div class="row" ng-if="vm.addModel.lineIds.length">
+              <div class="col-sm-12 text-right">
+                <button type="button" class="btn btn-small btn-warning" ng-click="vm.openLineModal()">
+                  <i class="fa fa-list"></i> 
+                  <span translate="GENERAL.CHANGE"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">
+            <span translate="USER.MACHINES"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <div ng-if="!vm.addModel.machineIds.length" class="line-height-md">
+              <span translate="USER.NO_SELECTED_MACHINE" ng-if="vm.addModel.role !== 'admin'"></span>
+              <div ng-if="vm.addModel.lineIds.length && !vm.addModel.machineIds.length && vm.addModel.role === 'user'">
+                <span class="red-text" translate="TROUBLESHOOT.CLICK"></span>
+                <span class="word-has-function" translate="TROUBLESHOOT.HERE" ng-click="vm.openMachineModal()"></span> 
+                <span class="red-text" translate="USER.CHOOSE_MACHINE"></span>
+              </div>
+              <div ng-if="vm.addModel.role === 'admin'"> 
+                <label class="label label-default m-r-xs" translate="USER.ALL_MACHINES" ></label>
+              </div>
+            </div>
+
+            <div class="m-b" ng-if="vm.addModel.machineIds.length">
+              <div class="user-label label label-default m-r-xs" ng-repeat="machine in vm.addModel.machineIds | limitTo: 10" ng-bind="machine.name"></div>
+              <div class="user-label label label-default m-r-xs" ng-repeat="machine in vm.addModel.machineIds | startFrom: 10" ng-bind="machine.name" ng-if="vm.showFullMachine"></div>
+              <div class="user-label label label-primary m-r-xs pointer" ng-if="vm.addModel.machineIds.length > 10" ng-click="vm.showFullMachine = !vm.showFullMachine">
+                <span ng-bind="'.......'" ng-if="!vm.showFullMachine"></span>
+                <span ng-bind="'- - - -'" ng-if="vm.showFullMachine"></span>
+              </div>
+            </div>
+
+            <div class="row" ng-if="vm.addModel.machineIds.length">
+              <div class="col-sm-12 text-right">
+                <button type="button" class="btn btn-small btn-warning" ng-click="vm.openMachineModal()">
+                  <i class="fa fa-list"></i> 
+                  <span translate="GENERAL.CHANGE"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-6">
+            <a ui-sref="app.user" class="btn btn-default">
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+              <span translate="GENERAL.BACK"></span>
+            </a>
+          </div>
+
+          <div class="col-sm-6 text-right">
+            <input type="checkbox" icheck name="isAnother" ng-model="vm.addAnother">
+            <span translate="GENERAL.ADD_ANOTHER"></span>
+
+            <button type="submit" class="btn btn-success btn-have-left" ng-disabled="(!vm.addModel.areaIds.length && vm.addModel.role !== 'admin') || vm.formAdd.$invalid">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              <span translate="GENERAL.SAVE"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+</div>

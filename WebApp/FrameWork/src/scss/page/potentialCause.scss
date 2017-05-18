@@ -1,0 +1,14 @@
+.page-potentialCause {
+	
+	@media (max-width: 767px) {
+		.custom-list thead tr th:nth-child(6), .custom-list tbody tr td:nth-child(6), .custom-list thead tr th:nth-child(4), .custom-list tbody tr td:nth-child(4), .custom-list thead tr th:nth-child(5), .custom-list tbody tr td:nth-child(5), .custom-list thead tr th:nth-child(7), .custom-list tbody tr td:nth-child(7) {
+			display: none;
+		}
+	}
+
+	@media (max-width: 399px) {
+		.custom-list thead tr th:nth-child(3), .custom-list tbody tr td:nth-child(3) {
+			display: none;
+		}
+	}
+}

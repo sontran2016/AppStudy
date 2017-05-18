@@ -1,0 +1,13 @@
+{
+  "CHANGE_PASSWORD": {
+    "HEADING": "CHANGE PASSWORD",
+    "PW_MISMATCH": "Passwords mismatch.",
+    "CURRENT_PW": "Current Password",
+    "CONFIRM_PW": "Confirm Password",
+    "SAVE_PW": "Save Password",
+    "PLEASE_ENTER_CURRENT_PW": "Please enter your current password",
+    "PLEASE_ENTER_NEW_PW": "Please enter new password",
+    "PW_REQ": "Password must be at least 6 characters long",
+    "NEW_PW": "New Password"
+  }
+}

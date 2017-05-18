@@ -1,0 +1,96 @@
+<div class="page-component">
+
+  <div class="page-header">
+    <h1 translate="COMPONENT.ADD_HEADING"></h1>
+  </div>
+
+  <form class="form-horizontal" name="vm.formAdd" ng-submit="vm.save()" novalidate>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.componentName.$invalid && vm.formAdd.componentName.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="COMPONENT.NAME"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="componentName" ng-model="vm.addModel.name" 
+                    placeholder="{{'COMPONENT.NAME' | translate}}" 
+                    focus required>
+            <div class="input-errors" ng-show="vm.formAdd.componentName.$invalid && vm.formAdd.componentName.$dirty">
+              <span ng-show="vm.formAdd.componentName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.shortName.$invalid && vm.formAdd.shortName.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.SHORT_NAME"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="shortName" ng-model="vm.addModel.shortName" placeholder="{{'GENERAL.SHORT_NAME' | translate}}" required>
+            <div class="input-errors" ng-show="vm.formAdd.shortName.$invalid && vm.formAdd.shortName.$dirty">
+              <span ng-show="vm.formAdd.shortName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (!vm.addModel.lineIds.length && vm.formAdd.lineIds.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.LINE"></label>
+          <div class="col-sm-10">
+            <select kendo-multi-select class="form-control"
+                    name="lineIds"
+                    k-data-text-field="'name'" k-data-value-field="'id'"
+                    k-data-source="vm.lineList"
+                    k-placeholder="'- Select Line(s) -'"
+                    k-auto-bind="false"
+                    k-value-primitive="true"
+                    k-ng-model="vm.addModel.lineIds"
+                    ng-model="vm.lineIdstmp"
+                    k-change="'vm.filterMachines()'">
+            </select>
+            <div class="input-errors" ng-show="vm.formAdd.lineIds.$dirty">
+              <span ng-show="!vm.addModel.lineIds.length" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (!vm.addModel.machineIds.length && vm.formAdd.machineIds.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.MACHINE"></label>
+          <div class="col-sm-10">
+            <select kendo-multi-select class="form-control"
+                    name="machineIds"
+                    k-data-text-field="'name'" k-data-value-field="'id'"
+                    k-data-source="vm.machineList"
+                    k-placeholder="'- Select Machine(s) -'"
+                    k-auto-bind="false"
+                    k-value-primitive="true"
+                    k-ng-model="vm.addModel.machineIds"
+                    ng-model="vm.machineIdstmp">
+            </select>
+            <div class="input-errors" ng-show="vm.formAdd.machineIds.$dirty">
+              <span ng-show="!vm.addModel.machineIds.length" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-6">
+            <a ui-sref="app.component" class="btn btn-default">
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+              <span translate="GENERAL.BACK"></span>
+            </a>
+          </div>
+
+          <div class="col-sm-6 text-right">
+            <input type="checkbox" icheck name="isAnother" ng-model="vm.isAnother">
+            <span translate="GENERAL.ADD_ANOTHER"></span>
+
+            <button type="submit" class="btn btn-success btn-have-left" ng-disabled="!vm.addModel.machineIds.length || vm.formAdd.$invalid">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              <span translate="GENERAL.SAVE"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+</div>

@@ -1,0 +1,11 @@
+{
+  "MACHINE": {
+    "HEADING": "MACHINES MANAGEMENT",
+    "ADD_HEADING": "ADD NEW MACHINE",
+    "EDIT_HEADING": "EDIT MACHINE",
+    "BTN_ADD": "New Machine",
+    "NAME": "Machine Name",
+    "CODE": "Machine Code",
+    "ENTER_KEYWORD": "- Enter the machine name keyword -"
+  }
+}

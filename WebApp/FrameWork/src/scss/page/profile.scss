@@ -1,0 +1,48 @@
+﻿
+.profile {
+    padding-top:20px;
+
+    .user-profile-info{
+        text-align: center;
+        padding-top:34px;
+
+        img.profile-avatar{
+            width:50%;
+            border-radius: 50%;
+        }
+    }
+
+    .user-avatar{
+        width: 136px;
+    }
+    .user-profile-name {
+    	position: absolute;
+    	top: 25%;
+    	margin: 0 0 0 150px;
+    }
+
+    .user-name{
+        text-transform: uppercase;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .permission-space{
+        margin-top: 5px;
+    }
+    ul.inline-block{
+        padding:0;
+        margin:0;
+        line-height: 28px;
+    }
+    ul.inline-block li{
+        display: inline-block;
+        margin-right:5px;
+    }
+    ul.inline-block li label{
+        padding:6px;
+    }
+    .heading_a .heading_text{
+        font-size: 14px;
+    }
+}

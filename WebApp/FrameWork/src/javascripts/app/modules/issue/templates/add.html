@@ -1,0 +1,201 @@
+<div class="page-issue">
+
+  <div class="page-header">
+    <h1 translate="ISSUE.ADD_HEADING"></h1>
+  </div>
+
+  <form class="form-horizontal" name="vm.formAdd" novalidate>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group">
+          <label class="col-sm-2 control-label req" translate="ISSUE.ISSUE_DATE"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control"
+                   ng-model="vm.issueModel.timestamp"
+                   name="timestamp" disabled />
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.title.$invalid && vm.formAdd.title.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.TITLE"></label>
+          <div class="col-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2" ng-bind="vm.shortName"></span>
+                <input class="form-control" name="title"
+                   placeholder="{{'GENERAL.TITLE' | translate}}" aria-describedby="basic-addon2"
+                   ng-model="vm.issueModel.title" required ng-disabled="vm.issueModel.id">
+            </div>
+            <div class="input-errors" ng-show="vm.formAdd.title.$invalid && vm.formAdd.title.$dirty">
+              <span ng-show="vm.formAdd.title.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.DESCRIPTION"></label>
+          <div class="col-sm-10">
+            <textarea rows="8" class="form-control no-resize" name="description"
+                      placeholder="{{'GENERAL.DESCRIPTION' | translate}}"
+                      ng-model="vm.issueModel.description" ng-disabled="vm.issueModel.id"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.area.$invalid && vm.formAdd.area.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.AREA"></label>
+          <div class="col-sm-10">
+            <select class="form-control"
+                    kendo-drop-down-list="vm.areaInstance"
+                    name="area"
+                    required
+                    k-change="'vm.filterLine()'"
+                    k-data-text-field="'name'"
+                    k-data-value-field="'id'"
+                    k-data-source="vm.areaList"
+                    k-option-label="'- Choose Area -'"
+                    k-filter="'contains'"
+                    k-value-primitive="true"
+                    k-ng-model="vm.issueModel.areaId"
+                    ng-model="vm.issueModel.areaId"
+                    ng-disabled="vm.issueModel.id">
+            </select>
+            <div class="input-errors" ng-show="vm.formAdd.area.$invalid && vm.formAdd.area.$dirty">
+              <span ng-show="vm.formAdd.area.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.line.$invalid && vm.formAdd.line.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.LINE"></label>
+          <div class="col-sm-10">
+            <select class="form-control"
+                    kendo-drop-down-list="vm.lineInstance"
+                    name="line"
+                    required
+                    k-change="'vm.filterMachine()'"
+                    k-data-text-field="'name'"
+                    k-data-value-field="'id'"
+                    k-data-source="vm.lineList"
+                    k-option-label="'- Choose Line -'"
+                    k-filter="'contains'"
+                    k-value-primitive="true"
+                    k-ng-model="vm.issueModel.lineId"
+                    ng-model="vm.issueModel.lineId"
+                    ng-disabled="vm.issueModel.id">
+            </select>
+            <div class="input-errors" ng-show="vm.formAdd.line.$invalid && vm.formAdd.line.$dirty">
+              <span ng-show="vm.formAdd.line.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.machine.$invalid && vm.formAdd.machine.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.MACHINE"></label>
+          <div class="col-sm-10">
+            <select class="form-control"
+                    kendo-drop-down-list="vm.machineInstance"
+                    name="machine"
+                    required
+                    k-change="'vm.filterComponent()'"
+                    k-data-text-field="'name'"
+                    k-data-value-field="'id'"
+                    k-data-source="vm.machineList"
+                    k-option-label="'- Choose Machine -'"
+                    k-filter="'contains'"
+                    k-value-primitive="true"
+                    k-ng-model="vm.issueModel.machineId"
+                    ng-model="vm.issueModel.machineId"
+                    ng-disabled="vm.issueModel.id">
+            </select>
+            <div class="input-errors" ng-show="vm.formAdd.machine.$invalid && vm.formAdd.machine.$dirty">
+              <span ng-show="vm.formAdd.machine.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.component.$invalid && vm.formAdd.component.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.COMPONENT"></label>
+          <div class="col-sm-10">
+            <select class="form-control"
+                    kendo-drop-down-list="vm.componentInstance"
+                    name="component"
+                    required
+                    k-change="'vm.getShortName()'"
+                    k-data-text-field="'name'"
+                    k-data-value-field="'id'"
+                    k-data-source="vm.componentList"
+                    k-option-label="'- Choose Component -'"
+                    k-filter="'contains'"
+                    k-value-primitive="true"
+                    k-ng-model="vm.issueModel.componentId"
+                    ng-model="vm.issueModel.componentId"
+                    ng-disabled="vm.issueModel.id">
+            </select>
+            <div class="input-errors" ng-show="vm.formAdd.component.$invalid && vm.formAdd.component.$dirty">
+              <span ng-show="vm.formAdd.component.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.symptom.$invalid && vm.formAdd.symptom.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.SYMPTOM"></label>
+          <div class="col-sm-10">
+            <input class="form-control" name="symptom" placeholder="{{'GENERAL.SYMPTOM' | translate}}"
+                   ng-model="vm.symptomDescription" required ng-disabled="!vm.issueModel.areaId || !vm.issueModel.lineId || !vm.issueModel.machineId || !vm.issueModel.componentId || vm.issueModel.id">
+            <div class="input-errors" ng-show="vm.formAdd.symptom.$invalid && vm.formAdd.symptom.$dirty">
+              <span ng-show="vm.formAdd.symptom.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.potentialCauseId.$invalid && vm.formAdd.potentialCauseId.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.POTENTIAL_CAUSES"></label>
+          <div class="col-sm-10">
+            <div class="potential-item" ng-repeat="item in vm.potentialCauseList">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Title" ng-model="item.description">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-success" ng-click="vm.savePotentialCause(item)" ng-disabled="!item.description || !vm.issueModel.areaId || !vm.issueModel.lineId || !vm.issueModel.machineId || !vm.issueModel.componentId">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger" ng-click="vm.removePotentialCause(item)" ng-if="!item.id" ng-disabled="!vm.issueModel.areaId || !vm.issueModel.lineId || !vm.issueModel.machineId || !vm.issueModel.componentId">
+                    <i class="fa fa-minus" aria-hidden="true"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger" confirm-delete action="If you delete potential cause, troubleshoot of this potential cause will be deactivated. Are you sure?" on-ok="vm.deletePotentialCause(item)" ng-if="item.id && vm.potentialCauseList.length > 1" ng-disabled="(item.trouble.isHaveShootingApproved || item.trouble.shootings[0].status.id === 1) && vm.permission !== 'admin' && (!vm.issueModel.areaId || !vm.issueModel.lineId || !vm.issueModel.machineId || !vm.issueModel.componentId)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger" confirm-delete action="This is the last potential cause of issue, issue will be deleted if you delete this potential cause. Are you sure?" on-ok="vm.deletePotentialCause(item)" ng-if="item.id && vm.potentialCauseList.length === 1" ng-disabled="(item.trouble.isHaveShootingApproved || item.trouble.shootings[0].status.id === 1) && vm.permission !== 'admin' && (!vm.issueModel.areaId || !vm.issueModel.lineId || !vm.issueModel.machineId || !vm.issueModel.componentId)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                  </button>
+                  <button type="button" class="btn btn-primary btn-troubleshoot" ng-click="vm.addTroubleshoot(item)" ng-if="!item.trouble" ng-disabled="!vm.issueModel.title || !item.description || !item.id">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <span translate="ISSUE.BTN_ADD_TROUBLESHOOT"></span>
+                  </button>
+                  <button type="button" class="btn btn-primary btn-troubleshoot" ng-click="vm.viewTroubleshoot(item)" ng-if="item.trouble">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                    <span translate="ISSUE.BTN_VIEW_TROUBLESHOOT"></span>
+                  </button>
+                </span>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-sm btn-info" ng-disabled="(!vm.potentialCauseList[vm.potentialCauseList.length - 1].id && vm.potentialCauseList.length) || !vm.issueModel.areaId || !vm.issueModel.lineId || !vm.issueModel.machineId || !vm.issueModel.componentId || !vm.symptomDescription" ng-click="vm.addPotentialCause()">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+              <span translate="ISSUE.ADD_NEW_POTENTIAL_CAUSE"></span>
+            </button>
+          </div>
+      </div>
+    </div>
+
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-6">
+          <a ui-sref="app.issue" class="btn btn-default">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+            <span translate="GENERAL.BACK"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

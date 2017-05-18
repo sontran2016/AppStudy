@@ -1,0 +1,21 @@
+{
+  "AREA": {
+    "HEADING": "AREA MANAGEMENT",
+    "BTN_ADD": "New Area",
+    "BTN_DELETE_SELECTED": "Delete Selected",
+    "NAME": "Name",
+    "DESCRIPTION": "Description",
+    "IS_VISIBLE": "Is Visible",
+    "IS_ACTIVE": "Is Active",
+
+    "ADD_HEADING": "ADD NEW AREA",
+    "ADD_DESCRIPTION": "Complete form below to create new area. Go to next step to add more symptoms",
+    "SYMPTOM": "Symptom",
+
+    "CONFIRMATION": "Confirmation",
+    "REMOVE_DESCRIPTION": "Selected row(s) will be deleted forever. Are you sure?",
+
+    "EDIT_HEADING": "EIT AREA",
+    "EDIT_DESCRIPTION": "Complete form below to edit area. Go to next step to add more symptoms"
+  }
+}

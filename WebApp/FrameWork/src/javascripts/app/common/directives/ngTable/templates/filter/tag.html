@@ -1,0 +1,24 @@
+<div class="panel panel-filter">
+  <div class="panel-heading" ng-click="vm.isCollapsed = !vm.isCollapsed">
+    <div class="row">
+      <div class="col-xs-12 text-left">
+        <i class="fa fa-filter"></i> <span translate="GENERAL.SEARCH"></span>
+        <i ng-if="!vm.isCollapsed" class="fa fa-angle-double-up pull-right"></i>
+        <i ng-if="vm.isCollapsed"  class="fa fa-angle-double-down pull-right" ></i>
+      </div>
+    </div>
+    </div>
+    <div class="panel-body" uib-collapse="vm.isCollapsed">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label translate="TAG.SEARCH_NAME"></label>
+          <input type="text" class="form-control"
+                 name="keyword" ng-model="vm.keyword"
+                 ng-model-options="{debounce: { 'default': 500} }" ng-change="vm.search()"
+                 placeholder="{{'TAG.ENTER_KEYWORD' | translate}}"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

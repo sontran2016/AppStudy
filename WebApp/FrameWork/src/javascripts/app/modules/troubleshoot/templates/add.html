@@ -1,0 +1,162 @@
+<div class="page-troubleshoot">
+
+  <div class="page-header">
+    <h1 translate="TROUBLESHOOT.ADD_HEADING"></h1>
+  </div>
+
+  <form class="form-horizontal" name="vm.formAdd" ng-submit="vm.save()">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.title.$invalid && vm.formAdd.title.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.TITLE"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="title"
+                   ng-model="vm.addModel.title" placeholder="{{'GENERAL.TITLE' | translate}}" required/>
+
+            <div class="input-errors" ng-show="vm.formAdd.title.$invalid && vm.formAdd.title.$dirty">
+                <span ng-show="vm.formAdd.title.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.DESCRIPTION"></label>
+          <div class="col-sm-10">
+            <textarea rows="8" class="form-control no-resize" name="description"
+                      ng-model="vm.addModel.description" placeholder="{{'GENERAL.DESCRIPTION' | translate}}"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group"
+             ng-class="{'has-error': (vm.formAdd.symptomId.$invalid && vm.formAdd.symptomId.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.SYMPTOM"></label>
+          <div class="col-sm-10">
+            <div class="symptom-selection">
+              <input type="hidden" name="symptomId" ng-model="vm.addModel.symptomId"
+                     ng-change="vm.getPotentialCauses(vm.addModel.symptomId)" required/>
+
+              <p ng-bind="vm.addModel.symptomSelected" ng-class="{'item-chosen': vm.addModel.symptomSelected}"></p>
+
+              <div ng-if="!vm.addModel.symptomName">
+                <p>
+                  <span translate="TROUBLESHOOT.CLICK"></span>
+                  <span class="word-has-function" translate="TROUBLESHOOT.HERE" ng-click="vm.chooseSymptom()"></span>
+                  <span translate="TROUBLESHOOT.TO_CHOOSE_SYMPTOM"></span>
+                </p>
+              </div>
+              <div ng-if="vm.addModel.symptomName">
+                <div class="form-group">
+                  <div class="col-sm-12 text-right">
+                    <button type="button" class="btn btn-small btn-warning" ng-click="vm.chooseSymptom()"><i
+                      class="fa fa-list"></i> <span
+                      translate="GENERAL.CHANGE"></span></button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-errors"
+                   ng-show="vm.formAdd.symptomId.$invalid && vm.formAdd.symptomId.$dirty">
+                  <span ng-show="vm.formAdd.symptomId.$error.required"
+                        translate="VALIDATION.REQUIRED"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group"
+             ng-class="{'has-error': (vm.formAdd.potentialCauseId.$invalid && vm.formAdd.potentialCauseId.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.POTENTIAL_CAUSE"></label>
+
+          <div class="col-sm-10">
+            <div class="symptom-selection">
+              <input type="hidden" name="potentialCauseId" ng-model="vm.addModel.potentialCauseId"
+                     ng-change="vm.getPotentialCauses(vm.addModel.potentialCauseId)" required/>
+
+              <p ng-bind="vm.addModel.potentialSelected" ng-class="{'item-chosen': vm.addModel.potentialSelected}"></p>
+
+              <div ng-if="!vm.addModel.potentialCauseName && vm.addModel.symptomName">
+                <p>
+                  <span translate="TROUBLESHOOT.CLICK"></span>
+                  <span class="word-has-function" translate="TROUBLESHOOT.HERE" ng-click="vm.choosePotential()"></span>
+                  <span translate="TROUBLESHOOT.TO_CHOOSE_POTENTIAL"></span>
+                </p>
+              </div>
+
+              <div ng-if="vm.addModel.potentialCauseName">
+                <div class="form-group">
+                  <div class="col-sm-12 text-right">
+                    <button type="button" class="btn btn-small btn-warning" ng-click="vm.choosePotential()"><i
+                      class="fa fa-list"></i> <span
+                      translate="GENERAL.CHANGE"></span></button>
+                  </div>
+                </div>
+              </div>
+              <div class="input-errors"
+                   ng-show="vm.formAdd.potentialCauseId.$invalid && vm.formAdd.potentialCauseId.$dirty">
+                  <span ng-show="vm.formAdd.potentialCauseId.$error.required"
+                        translate="VALIDATION.REQUIRED"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label " translate="GENERAL.TAGS"></label>
+
+          <div class="col-sm-10">
+            <select multiple="multiple" c-kendo-multi-select=""
+                    options="{dataTextField: 'name', dataValueField: 'id', valuePrimitive: true, autoBind: true}"
+                    ng-source="vm.tags" ng-model="vm.addModel.tagIds"
+                    placeholder="- Select Tag(s) -"
+                    no-item-message="No Tags" add-new="vm.addNewTag(tagName)"></select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label " translate="TROUBLESHOOT.ISSUE_IMAGES_VIDEOS"></label>
+
+          <div class="col-sm-10">
+            <button type="button" class="btn btn-primary btn-sm" ng-model="vm.files"
+                ngf-select="vm.uploadFile()" ngf-multiple="false"
+                ngf-keep="'distinct'" ngf-accept="'.png,.jpg,.gif,.jpeg,.bmp,.tiff,.mp4,.mov'">
+              <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+              <span translate="GENERAL.BROWSE_IMAGE_VIDEO"></span>
+            </button>
+
+            <div class="m-t" ng-if="vm.resources.length">
+              <div class="troubleshoot-img flex align-center pull-left" ng-repeat="file in vm.resources">
+                <img alt="" ng-src="{{file.fileUrl}}" class="img-responsive img-thumb pull-left" ng-if="vm.getFileType(vm.getFileExtension(file.fileName)) === 'image'" />
+                <video class="media-object" width="70%" ng-if="vm.getFileType(vm.getFileExtension(file.fileName)) === 'video'">
+                  <source ng-src="{{vm.getSrc(file.fileUrl)}}" type="video/mp4">
+                </video>
+                <i class="fa fa-times remove-icon" aria-hidden="true" ng-click="vm.removeFile(file)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-6">
+            <a ui-sref="app.troubleshoot" class="btn btn-default">
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+              <span translate="GENERAL.BACK"></span>
+            </a>
+          </div>
+
+          <div class="col-sm-6 text-right">
+            <input type="checkbox" icheck name="isAnother" ng-model="vm.addAnother">
+            <span translate="GENERAL.ADD_ANOTHER"></span>
+
+            <button type="submit" class="btn btn-success btn-have-left" ng-disabled="vm.formAdd.$invalid">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              <span translate="GENERAL.SAVE"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>

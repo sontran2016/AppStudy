@@ -1,0 +1,5 @@
+C:\SonTran\Example\WinApp\SpringRemote\ServerService\bin\Debug\ServerService.dll
+C:\SonTran\Example\WinApp\SpringRemote\ServerService\bin\Debug\ServerService.pdb
+C:\SonTran\Example\WinApp\SpringRemote\ServerService\obj\Debug\ServerService.csprojResolveAssemblyReference.cache
+C:\SonTran\Example\WinApp\SpringRemote\ServerService\obj\Debug\ServerService.dll
+C:\SonTran\Example\WinApp\SpringRemote\ServerService\obj\Debug\ServerService.pdb

@@ -1,0 +1,25 @@
+<div class="issue-panel">
+  <div class="issue-content flex align-center">
+    <div class="row w-full m-n" ng-if="vm.permission === vm.roleList.ADMIN.value">
+      <div class="col-sm-6 solved pointer" ui-sref="app.issueOpenDashboard">
+        <span class="number" ng-bind="vm.issuesCount.opened"></span><br />
+        <span translate="HOME.ISSUE_OPENED"></span>
+      </div>
+      <div class="col-sm-6 unsolved pointer" ui-sref="app.issueCloseDashboard">
+        <span class="number" ng-bind="vm.issuesCount.closed"></span><br />
+        <span translate="HOME.ISSUE_CLOSED"></span>
+      </div>
+    </div>
+
+    <div class="row w-full m-n" ng-if="vm.permission !== vm.roleList.ADMIN.value">
+      <div class="col-sm-6 solved pointer" ui-sref="app.issueOpenDashboard">
+        <span class="number" ng-bind="vm.issuesCount.opened"></span><br />
+        <span translate="HOME.ISSUE_OPENED"></span>
+      </div>
+      <div class="col-sm-6 unsolved pointer" ui-sref="app.issueCloseDashboard">
+        <span class="number" ng-bind="vm.issuesCount.closed"></span><br />
+        <span translate="HOME.ISSUE_CLOSED"></span>
+      </div>
+    </div>
+  </div>
+</div>

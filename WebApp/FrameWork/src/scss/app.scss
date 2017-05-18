@@ -1,0 +1,44 @@
+/* Sang Dao */
+// Font-awesome
+$fa-font-path: '../bower_components/components-font-awesome/fonts';
+@import "../bower_components/components-font-awesome/scss/font-awesome";
+
+$ei-font-path: '../bower_components/elegant-icons/fonts';
+@import "../bower_components/elegant-icons/scss/style";
+
+$el-font-path: '../bower_components/elusive-icons/fonts';
+@import "../bower_components/elusive-icons/scss/elusive-icons";
+
+@import "../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "../bower_components/AngularJS-Toaster/toaster.css";
+@import "../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
+@import '../js/kendo-ui/styles/kendo.default.min.css';
+@import '../js/kendo-ui/styles/kendo.common.min.css';
+@import '../bower_components/angular-loading-bar/build/loading-bar.css';
+@import '../bower_components/iCheck/skins/all.css';
+@import '../bower_components/ng-table/dist/ng-table.css';
+@import '../bower_components/ng-tags-input/ng-tags-input.css';
+
+// Fixes
+@import "./kendo-bootstrap-fix";
+
+@import "./kendo-custom-theme";
+
+// Site style
+@import "./variables";
+
+@import "./utilities";
+@import "./style";
+
+@import "./rewrite";
+
+@import "./custom";
+
+// Elements
+@import "./elements/index";
+
+// Section
+@import "./sections/index";
+
+// Page
+@import "./page/index";

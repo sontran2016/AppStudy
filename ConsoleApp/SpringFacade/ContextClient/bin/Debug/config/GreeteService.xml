@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net" xmlns:r="http://www.springframework.net/remoting">
+  <object
+      id="greeterService"
+      serviceInterface="ContextServer.IGreeter, ContextServer.IGreeter"
+      serviceUrl="tcp://SONTRAN:19000/ContextServer.Greeter"/>
+</objects>

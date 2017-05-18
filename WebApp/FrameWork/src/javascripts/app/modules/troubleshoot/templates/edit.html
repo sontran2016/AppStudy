@@ -1,0 +1,171 @@
+<div class="troubleshoot-details-page page-issue page-troubleshoot">
+
+  <div class="page-header">
+    <h1 translate="TROUBLESHOOT.EDIT_HEADING"></h1>
+  </div>
+
+
+  <form class="form-horizontal" name="vm.formEdit">
+    <div class="panel panel-default">
+      <div class="panel-body">
+
+        <div class="form-group" ng-class="{'has-error': (vm.formEdit.title.$invalid && vm.formEdit.title.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.TITLE"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="title"
+                   ng-model="vm.troubleshootModel.title" placeholder="{{'GENERAL.TITLE' | translate}}" required/>
+
+            <div class="input-errors" ng-show="vm.formEdit.title.$invalid && vm.formEdit.title.$dirty">
+                  <span ng-show="vm.formEdit.title.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.DESCRIPTION"></label>
+          <div class="col-sm-10">
+            <textarea rows="8" class="form-control no-resize" name="description"
+                      ng-model="vm.troubleshootModel.description" placeholder="{{'GENERAL.DESCRIPTION' | translate}}"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.SYMPTOM"></label>
+          <div class="col-sm-10">
+            <div ng-bind="vm.troubleshootModel.symptom.description" class="text-justify" ></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.POTENTIAL_CAUSE"></label>
+          <div class="col-sm-10">
+            <div class="cause-list">
+              <div class="potential-cause-item" ng-class-odd="'potential-cause-item-odd'" ng-class-even="'potential-cause-item-even'" ng-bind="potential.description" ng-repeat="potential in vm.troubleshootModel.potentialCauses" ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label " translate="GENERAL.TAGS"></label>
+          <div class="col-sm-10">
+            <select multiple="multiple" c-kendo-multi-select=""
+                    options="{dataTextField: 'name', dataValueField: 'id', valuePrimitive: true, autoBind: true}"
+                    ng-source="vm.tags" ng-model="vm.troubleshootModel.tagIds"
+                    placeholder="- Select Tag(s) -"
+                    no-item-message="No Tags" add-new="vm.addNewTag(tagName)"></select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label " translate="TROUBLESHOOT.ISSUE_IMAGES_VIDEOS"></label>
+          <div class="col-sm-10">
+            <button type="button" class="btn btn-primary btn-sm" ng-model="vm.files"
+                ngf-select="vm.uploadFile()" ngf-multiple="false"
+                ngf-keep="'distinct'" ngf-accept="'.png,.jpg,.gif,.jpeg,.bmp,.tiff,.mp4,.mov'">
+              <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+              <span translate="GENERAL.BROWSE_IMAGE_VIDEO"></span>
+            </button>
+
+            <div class="m-t" ng-if="vm.troubleshootModel.resources.length">
+              <div class="troubleshoot-img flex align-center pull-left" ng-repeat="file in vm.troubleshootModel.resources">
+                <img alt="" ng-src="{{file.fileUrl}}" class="img-responsive img-thumb pull-left" ng-if="vm.getFileType(vm.getFileExtension(file.fileName)) === 'image'" />
+                <video class="media-object" width="70%" ng-if="vm.getFileType(vm.getFileExtension(file.fileName)) === 'video'">
+                  <source ng-src="{{vm.getSrc(file.fileUrl)}}" type="video/mp4">
+                </video>
+                <i class="fa fa-times remove-icon" aria-hidden="true" ng-click="vm.removeFile(file)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.ACTIVE"></label>
+          <div class="col-sm-10">
+            <input type="checkbox" icheck name="isActive" ng-model="vm.troubleshootModel.isActive" ng-disabled="vm.isActive">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12 text-right">
+            <button type="button" class="btn btn-success" ng-click="vm.save()">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              <span translate="GENERAL.SAVE"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="alert alert-primary alert-space bold-text" translate="TROUBLESHOOT.ADD_SHOOTING"></div>
+
+        <div class="row" ng-if="!vm.approvedShooting.length">
+          <div class="col-sm-12 text-center shooting-label fontstyle-italic">
+            <span translate="TROUBLESHOOT.NO_SHOOTING"></span>
+          </div>
+        </div>
+
+        <div ng-if="vm.approvedShooting.length && vm.approvedShooting[0].steps.length">
+          <div class="media step-item" ng-repeat="step in vm.approvedShooting[0].steps">
+            <div class="media-left">
+                <img class="media-object img-thumb" ng-src="{{step.resource.fileUrl}}" alt="">
+            </div>
+            <div class="media-body">
+                <h5 class="media-heading" ng-bind="'Step ' + ($index +1) + ':'"></h5>
+                <p class="text-justify" ng-bind-html="step.stepContent | newLines | trustedHtml"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" ng-if="vm.approvedShooting.length && vm.approvedShooting[0].resource">
+          <div class="col-sm-2 text-right">
+            <label translate="TROUBLESHOOT.ATTACHMENT_FILE"></label><br />
+            <em translate="TROUBLESHOOT.TYPE_SHOOTING_FILE"></em>
+          </div>
+          <div classs="col-sm-10">
+            <i class="fa fa-paperclip" aria-hidden="true"></i>
+            <span class="file-name" ng-bind="vm.approvedShooting[0].resource.fileName"></span><br />
+            <div class="m-t">
+              <a class="btn btn-primary btn-sm" href="javascript: void(0)"
+                 ng-click="vm.downLoad(vm.approvedShooting[0].resource.fileId)">
+                <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                <span translate="GENERAL.DOWNLOAD"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-primary alert-space bold-text" translate="TROUBLESHOOT.COMMENTS"></div>
+
+        <div class="row m-b" ng-if="!vm.troubleshootModel.comments.length">
+          <div class="col-sm-12 text-center shooting-label fontstyle-italic">
+            <span translate="TROUBLESHOOT.NO_COMMENT"></span>
+          </div>
+        </div>
+
+        <div class="media comment-item" ng-repeat="comment in vm.comments" ng-if="vm.troubleshootModel.comments.length">
+          <div class="media-body">
+            <p class="text-justify" ng-bind="comment.comment"></p>
+          </div>
+          <div class="media-right text-right">
+            <img ng-src="{{comment.user.avatar.fileUrl}}" class="img-thumbnail img-circle img-xs pull-right"/>
+            <div class="pull-right text-right avatar-time-panel">
+              <span translate="GENERAL.POSTED_BY"></span> <br />
+              <span translate="GENERAL.AT"></span> <span ng-bind="comment.timestamp | date: 'dd-MM-yyyy hh:mm a'"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-3">
+            <a ui-sref="app.troubleshoot" class="btn btn-default">
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+              <span translate="GENERAL.BACK"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>

@@ -1,0 +1,22 @@
+.tree-view {
+	
+	.tree-view-container {
+		border: 2px solid #5FB7CD;
+		border-radius: 5px;
+		padding: 10px;
+
+		.tree-parent {
+			background-color: #f5f5f5;
+		    padding: 5px;
+		    line-height: 25px;
+		    margin-bottom: 15px;
+		}
+
+		.tree-item {
+			border-bottom: 1px solid #e5e5e5;
+			padding-bottom: 10px;
+			margin-bottom: 15px;
+			cursor: pointer;
+		}
+	}
+}

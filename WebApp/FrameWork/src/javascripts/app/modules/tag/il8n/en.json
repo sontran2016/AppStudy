@@ -1,0 +1,11 @@
+{
+  "TAG": {
+    "TAG": "Tag",
+    "HEADING": "TAGS MANAGEMENT",
+    "ADD_HEADING": "ADD NEW TAG",
+    "EDIT_HEADING": "EDIT TAG",
+    "BTN_ADD": "New Tag",
+    "SEARCH_NAME": "Tag Name",
+    "ENTER_KEYWORD": "- Enter the tag name keyword -"
+  }
+}

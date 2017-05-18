@@ -1,0 +1,13 @@
+<div class="modal-header">
+  <h3 class="modal-title" translate="GENERAL.ATTENTION"></h3>
+</div>
+<div class="modal-body text-center">
+  <h4 translate="GENERAL.NOTIFY_CHANGED_TROUBLESHOOT" ng-if="vm.type === 'troubleshoot'"></h4>
+  <h4 translate="GENERAL.NOTIFY_CHANGED_ISSUE" ng-if="vm.type === 'issue'"></h4>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success btn-sm" type="button" ng-click="vm.close()">
+    <i class="fa fa fa-times-circle"></i>
+    <span translate="GENERAL.OK"></span>
+  </button>
+</div>

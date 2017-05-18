@@ -1,0 +1,236 @@
+body.login_page2 {
+  padding: 0 10px 0;
+}
+
+body.login_page2 .login_container {
+  margin: 80px auto;
+}
+
+@media (max-height:720px){
+  body.login_page2 .login_container{
+    margin: 0 auto 80px;
+  }
+}
+.modal-backdrop {
+  z-index: 10040 !important;
+}
+
+.modal-open {
+  overflow: visible !important;
+}
+
+.modal-open .modal {
+  z-index: 10050 !important;
+}
+
+.modal-footer {
+  padding: 15px 0px !important;
+}
+
+.btn {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.btn.active, .btn:active {
+  box-shadow: none;
+}
+
+.form-control-static {
+  min-height: 20px;
+}
+
+// Angular-Loading icon
+#loading-bar-spinner .spinner-icon {
+  border-top-color: #fff;
+  border-left-color: #fff;
+}
+
+#loading-bar .bar {
+  background: #fff;
+  .peg {
+    -moz-box-shadow: #fff 1px 0 6px 1px;
+    -ms-box-shadow: #fff 1px 0 6px 1px;
+    -webkit-box-shadow: #fff 1px 0 6px 1px;
+    box-shadow: #fff 1px 0 6px 1px;
+  }
+}
+
+.side_menu_active #main_menu {
+  top: 48px;
+  bottom: 0px;
+  height: auto;
+}
+
+.side_menu_active .menu_toggle {
+  padding: 5px 0px;
+  bottom: 0;
+}
+
+.side_menu_active #main_menu .first_level.section_active > a, .side_menu_active #main_menu .first_level.section_active > a:hover,
+.side_menu_active.side_menu_expanded #main_menu .first_level.section_active > a, .side_menu_active.side_menu_expanded #main_menu .first_level.section_active > a:hover {
+  background: #3F9BB0;
+  color: #fff;
+}
+
+#main_header .header_user_actions .user_dropdown .caret {
+  color: #000;
+}
+
+.checkbox label, .radio label {
+  padding-left: 0;
+}
+
+.icheckbox_square-blue {
+  top: -2px;
+  margin-right: 5px;
+}
+
+/*Pagination && Count item per page should display inline */
+.ng-table-counts{
+  margin:10px 0;
+}
+
+/*Check box should be vertical align middle with label*/
+.form-horizontal .control-label{
+  padding-top:0;
+}
+
+.vertical-align-center.selector{
+  width: 5% !important;
+  vertical-align: middle;
+  padding-top:10px;
+}
+
+.form-control {
+  .k-textbox,
+  .k-autocomplete,
+  .k-dropdown-wrap,
+  .k-numeric-wrap,
+  .k-multiselect-wrap {
+    height: auto;
+    .k-input {
+      height: 29px;
+    }
+  }
+  .k-autocomplete.k-state-default,
+  .k-picker-wrap.k-state-default,
+  .k-numeric-wrap.k-state-default,
+  .k-dropdown-wrap.k-state-default {
+    border-radius: 0;
+  }
+}
+
+#breadcrumbs ul li + li:before {
+  content: '>' !important;
+}
+
+.heading_text {
+  font-weight: bold !important;
+}
+
+#toast-container > div {
+  opacity: 1 !important;
+}
+
+.k-dropdown-wrap .k-input {
+  border-radius: 0 !important;
+  padding: 0 !important;
+  height: auto !important;
+  line-height: 32px;
+  color: #333 !important;
+}
+
+.k-dropdown-wrap {
+  border-radius: 0 !important;
+  height: auto !important;
+}
+
+.k-widget {
+  line-height: 32px;
+}
+
+.k-dropdown-wrap.k-state-default {
+  background-color: white;
+}
+
+li.k-state-focused {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.k-popup {
+  .k-item {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .k-list {
+    overflow-x: hidden;
+    max-height: 200px;
+
+    .k-item {
+      margin-bottom: 1px !important;
+    }
+  }
+}
+
+.k-input, input.k-textbox, textarea.k-textbox, input.k-textbox:hover, textarea.k-textbox:hover, .k-textbox > input, .k-multiselect-wrap {
+  color: black !important;
+}
+
+.k-multiselect {
+  position: relative;
+  height: auto !important;
+  &:after {
+    content: "\25BC";
+    position: absolute;
+    top: 0;
+    right: 6px;
+    font-size: 11px;
+  }
+  .k-multiselect-wrap {
+    margin-right: 22px;
+  }
+  .k-multiselect-wrap ul li span {
+    text-align: justify;
+    display: inline-block;
+  }
+}
+
+.checkbox label {
+  font-weight: normal !important;
+  span {
+    margin-left: 10px !important;
+  }
+}
+.k-combobox .k-select {
+  border-style: none
+}
+
+.ng-table th {
+  text-align: left;
+}
+
+.ng-table th:first-child {
+  text-align: center;
+}
+
+.ng-table-filters {
+  background-color: #e5e5e5 !important;
+}
+
+.table tbody tr td {
+  vertical-align: middle !important;
+}
+
+.btn-default.active, .btn-default:active, .btn-default:hover, .open>.btn-default.dropdown-toggle {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+
+.mCSB_outside+.mCSB_scrollTools {
+  right: -20px !important;
+}

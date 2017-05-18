@@ -1,0 +1,6 @@
+{
+  "RESET_PASSWORD": {
+    "RESET_SUCCESSFUL": "Your password has been updated successful, you can sign in with new password now.",
+    "LINK_INVALID": "This link is not valid. Perhaps you already used it."
+  }
+}

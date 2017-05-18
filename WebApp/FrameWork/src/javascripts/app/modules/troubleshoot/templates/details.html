@@ -1,0 +1,274 @@
+<div class="troubleshoot-details-page">
+
+  <div class="page-header">
+    <h1>TROUBLESHOOT DETAILS</h1>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+
+      <div class="row rating-info">
+        <div class="col-sm-6">
+          <span uib-rating ng-model="vm.detailsData.rate" enable-reset="false" ng-if="!vm.detailsData.isRated" ng-click="vm.setRating()"></span>
+          <span uib-rating ng-model="vm.detailsData.rate" read-only="true" ng-if="vm.detailsData.isRated"></span>
+        </div>
+        <div class="col-sm-6 text-right">
+          <img ng-if="vm.detailsData.createdBy.avatar" ng-src="{{vm.detailsData.createdBy.avatar.fileUrl}}"
+                class="img-thumbnail img-circle img-xs pull-right"/>
+          <div class="pull-right text-right avatar-time-panel">
+            <span translate="GENERAL.LAST_UPDATED"></span> <br />
+            <span translate="GENERAL.AT"></span> <span ng-bind="vm.detailsData.updateOnDate | date: 'dd-MM-yyyy hh:mm a'"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row m-b">
+        <label class="col-sm-2 control-label colon text-right" translate="TROUBLESHOOT.CODE"></label>
+        <div class="col-sm-10" ng-bind="vm.detailsData.troubleCode"></div>
+      </div>
+
+      <div class="row m-b">
+        <label class="col-sm-2 control-label colon text-right" translate="GENERAL.TITLE"></label>
+        <div class="col-sm-10" ng-bind="vm.detailsData.title"></div>
+      </div>
+
+      <div class="row m-b">
+        <label class="col-sm-2 control-label colon text-right" translate="GENERAL.DESCRIPTION"></label>
+        <div class="col-sm-10 text-justify">
+          <span ng-bind-html="vm.detailsData.description | newLines" ng-if="vm.detailsData.description"></span>
+          <span ng-bind-html="'N/A'" ng-if="!vm.detailsData.description"></span>
+        </div>
+      </div>
+
+      <div class="row m-b">
+        <label class="col-sm-2 control-label colon text-right" translate="GENERAL.STATUS"></label>
+        <div class="col-sm-10">
+          <div ng-bind="vm.detailsData.status.name || 'Created'" class="label" ng-class="{
+                      'label-primary': (vm.detailsData.status.id==vm.shootingStatus.CREATED || !vm.detailsData.status),
+                      'label-success': vm.detailsData.status.id==vm.shootingStatus.APPROVED,
+                      'label-warning': vm.detailsData.status.id==vm.shootingStatus.NEED_APPROVE,
+                      'label-danger': vm.detailsData.status.id==vm.shootingStatus.REJECTED}"></div>
+        </div>
+      </div>
+
+      <div class="row m-b">
+        <label class="col-sm-2 control-label colon text-right" translate="GENERAL.ACTIVE_INACTIVE"></label>
+        <div class="col-sm-10" ng-bind="vm.detailsData.isActive ? 'Active' : 'Inactive'"></div>
+      </div>
+
+      <div class="row m-b" ng-if="vm.detailsData.line">
+        <label class="col-sm-2 control-label colon text-right" translate="GENERAL.LINE"></label>
+        <div class="col-sm-10" ng-bind="vm.detailsData.line.name || 'N/A'">
+        </div>
+      </div>
+
+      <div class="row m-b" ng-if="vm.detailsData.machine">
+        <label class="col-sm-2 control-label colon text-right" translate="GENERAL.MACHINE"></label>
+        <div class="col-sm-10" ng-bind="vm.detailsData.machine.name || 'N/A'">
+        </div>
+      </div>
+
+      <div class="row m-b" ng-if="vm.detailsData.component">
+        <label class="col-sm-2 control-label colon text-right" translate="GENERAL.COMPONENT"></label>
+        <div class="col-sm-10" ng-bind="vm.detailsData.component.name || 'N/A'">
+        </div>
+      </div>
+
+      <div class="row m-b">
+        <label class="col-sm-2 control-label colon text-right" translate="GENERAL.SYMPTOM"></label>
+        <div class="col-sm-10" ng-bind="vm.detailsData.symptom.description || 'N/A'">
+        </div>
+      </div>
+
+      <div class="row m-b">
+        <label class="col-sm-2 control-label colon text-right" translate="GENERAL.POTENTIAL_CAUSE"></label>
+        <div class="col-sm-10">
+          <div class="cause-list">
+            <div class="potential-cause-item" ng-class-odd="'potential-cause-item-odd'" ng-class-even="'potential-cause-item-even'"
+                ng-repeat="cause in vm.detailsData.potentialCauses" ng-bind="cause.description"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row m-b">
+        <label class="col-sm-2 control-label colon text-right" translate="GENERAL.TAGS"></label>
+        <div class="col-sm-10">
+          <label class="label custom-label label-success" ng-repeat="tag in vm.detailsData.tags" ng-bind="tag.name"></label>
+          <span ng-if="!vm.detailsData.tags.length" ng-bind="'N/A'"></span>
+        </div>
+      </div>
+
+      <div class="row m-b">
+        <label class="col-sm-2 control-label colon text-right" translate="TROUBLESHOOT.ISSUE_IMAGES_VIDEOS"></label>
+        <div class="col-sm-10">
+          <div class="troubleshoot-img flex align-center pull-left" ng-repeat="file in vm.detailsData.resources">
+            <preview-template url="file.fileUrl" file-name="file.fileName" type="'image'" ng-if="vm.getFileType(vm.getFileExtension(file.fileName)) === 'image'"></preview-template>
+            <preview-template url="file.fileUrl" file-name="file.fileName" type="'video'" ng-if="vm.getFileType(vm.getFileExtension(file.fileName)) === 'video'"></preview-template>
+          </div>
+          <span ng-if="!vm.detailsData.resources.length" ng-bind="'N/A'"></span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 text-right">
+          <button type="button" class="btn btn-info" ui-sref="app.troubleshootEdit({id: vm.detailsData.id})"
+                  ng-if="vm.permission === vm.roleList.ADMIN.value || (vm.permission !== vm.roleList.ADMIN.value && vm.detailsData.isActive === true && vm.detailsData.createdBy.id === vm.currentUser.id && vm.detailsData.canEdit)">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            <span translate="GENERAL.EDIT"></span>
+          </button>
+          <button type="button" class="btn btn-info" ng-click="vm.updateTroubleshoot()"
+                  ng-if="vm.detailsData.isActive === false && vm.permission === vm.roleList.ADMIN.value && vm.detailsData.createdBy.id !== vm.currentUser.id">
+            <i class="fa fa-reply-all" aria-hidden="true"></i>
+            <span translate="GENERAL.ACTIVATE"></span>
+          </button>
+          <button type="button" class="btn btn-danger" ng-click="vm.addToFavorite(vm.detailsData.id)"
+                  ng-if="!vm.detailsData.isFavorited && vm.detailsData.isActive">
+            <i class="fa fa-gratipay" aria-hidden="true"></i>
+            <span translate="GENERAL.ADD_FAVORITE"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="alert alert-primary alert-space bold-text" translate="TROUBLESHOOT.ADD_SHOOTING"></div>
+
+      <div class="row" ng-if="!vm.detailsData.shootings.length">
+        <div class="col-sm-12 text-center shooting-label fontstyle-italic">
+          <span translate="TROUBLESHOOT.NO_SHOOTING"></span>
+          <span translate="TROUBLESHOOT.CLICK"></span>
+          <span class="word-has-function" translate="TROUBLESHOOT.HERE" ng-click="vm.addNewShooting()"></span>
+          <span translate="TROUBLESHOOT.CREATE_NEW_SHOOTING"></span>
+        </div>
+      </div>
+
+      <!-- Admin role and approver role -->
+      <div class="row" ng-if="vm.myShooting && !vm.approvedShooting.length && !vm.needToApproveShooting.length && (vm.permission === vm.roleList.ADMIN.value || vm.permission === vm.roleList.APPROVER.value)">
+        <div class="col-sm-12 text-center shooting-label fontstyle-italic">
+          <span translate="TROUBLESHOOT.NO_SHOOTING"></span>
+        </div>
+      </div>
+
+      <div class="row" ng-if="(vm.permission === vm.roleList.ADMIN.value || vm.permission === vm.roleList.APPROVER.value) && vm.detailsData.shootings.length && !vm.myShooting">
+        <div class="col-sm-12 text-right m-t">
+          <button type="button" class="btn btn-info" ng-click="vm.addNewShooting()">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            <span translate="TROUBLESHOOT.NEW_SHOOTING"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="table-version-shooting" ng-if="(vm.needToApproveShooting.length || vm.myShooting || vm.approvedShooting.length) && (vm.permission === vm.roleList.ADMIN.value || vm.permission === vm.roleList.APPROVER.value)">
+        <c-ng-table instance="vm.shootingTable" conf="vm.conf"></c-ng-table>
+      </div>
+      <!--end admin role -->
+
+      <!-- User role -->
+      <div class="row" ng-if="vm.myShooting && !vm.approvedShooting.length && vm.permission !== vm.roleList.ADMIN.value && vm.permission !== vm.roleList.APPROVER.value">
+        <div class="col-sm-12 text-center shooting-label fontstyle-italic">
+          <span translate="TROUBLESHOOT.NO_SHOOTING"></span>
+        </div>
+      </div>
+
+      <div class="row" ng-if="vm.permission !== vm.roleList.ADMIN.value && vm.permission !== vm.roleList.APPROVER.value && vm.approvedShooting.length && vm.approvedShooting[0].resource">
+        <div class="col-sm-2 text-right">
+          <label translate="TROUBLESHOOT.ATTACHMENT_FILE"></label><br />
+          <em translate="TROUBLESHOOT.TYPE_SHOOTING_FILE"></em>
+        </div>
+        <div classs="col-sm-10">
+          <i class="fa fa-paperclip" aria-hidden="true"></i>
+          <span class="file-name" ng-bind="vm.approvedShooting[0].resource.fileName"></span><br />
+          <div class="m-t">
+            <a class="btn btn-primary btn-sm" href="javascript: void(0)"
+               ng-click="vm.downLoad(vm.approvedShooting[0].resource.fileId)">
+              <i class="fa fa-cloud-download" aria-hidden="true"></i>
+              <span translate="GENERAL.DOWNLOAD"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div ng-if="vm.permission !== vm.roleList.ADMIN.value && vm.permission !== vm.roleList.APPROVER.value && vm.approvedShooting.length && vm.approvedShooting[0].steps.length">
+        <div class="media step-item" ng-repeat="step in vm.approvedShooting[0].steps">
+          <div class="media-left">
+            <div class="troubleshoot-img flex align-center">
+              <preview-template url="step.resource.fileUrl" file-name="step.resource.fileName" type="'image'" ng-if="vm.getFileType(vm.getFileExtension(step.resource.fileName)) === 'image'"></preview-template>
+              <preview-template url="step.resource.fileUrl" file-name="step.resource.fileName" type="'video'" ng-if="vm.getFileType(vm.getFileExtension(step.resource.fileName)) === 'video'"></preview-template>
+              <img class="media-object img-thumb" ng-if="!step.resource" ng-src="./img/no-image.png" alt="">
+            </div>
+          </div>
+          <div class="media-body">
+              <h5 class="media-heading" ng-bind="'Step ' + ($index +1) + ':'"></h5>
+              <p class="text-justify" ng-bind-html="step.stepContent | newLines | trustedHtml"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" ng-if="vm.detailsData.shootings.length && vm.permission !== vm.roleList.ADMIN.value && vm.permission !== vm.roleList.APPROVER.value">
+        <div class="col-sm-12 text-right m-t">
+          <button type="button" class="btn btn-info" ng-click="vm.addNewShooting()" ng-if="!vm.myShooting">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            <span translate="TROUBLESHOOT.NEW_SHOOTING"></span>
+          </button>
+          <button type="button" class="btn btn-primary" ng-click="vm.viewMyShooting()" ng-if="vm.myShooting">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+            <span translate="TROUBLESHOOT.MY_SHOOTING"></span>
+          </button>
+        </div>
+      </div>
+      <!--end user role -->
+
+
+      <div class="alert alert-primary alert-space bold-text" translate="TROUBLESHOOT.COMMENTS" ng-if="vm.approvedShooting.length"></div>
+
+      <div class="row m-b" ng-if="!vm.detailsData.comments && vm.approvedShooting.length">
+        <div class="col-sm-12 text-center shooting-label fontstyle-italic">
+          <span translate="TROUBLESHOOT.NO_COMMENT"></span>
+        </div>
+      </div>
+
+      <div class="media comment-item" ng-repeat="comment in vm.comments" ng-if="vm.approvedShooting.length">
+        <div class="media-body">
+          <p class="text-justify" ng-bind-html="comment.comment | newLines | trustedHtml"></p>
+        </div>
+        <div class="media-right text-right">
+          <img ng-src="{{comment.user.avatar.fileUrl}}" class="img-thumbnail img-circle img-xs pull-right"/>
+          <div class="pull-right text-right avatar-time-panel">
+            <span translate="GENERAL.POSTED_BY"></span> <br />
+            <span translate="GENERAL.AT"></span> <span ng-bind="comment.timestamp | date: 'dd-MM-yyyy hh:mm a'"></span>
+          </div>
+        </div>
+      </div>
+
+      <form class="form-horizontal" name="vm.formComment" ng-if="vm.approvedShooting.length" novalidate>
+        <div class="form-group">
+          <div class="col-sm-11">
+            <editor model="vm.commentModel.comment"></editor>
+          </div>
+          <div class="col-sm-1 btn-send-comment pointer" ng-click="vm.sendComment()">
+            <i class="fa fa-paper-plane-o" aria-hidden="true"></i><br />
+            <span translate="GENERAL.SEND"></span>
+          </div>
+          <div class="col-sm-1 btn-comment">
+            <button type="button" class="btn btn-default btn-block" ng-click="vm.sendComment()">
+              <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+              <span translate="GENERAL.SEND"></span>
+            </button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-sm-3">
+          <a ng-click="vm.back()" class="btn btn-default">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+            <span translate="GENERAL.BACK"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

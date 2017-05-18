@@ -1,0 +1,283 @@
+<div class="tree-view">
+  <div  class="page-header">
+    <h1 translate="TREE_VIEW.HEADING"></h1>
+  </div>
+
+  <div class="panel panel-filter">
+	  <div class="panel-heading" ng-click="vm.isCollapsed = !vm.isCollapsed">
+	    <div class="row">
+	      <div class="col-sm-12 text-left">
+	        <i class="fa fa-filter"></i> <span translate="GENERAL.SEARCH_FILTER"></span>
+	        <i ng-if="!vm.isCollapsed" class="fa fa-angle-double-up pull-right"></i>
+	        <i ng-if="vm.isCollapsed" class="fa fa-angle-double-down pull-right"></i>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="panel-body panel-filter" uib-collapse="vm.isCollapsed">
+	    <div class="row">
+	      <div class="col-sm-6">
+	        <div class="form-group">
+	          <label translate="GENERAL.AREA"></label>
+	          <select class="form-control"
+	                  kendo-multi-select
+	                  name="areaIds"
+	                  k-data-text-field="'name'" k-data-value-field="'id'"
+	                  k-data-source="vm.areas"
+	                  k-auto-bind="false"
+	                  k-placeholder="'- Any Area -'"
+	                  k-change="'vm.filterLine()'"
+	                  k-ng-model="vm.filter.areaIds">
+	          </select>
+	        </div>
+	      </div>
+	      <div class="col-sm-6">
+	        <div class="form-group">
+	          <label translate="GENERAL.LINE"></label>
+	          <select class="form-control"
+	                  kendo-multi-select
+	                  name="lineIds"
+	                  k-data-text-field="'name'" k-data-value-field="'id'"
+	                  k-data-source="vm.lineList"
+	                  k-placeholder="'- Any Line -'"
+	                  k-change="'vm.getTree()'"
+	                  k-ng-model="vm.filter.lineIds">
+	          </select>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="tree-view-container">
+		<div ui-tree ng-if="vm.data.areas.length">
+		  <ul ui-tree-nodes ng-model="vm.data.areas">
+		    <li ng-repeat="area in vm.data.areas" class="list-style-none">
+		      <div class="tree-parent pointer" ng-click="area.isCollapsed = !area.isCollapsed">
+		        <i class="fa fa-home"></i> 
+		        <span class="bold-text" ng-bind="area.area.name"></span>
+		        <span class="bold-text"  ng-bind="'(' + area.area.shortName + ')'"></span>
+		        <span class="pull-right">
+		        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="area.isCollapsed && area.lines.length"></i>
+		        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!area.isCollapsed && area.lines.length"></i>
+		        </span>
+		      </div>
+
+		      <ul ui-tree-nodes ng-model="area.lines" ng-if="!area.isCollapsed">
+		        <li ng-repeat="line in area.lines" class="list-style-none">
+		          <div class="tree-item" ng-click="line.isCollapsed = !line.isCollapsed">
+		            <i class="fa fa-magic"></i> 
+		            <span ng-bind="line.line.name"></span>
+		            <span ng-bind="'(' + line.line.shortName + ')'" ng-if="line.line.shortName"></span>
+		            <span class="pull-right">
+			        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="line.isCollapsed && line.machines.length"></i>
+			        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!line.isCollapsed && line.machines.length"></i>
+			        </span>
+		          </div>
+
+		          <ul ui-tree-nodes ng-model="line.issues" ng-if="!line.isCollapsed">
+		          	<li ng-repeat="issue in line.issues" class="list-style-none">
+		          		<div class="tree-item" ng-click="issue.isCollapsed = !issue.isCollapsed">
+		          			<i class="fa fa-exclamation-triangle"></i> <span ng-bind="issue.issue.title"></span>
+		          			<span class="pull-right">
+					        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="issue.isCollapsed && issue.issue.symptom"></i>
+					        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!issue.isCollapsed && issue.issue.symptom"></i>
+					        </span>
+		          		</div>
+
+		          		<ul ui-tree-nodes ng-model="issue.symptom" ng-if="!issue.isCollapsed">
+		          			<li class="list-style-none">
+				          		<div class="tree-item" ng-click="issue.issue.symptom.isCollapsed = !issue.issue.symptom.isCollapsed">
+				          			<i class="fa fa-map-signs"></i> <span ng-bind="issue.issue.symptom.symptom.description"></span>
+				          			<span class="pull-right">
+							        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="issue.issue.symptom.isCollapsed && issue.issue.symptom.potentialCauses.length"></i>
+							        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!issue.issue.symptom.isCollapsed && issue.issue.symptom.potentialCauses.length"></i>
+							        </span>
+				          		</div>
+
+				          		<ul ui-tree-nodes ng-model="symptom.potentialCause" ng-if="!issue.issue.symptom.isCollapsed">
+				          			<li ng-repeat="potential in issue.issue.symptom.potentialCauses" class="list-style-none">
+				          				<div class="tree-item" ng-click="potential.isCollapsed = !potential.isCollapsed">
+						          			<i class="fa fa-list"></i> <span ng-bind="potential.potentialCause.description"></span>
+						          			<span class="pull-right">
+									        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="potential.isCollapsed && potential.troubles.length"></i>
+									        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!potential.isCollapsed && potential.troubles.length"></i>
+									        </span>
+						          		</div>
+
+						          		<ul ui-tree-nodes ng-model="potential.troubles" ng-if="!potential.isCollapsed">
+						          			<li ng-repeat="trouble in potential.troubles" class="list-style-none">
+						          				<div class="tree-item">
+								          			<i class="fa fa-question-circle"></i> <span ng-bind="trouble.title"></span>
+								          		</div>
+						          			</li>
+						          		</ul>
+				          			</li>
+				          		</ul>
+				          	</li>
+		          		</ul>
+		          	</li>
+		          </ul>
+
+		          <ul ui-tree-nodes ng-model="line.machines" ng-if="!line.isCollapsed">
+		          	<li ng-repeat="machine in line.machines" class="list-style-none">
+		          		<div class="tree-item" ng-click="machine.isCollapsed = !machine.isCollapsed">
+		          			<i class="fa fa-mobile"></i> 
+		          			<span ng-bind="machine.machine.name"></span>
+		          			<span ng-bind="'(' + machine.machine.shortName + ')'" ng-if="machine.machine.shortName"></span>
+		          			<span class="pull-right">
+					        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="machine.isCollapsed && machine.components.length"></i>
+					        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!machine.isCollapsed && machine.components.length"></i>
+					        </span>
+		          		</div>
+
+		          		<ul ui-tree-nodes ng-model="machine.issues" ng-if="!machine.isCollapsed">
+				          	<li ng-repeat="issue in machine.issues" class="list-style-none">
+				          		<div class="tree-item" ng-click="issue.isCollapsed = !issue.isCollapsed">
+				          			<i class="fa fa-exclamation-triangle"></i> <span ng-bind="issue.issue.title"></span>
+				          			<span class="pull-right">
+							        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="issue.isCollapsed && issue.issue.symptom"></i>
+							        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!issue.isCollapsed && issue.issue.symptom"></i>
+							        </span>
+				          		</div>
+
+				          		<ul ui-tree-nodes ng-model="issue.symptom" ng-if="!issue.isCollapsed">
+				          			<li class="list-style-none">
+						          		<div class="tree-item" ng-click="issue.issue.symptom.isCollapsed = !issue.issue.symptom.isCollapsed">
+						          			<i class="fa fa-map-signs"></i> <span ng-bind="issue.issue.symptom.symptom.description"></span>
+						          			<span class="pull-right">
+									        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="issue.issue.symptom.isCollapsed && issue.issue.symptom.potentialCauses.length"></i>
+									        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!issue.issue.symptom.isCollapsed && issue.issue.symptom.potentialCauses.length"></i>
+									        </span>
+						          		</div>
+
+						          		<ul ui-tree-nodes ng-model="symptom.potentialCause" ng-if="!issue.issue.symptom.isCollapsed">
+						          			<li ng-repeat="potential in issue.issue.symptom.potentialCauses" class="list-style-none">
+						          				<div class="tree-item" ng-click="potential.isCollapsed = !potential.isCollapsed">
+								          			<i class="fa fa-list"></i> <span ng-bind="potential.potentialCause.description"></span>
+								          			<span class="pull-right">
+											        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="potential.isCollapsed && potential.troubles.length"></i>
+											        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!potential.isCollapsed && potential.troubles.length"></i>
+											        </span>
+								          		</div>
+
+								          		<ul ui-tree-nodes ng-model="potential.troubles" ng-if="!potential.isCollapsed">
+								          			<li ng-repeat="trouble in potential.troubles" class="list-style-none">
+								          				<div class="tree-item">
+										          			<i class="fa fa-question-circle"></i> <span ng-bind="trouble.title"></span>
+										          		</div>
+								          			</li>
+								          		</ul>
+						          			</li>
+						          		</ul>
+						          	</li>
+				          		</ul>
+				          	</li>
+				        </ul>
+
+		          		<ul ui-tree-nodes ng-model="machine.components" ng-if="!machine.isCollapsed">
+		          			<li ng-repeat="component in machine.components" class="list-style-none">
+		          				<div class="tree-item" ng-click="component.isCollapsed = !component.isCollapsed">
+		          					<i class="fa fa-desktop"></i> 
+		          					<span ng-bind="component.component.name"></span>
+		          					<span ng-bind="'(' + component.component.shortName + ')'" ng-if="component.component.shortName"></span>
+		          					<span class="pull-right">
+							        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="component.isCollapsed && component.symptoms.length"></i>
+							        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!component.isCollapsed && component.symptoms.length"></i>
+							        </span>
+		          				</div>
+
+		          				<ul ui-tree-nodes ng-model="component.issues" ng-if="!component.isCollapsed">
+						          	<li ng-repeat="issue in component.issues" class="list-style-none">
+						          		<div class="tree-item" ng-click="issue.isCollapsed = !issue.isCollapsed">
+						          			<i class="fa fa-exclamation-triangle"></i> <span ng-bind="issue.issue.title"></span>
+						          			<span class="pull-right">
+									        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="issue.isCollapsed && issue.issue.symptom"></i>
+									        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!issue.isCollapsed && issue.issue.symptom"></i>
+									        </span>
+						          		</div>
+
+						          		<ul ui-tree-nodes ng-model="issue.symptom" ng-if="!issue.isCollapsed">
+						          			<li class="list-style-none">
+								          		<div class="tree-item" ng-click="issue.issue.symptom.isCollapsed = !issue.issue.symptom.isCollapsed">
+								          			<i class="fa fa-map-signs"></i> <span ng-bind="issue.issue.symptom.symptom.description"></span>
+								          			<span class="pull-right">
+											        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="issue.issue.symptom.isCollapsed && issue.issue.symptom.potentialCauses.length"></i>
+											        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!issue.issue.symptom.isCollapsed && issue.issue.symptom.potentialCauses.length"></i>
+											        </span>
+								          		</div>
+
+								          		<ul ui-tree-nodes ng-model="symptom.potentialCause" ng-if="!issue.issue.symptom.isCollapsed">
+								          			<li ng-repeat="potential in issue.issue.symptom.potentialCauses" class="list-style-none">
+								          				<div class="tree-item" ng-click="potential.isCollapsed = !potential.isCollapsed">
+										          			<i class="fa fa-list"></i> <span ng-bind="potential.potentialCause.description"></span>
+										          			<span class="pull-right">
+													        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="potential.isCollapsed && potential.troubles.length"></i>
+													        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!potential.isCollapsed && potential.troubles.length"></i>
+													        </span>
+										          		</div>
+
+										          		<ul ui-tree-nodes ng-model="potential.troubles" ng-if="!potential.isCollapsed">
+										          			<li ng-repeat="trouble in potential.troubles" class="list-style-none">
+										          				<div class="tree-item">
+												          			<i class="fa fa-question-circle"></i> <span ng-bind="trouble.title"></span>
+												          		</div>
+										          			</li>
+										          		</ul>
+								          			</li>
+								          		</ul>
+								          	</li>
+						          		</ul>
+						          	</li>
+						        </ul>
+
+		          				<ul ui-tree-nodes ng-model="component.symptoms" ng-if="!component.isCollapsed">
+		          					<li ng-repeat="symptom in component.symptoms" class="list-style-none">
+		          						<div class="tree-item" ng-click="symptom.isCollapsed = !symptom.isCollapsed">
+				          					<i class="fa fa-map-signs"></i> <span ng-bind="symptom.symptom.description"></span>
+				          					<span class="pull-right">
+									        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="symptom.isCollapsed && symptom.potentialCauses.length"></i>
+									        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!symptom.isCollapsed && symptom.potentialCauses.length"></i>
+									        </span>
+				          				</div>
+
+				          				<ul ui-tree-nodes ng-model="symptom.potentialCauses" ng-if="!symptom.isCollapsed">
+				          					<li ng-repeat="potential in symptom.potentialCauses" class="list-style-none">
+				          						<div class="tree-item" ng-click="potential.isCollapsed = !potential.isCollapsed">
+				          							<i class="fa fa-list"></i> <span ng-bind="potential.potentialCause.description"></span>
+				          							<span class="pull-right">
+											        	<i class="fa fa-chevron-right" aria-hidden="true" ng-if="potential.isCollapsed && potential.troubles.length"></i>
+											        	<i class="fa fa-chevron-down" aria-hidden="true" ng-if="!potential.isCollapsed && potential.troubles.length"></i>
+											        </span>
+				          						</div>
+
+				          						<ul ui-tree-nodes ng-model="potential.troubles" ng-if="!potential.isCollapsed">
+				          							<li ng-repeat="trouble in potential.troubles" class="list-style-none">
+				          								<div class="tree-item" ng-click="trouble.isCollapsed = !trouble.isCollapsed">
+				          								<i class="fa fa-question-circle"></i> <span ng-bind="trouble.title"></span>
+				          								</div>
+				          							</li>
+				          						</ul>
+
+				          					</li>
+				          				</ul>
+
+		          					</li>
+		          				</ul>
+
+		          			</li>
+		          		</ul>
+
+		          	</li>
+		          </ul>
+
+		        </li>
+		      </ul>
+
+		    </li>
+		  </ul>
+
+		</div>
+
+		<p><em ng-if="!vm.data.areas.length" ng-bind="TREE_VIEW.NO_DATA"></em></p>
+	</div>
+</div>

@@ -1,0 +1,10 @@
+<div class="top-troubleshoot-panel">
+	<div class="row top-rating-item" ng-repeat="troubleshoot in vm.topRateTroubles">
+	  <div class="col-sm-8">
+	    <span class="pointer" ng-bind="troubleshoot.title" ui-sref="app.troubleshootDetails({id: troubleshoot.id})"></span>
+	  </div>
+	    <div class="col-sm-4 text-right">
+	      <span uib-rating ng-model="troubleshoot.rate" read-only="true"></span>
+	    </div>
+	</div>
+</div>

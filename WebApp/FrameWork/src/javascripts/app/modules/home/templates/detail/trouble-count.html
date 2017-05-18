@@ -1,0 +1,28 @@
+<div class="troubleshoot-panel">
+  <div class="troubleshoot-content flex align-center">
+    <div class="row w-full m-n" ng-if="vm.permission === vm.roleList.ADMIN.value">
+      <div class="col-sm-6 total pointer" ui-sref="app.troublePublicDashboard">
+        <span class="number" ng-bind="vm.troubleCount.public"></span><br />
+        <span translate="HOME.TROUBLESHOOT_PUBLIC"></span>
+      </div>
+      <div class="col-sm-6 need-approve pointer" ui-sref="app.troubleNeedConfirmDashboard">
+        <span class="number" ng-bind="vm.troubleCount.needConfirm"></span><br />
+        <span translate="HOME.ISSUE_NEED_APPROVE"></span>
+      </div>
+    </div>
+    <div class="row w-full m-n" ng-if="vm.permission !== vm.roleList.ADMIN.value">
+      <div class="col-sm-4 need-approve pointer" ui-sref="app.troubleNotConfirmDashboard">
+        <span class="number" ng-bind="vm.troubleCount.needConfirm"></span><br />
+        <span translate="HOME.TROUBLESHOOT_NOT_CONFIRM"></span>
+      </div>
+      <div class="col-sm-4 rejected pointer" ui-sref="app.troubleRejectedDashboard">
+        <span class="number" ng-bind="vm.troubleCount.rejected"></span><br />
+        <span translate="HOME.TROUBLESHOOT_REJECTED"></span>
+      </div>
+      <div class="col-sm-4 total pointer" ui-sref="app.troubleMyShootingDashboard">
+        <span class="number" ng-bind="vm.troubleCount.myShooting"></span><br />
+        <span translate="HOME.TROUBLESHOOT_MY_TROUBLE"></span>
+      </div>
+    </div>
+  </div>
+</div>

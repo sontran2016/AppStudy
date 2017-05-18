@@ -1,0 +1,2990 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Brainboxes.IO</name>
+    </assembly>
+    <members>
+        <member name="T:Brainboxes.IO.BBStream">
+            <summary>
+            Stream wrapper which adds ability to flush and check for 
+            available data on all streams which need to be accessed.
+            Also adds ability to have a timeout on stream read and writes without the
+            underlying connection closing on failure
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.BBStream.#ctor(System.IO.Stream)">
+            <summary>
+            Create a BBStream from a connection class
+            </summary>
+            <param name="baseStream"></param>
+        </member>
+        <member name="P:Brainboxes.IO.BBStream.BaseStream">
+            <summary>
+            the underlying stream
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.BBStream.streamReadLock">
+            <summary>
+            ensure mutual exclusion for send and receive functions
+            which is really locking read and writes to the stream
+            lock must be in stream not protocol as protocols could be shared
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.BBStream.streamWriteLock">
+            <summary>
+            ensure mutual exclusion for send and receive functions
+            which is really locking read and writes to the stream
+            lock must be in stream not protocol as protocols could be shared
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.BBStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            implement a read timeout
+            which does not cause the connection to go into an unknown state. Specifically
+            NetworkStream timeouts cause disconnection, we don't want the protocol/device objects to have to know
+            about or handle this. Disconnecting and Reconnecting the connection on timeout can be extremely slow
+            instead, implement our own timeout mechanism.
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Brainboxes.IO.BBStream.DataAvailable">
+            <summary>
+            Indicates whether data is available, can be 0, for no data, 1 for 1 or more bytes, 
+            or a number representing the precise number of bytes
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.BBStream.Flush">
+            <summary>
+            Clear the read and write streams
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.Connection">
+            <summary>
+            Abstract base Connection class
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._timeout">
+            <summary>
+            2000 is the default timeout for the stream in milliseconds
+            it is applied to both the read and write timeout
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._stream">
+            <summary>
+            The stream which can be accessed once a connection is made
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._lastCacheIsConnected">
+            <summary>
+            last cached value of the isConnected flag
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._lastCacheTimeIsConnected">
+            <summary>
+            The time (UTC/GMT) which the IsConnected property was cached
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._isConnectedCacheTimeoutMs">
+            <summary>
+            The timeout for the isConnected Cache, this should be set
+            to something useful in the child class
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.Connection.IsConnected">
+            <summary>
+            Whether the Device is Connected
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Connection._newValueIsConnected">
+            <summary>
+            implementation specific method to update the status whether the connection is connected
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._lastCacheIsAvailable">
+            <summary>
+            the last cached value of the isAvailable flag
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._lastCacheTimeIsAvailable">
+            <summary>
+            The time (UTC) which the IsAvailable property was cached
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._isAvailableCacheTimeoutMs">
+            <summary>
+            The timeout for the isAvailable Cache, this should be set
+            to something useful in the child class
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.Connection.IsAvailable">
+            <summary>
+            Whether the Device is Available, e.g. on-line or off-line
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Connection._newValueIsAvailable">
+            <summary>
+            Connection specific implementation to determine if the connection is available
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.Connection._connectionStatusChangedEvent">
+            <summary>
+            Connection Status Changed Event Handler
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._numberOfEventsRegistered">
+            <summary>
+            The number of registered connection status changed events
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.Connection.ConnectionStatusChangedEvent">
+            <summary>
+            When the status of the connection changes this event is raised
+            e.g. when <c>IsConnected</c> changes from false to true
+            or when <c>IsAvailable</c> changes:
+            * for example for a <c>TCPConnection</c> if the IP address is goes from on-line to off-line
+            * or for example for a <c>SerialConnection</c> when the COM name is no longer present or in use by another program
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._pollingTimer">
+            <summary>
+            The timer thread used for polling IO
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._threadShouldBeRunning">
+            <summary>
+            flag to indicate whether the pollingThread should be running
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Connection._pollingLock">
+            <summary>
+            Locks write access to all ioLines _value , _valueCacheTime , _highLatchedStatus , _highLatchedCacheTime, _lowLatchedStatus, _lowLatchedCacheTime
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Connection._startPollingForChanges">
+            <summary>
+            start polling the connection for changes to the status of IsAvailable
+            or IsConnected
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Connection._stopPollingForChanges">
+            <summary>
+            Stop the thread which is monitoring the connection
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.Connection.Stream">
+            <summary>
+            The Connections underlying stream class
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Connection.Connect">
+            <summary>
+            Connect to the ED Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Connection.Disconnect">
+            <summary>
+            Disconnect from the ED Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Connection._connect">
+            <summary>
+            Override in the derived connection class
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Connection._disconnect">
+            <summary>
+            Override in the derived connection class
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.Connection.Timeout">
+            <summary>
+            The timeout for Stream reads and writes
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Connection.Dispose">
+            <summary>
+            Dispose of this Brainboxes device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Connection.Dispose(System.Boolean)">
+            <summary>
+            Dispose of this Brainboxes device
+            </summary>
+            <param name="itIsSafeToAlsoFreeManagedObjects"></param>
+        </member>
+        <member name="M:Brainboxes.IO.Connection.ToString">
+            <summary>
+            ToString
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.Connection.Create(System.String,System.Int32,System.Int32)">
+            <summary>
+            Supply a connection IP address or com port and the correct <c>IConnection</c> concrete class will be created and returned
+            <example>
+            IConnection c1 = Connection.Create("192.168.0.5"); // returns a TCPConnection class
+            IConnection c2 = Connection.Create("COM6", 9600); //returns a SerialConnection class with the baud rate set to 9600
+            </example>
+            </summary>
+            <param name="ipAddressOrComPort">either an IP address e.g. "192.168.0.1" or a com port name e.g. "COM3"</param>
+            <param name="portOrBaudRate">optional either the IP port number e.g. 9500 or the com port baud rate e.g. 115200</param>
+            <param name="timeout">optional the read write timeout for the connection defaults to 2,000ms</param>
+            <returns></returns>
+        </member>
+        <member name="T:Brainboxes.IO.ConnectionStatusChangedEventHandler">
+            <summary>
+            When the status of the connection changes this event is raised
+            e.g. when <c>IsConnected</c> changes from false to true
+            or when <c>IsAvailable</c> changes:
+            * for example for a <c>TCPConnection</c> if the IP address is goes from online to offline
+            * or for example for a <c>SerialConnection</c> when the COM name is no longer present or in use by another program
+            </summary>
+            <param name="connection">The connection whose property changed</param>
+            <param name="property">The property which has changed either IsConnected or IsAvailable</param>
+            <param name="newValue">The new value of the property </param>
+        </member>
+        <member name="T:Brainboxes.IO.IConnection">
+            <summary>
+            Interface which describes a connection to a Brainboxes Device
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IConnection.IsConnected">
+            <summary>
+            Whether the Brainboxes Device is connected
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IConnection.IsAvailable">
+            <summary>
+            Whether the Brainboxes Device is available, e.g. online or offline
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IConnection.ConnectionStatusChangedEvent">
+            <summary>
+            When the status of the connection changes this event is raised
+            e.g. when <c>IsConnected</c> changes from false to true
+            or when <c>IsAvailable</c> changes:
+            * for example for a <c>TCPConnection</c> if the IP address is goes from online to offline
+            * or for example for a <c>SerialConnection</c> when the COM name is no longer present or in use by another program
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IConnection.Timeout">
+            <summary>
+            Timeout for Reads and Writes
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IConnection.Stream">
+            <summary>
+            The Connections underlying stream which it exposes once a connection has been initiated
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IConnection.Connect">
+            <summary>
+            Connect to a Brainboxes Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IConnection.Disconnect">
+            <summary>
+            Disconnect from a Brainboxes Device
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.SerialConnection">
+            <summary>
+            A Connection to a Brainboxes Devices using a serial port
+            Note this is different to a Brainboxes device WITH a serial connection (e.g. an Ethernet to Serial Device)
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.SerialConnection._serialPort">
+            <summary>
+            The underlying serial port object
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.SerialConnection.PortName">
+            <summary>
+            The name of the serial port
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.SerialConnection.BaudRate">
+            <summary>
+            The serial port baud rate
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.SerialConnection.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Create a Serial connection to a Brainboxes EDDevice
+            First install the virtual com port for the device using Brainboxes Boost.IO Manager
+            </summary>
+            <param name="portName">By default when installing a virtual COM port using Brainboxes Boost.IO Manager the lowest available COM port is chosen (greater than 2)</param>
+            <param name="baudRate">Baud rate is irrelevant to brainboxes EDDevice as the serial port is virtual, but some software may be expecting to set/read it</param>
+            <param name="Timeout">The Read and Write Timeout for data, defaults to 2000ms</param>
+        </member>
+        <member name="M:Brainboxes.IO.SerialConnection._newValueIsConnected">
+            <summary>
+            checks if the serial port is open
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.SerialConnection._newValueIsAvailable">
+            <summary>
+            Whether the serial port exists and is available to connect to
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.SerialConnection.ToString">
+            <summary>
+            ToString
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.SerialConnection._connect">
+            <summary>
+            Opens a new connection to a serial port
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.SerialConnection._disconnect">
+            <summary>
+            Closed the port connection
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.TCPConnection">
+            <summary>
+            A TCP connection to a Brainboxes Device
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.TCPConnection.DEFAULT_ASCII_PORT">
+            <summary>
+            The default port for ASCII
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.TCPConnection.DEFAULT_MODBUSTCP_PORT">
+            <summary>
+            The default port for Modbus TCP
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.TCPConnection.#ctor(System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Create a TCP Connection to a Brainboxes EDDevice
+            Use Brainboxes Boost.IO to find out the IP address of the Brainboxes EDDevice on your network
+            </summary>
+            <param name="IP">The IP address of the EDDevice to connect to, defaults to 192.168.127.255, which will be the case if the device is on a network without DHCP and the connecting computer is on the same subnet</param>
+            <param name="Port">The TCP IP Port number, defaults to 9500</param>
+            <param name="Timeout">The Read and Write Timeout for data, defaults to 2,000ms</param>
+            <param name="ConnectionTimeout">The Connection Timeout for the TCP socket to open, defaults to 20,000ms</param>
+        </member>
+        <member name="F:Brainboxes.IO.TCPConnection.IP">
+            <summary>
+            The IP address of the Connection to the Brainboxes Device e.g. "192.168.0.1"
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.TCPConnection._port">
+            <summary>
+            The TCP port of the connection to the Brainboxes Device
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.TCPConnection.Port">
+            <summary>
+            The TCP port of the Connection to the Brainboxes Device e.g. "9500"
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.TCPConnection.ConnectionTimeout">
+            <summary>
+            Connection timeout for the socket in milliseconds, default 20 seconds
+            This is approximately the same as the TCPClient connection timeout, however
+            unlike the TCPClient, this connection timeout can be altered
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.TCPConnection._newValueIsConnected">
+            <summary>
+            checks that the socket is connected
+            by making a nonblocking, zero-byte Send call
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.TCPConnection._newValueIsAvailable">
+            <summary>
+            sends a ping to the device and determines if it
+            is still available on the network
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.TCPConnection.Timeout">
+            <summary>
+            The connection and stream timeouts (for both stream read and stream write)
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.TCPConnection.ToString">
+            <summary>
+            ToString
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.TCPConnection._connect">
+            <summary>
+            Connect to the Brainboxes Device on the specified IP address and port, within the ConnectionTimeout
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.TCPConnection._disconnect">
+            <summary>
+            close this connection to the Brainboxes Device
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.BBSerialPortType">
+            <summary>
+            The type of Serial Port
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.BBSerialPortType.RS232">
+            <summary>
+            RS-232 Serial Port
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.BBSerialPortType.RS422485">
+            <summary>
+            RS-422/485 Serial Port
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.BBSerialPort.BBSerialPortType">
+            <summary>
+            The type of Serial port either RS232 or RS422/485
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.BBSerialPort.DataAvailable">
+            <summary>
+            Indicates whether data is available, can be 0, for no data, 1 for 1 or more bytes, 
+            or a number representing the precise number of bytes
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.BBSerialPort.Send(System.String)">
+            <summary>
+            Transmit data to the serial port
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Brainboxes.IO.BBSerialPort.Receive">
+            <summary>
+            Receive data from the serial port
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Brainboxes.IO.Device`2">
+            <summary>
+            A generic Brainboxes Device
+            </summary>
+            <typeparam name="C">A class which implements IConnection</typeparam>
+            <typeparam name="P">A class which implements IProtocol</typeparam>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.Create(System.String)">
+            <summary>
+            Connects to the IP Address given and determines what kind of
+            Brainboxes Device is there, creates the object and returns it
+            </summary>
+            <param name="ipAddress"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.DeviceTypeFromIP(System.String,System.Xml.XmlDocument@)">
+            <summary>
+            Connect to an IP address and download the devinfo.xml document
+            look through the document and find the device's model number
+            Convert the model number into a type
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="xmlDoc">if the XML file is required for further processing, it will be passed out</param>
+            <param name="timeout">The timeout for the connection to the devices' XML file</param>
+            <returns></returns>
+        </member>
+        <member name="F:Brainboxes.IO.Device`2._connection">
+            <summary>
+            The connection
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Device`2._protocol">
+            <summary>
+            The protocol
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.Device`2.Label">
+            <summary>
+            User definable label for the Device to help identify when many devices / when debugging
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.#ctor">
+            <summary>
+            Default generic constructor
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.#ctor(`0)">
+            <summary>
+            Construct with connection
+            </summary>
+            <param name="connection"></param>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.#ctor(`1)">
+            <summary>
+            Construct with protocol
+            </summary>
+            <param name="protocol"></param>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.#ctor(`0,`1)">
+            <summary>
+            Construct with connection and protocol
+            </summary>
+            <param name="connection"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="P:Brainboxes.IO.Device`2.IsConnected">
+            <summary>
+            Is this Brainboxes Device currently connected
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.Device`2.IsAvailable">
+            <summary>
+            Is this Brainboxes Device currently available, e.g. on line or off line (TCP), or the connection is already in use (serial)
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.Device`2._deviceStatusChangedEvent">
+            <summary>
+            The event which describes when a device status change occurs
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2._connection_ConnectionStatusChangedEvent(Brainboxes.IO.IConnection,System.String,System.Boolean)">
+            <summary>
+            when the status of a connection changes this event is called which then 
+            fires a device status change event
+            </summary>
+            <param name="connection"></param>
+            <param name="property"></param>
+            <param name="newValue"></param>
+        </member>
+        <member name="E:Brainboxes.IO.Device`2.DeviceStatusChangedEvent">
+            <summary>
+            Event When the status of the devices connection changes
+            for example goes from Disconnected to Connected
+            or from Available to Unavailable
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.Connect">
+            <summary>
+            Connect the Brainboxes Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.Disconnect">
+            <summary>
+            Disconnect the Brainboxes Device
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.Device`2.Connection">
+            <summary>
+            The connection. If the connection is replaced and the previous connection was connected, the new connection will be connected too
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.Device`2.Protocol">
+            <summary>
+            Marking as virtual allows it to be overridden in the child class
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.ToString">
+            <summary>
+            Describe this Brainboxes Device
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.Describe">
+            <summary>
+            Give a complete summary of the Device
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.Dispose">
+            <summary>
+            Dispose of this Brainboxes device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.Device`2.Dispose(System.Boolean)">
+            <summary>
+            Dispose of this Brainboxes device
+            </summary>
+            <param name="itIsSafeToAlsoFreeManagedObjects"></param>
+        </member>
+        <member name="T:Brainboxes.IO.EDDevice">
+            <summary>
+            A generic Brainboxes ED Device can be used to represent any Brainboxes Remote IO device (that is part numbers starting "ED-XXX")
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.#ctor">
+            <summary>
+            Create a new EDDevice, connection needs to be set, protocol defaults to ASCIIProtocol
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            Create a new EDDevice, passing in the connection, protocol defaults to ASCIIProtocol
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.IIOProtocol)">
+            <summary>
+            Create an EDDevice passing in the protocol, connection
+            </summary>
+            <param name="connection"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.SendCommand(System.String)">
+            <summary>
+            Send a command to the Brainboxes device using the supplied protocol.
+            </summary>
+            <param name="command">command to send</param>
+            <returns>Response or null if no response</returns>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice._initLines">
+            <summary>
+            extending classes should override this method to set the IO lines correctly then call this base method at the end
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.FactoryReset">
+            <summary>
+            Factory resets the device,
+            this can take some time as the current connection is broken and a new on has to be re-established
+            the connection may not reconnect if the current IP address settings cannot be re-got be the device in default settings mode
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.Restart">
+            <summary>
+            Power Cycle the device
+            this can take some time as the current connection is broken and a new on has to be re-established
+            the function will block until the device is powered up and reconnected to
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice._reconnectAfterResetOrRestart(System.String)">
+            <summary>
+            Disconnects from the device the tries to reconnect each second
+            over a period of 20 seconds, returns as soon as a connection is established
+            </summary>
+            <param name="restartOrReconnect"></param>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.Connect">
+            <summary>
+            Connect to a Brainboxes Remote IO Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.Disconnect">
+            <summary>
+            Disconnect from a Brainboxes Remote IO Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.ToString">
+            <summary>
+            ToString
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.Describe">
+            <summary>
+            Give a complete summary of the EDDevice
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="E:Brainboxes.IO.EDDevice._ioLinesChanged">
+            <summary>
+            IOLines Changed Event
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.EDDevice._ioLineChanged">
+            <summary>
+            IOLine Changed Event
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.EDDevice._ioLineRisingEdge">
+            <summary>
+            IOLine Rising Edge Event
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.EDDevice._ioLineFallingEdge">
+            <summary>
+            IOLine Falling Edge Event
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.EDDevice._ioLineCount">
+            <summary>
+            IOLine Count Event
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.EDDevice._numberOfRegisteredEvents">
+            <summary>
+            The number of events registered with this EDDevice
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.EDDevice.IOLinesChanged">
+            <summary>
+            Register an event with this handler to be notified when the state of
+            one or more IOLines change within a polling interval
+            This is useful when a state in the program is dependent on 2 or more ioLine states
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.EDDevice.IOLineChanged">
+            <summary>
+            Register an event with this handler to be notified when the state of
+            an input or output line changes
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.EDDevice.IOLineRisingEdge">
+            <summary>
+            Register an event with this handler to be notified when the state of
+            an input or output line goes from 0 -> 1 / low to high / closed to open
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.EDDevice.IOLineFallingEdge">
+            <summary>
+            Register an event with this handler to be notified when the state of
+            an input or output line goes from 1 -> 0 / high to low / open to closed
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.EDDevice.IOLineCount">
+            <summary>
+            Register an event with this handler to be notified when the state of
+            an input changes increment the count of the IOLine
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice._eventAdded">
+            <summary>
+            Called whenever an event is added to any of the event collection
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice._eventRemoved">
+            <summary>
+            Called whenever an event is removed from any of the event collections
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.EDDevice._IOCounterUpdateDirection">
+            <summary>
+            whether the Digital Input IO Line counter updates on a rising edge or a falling edge
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.EDDevice.IOCounterUpdateDirection">
+            <summary>
+            whether the Digital Input IO Line counter updates on a rising edge or a falling edge
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.EDDevice._ioLines">
+            <summary>
+            The IOLines which this device has
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.EDDevice.IOLines">
+            <summary>
+            IOLines indexed by their logical line number as described on the brainboxes product label
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.EDDevice._outputs">
+            <summary>
+            Outputs
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.EDDevice.Outputs">
+            <summary>
+            The devices output Lines (if it has any) indexed by IOLineNumber e.g. DOUT0, DOUT1, DOUT2
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.EDDevice._inputs">
+            <summary>
+            Inputs
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.EDDevice.Inputs">
+            <summary>
+            The devices input Lines (if it has any) indexed by IOLineNumber e.g. DOUT0, DOUT1, DOUT2
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.EDDevice.IOLineCacheTimeout">
+            <summary>
+            The time between checking the state of the IO lines for event handling, defaults to 250 ms
+            Also the stale period, when the cached value of the IO line has to be re-queried on the device
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.EDDevice.Brainboxes#IO#IIOLineDelegate#cacheTimeout">
+            <summary>
+            The polling interval of the Device also the time for which a cached value of an IO line is valid without re-checking the device with a network call
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.EDDevice._ioLineWriteLock">
+            <summary>
+            Locks write access to all ioLines _value , _valueCacheTime , _highLatchedStatus , _highLatchedCacheTime, _lowLatchedStatus, _lowLatchedCacheTime
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.EDDevice._pollingTimer">
+            <summary>
+            The timer thread used for polling IO
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.EDDevice._threadShouldBeRunning">
+            <summary>
+            flag to indicate whether the pollingThread should be running
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.EDDevice._ioLineCacheTimeout">
+            <summary>
+            cache timeout is also the polling interval
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice._startPollingForChanges">
+            <summary>
+            Spins up a background timing thread which polls the Brainboxes ED Device periodically at ioLineCacheTimeout
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice._stopPollingForChanges">
+            <summary>
+            Stop and dispose the background thread which is polling for changes on the Brainboxes ED Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice._pollingThreadFunc(System.Object)">
+            <summary>
+            This is the function which is run on the background thread which Polls the ED Device for changes and then dispatches events
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice._pollIOASCII">
+            <summary>
+            Get the status of the IO lines
+            first check the current values
+            if there are any inputs also check the latched values
+            if the latches have been triggered reset them
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice._pollIOModbusTCP">
+            <summary>
+            Get the status of the IO lines
+            first check the current values
+            if there are any inputs also check the counters
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice._dispatchEvents">
+            <summary>
+            Only Dispatch events after the state of all the IOLines has been updated by the _pollIO function
+            otherwise event handlers may experience inconsistencies in the IOLine data
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.Dispose(System.Boolean)">
+            <summary>
+            Dispose of this Brainboxes Remote IO Device
+            </summary>
+            <param name="itIsSafeToAlsoFreeManagedObjects"></param>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.Create(System.String,System.Int32,System.Int32)">
+            <summary>
+            Supply a connection IP address or com port and the correct ED device will be created and returned
+            <example>
+            using(EDDevice ed = EDDevice.Create("192.168.0.5"))
+            {
+                //the connection is opened automatically
+                ed.Output[0] = 1;
+            } //connection is closed and object disposed after using block
+            </example>
+            </summary>
+            <param name="ipAddressOrComPort">either an IP address e.g. "192.168.0.1" or a com port name e.g. "COM3"</param>
+            <param name="portOrBaudRate">optional either the IP port number e.g. 9500 or the com port baud rate e.g. 115200, if port not supplied it will be figured out by querying the device</param>
+            <param name="timeout">The connection timeout</param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.EDDevice.CreateComDevice(System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            Create an EDDevice using COM port and therefore ASCII protocol
+            </summary>
+            <param name="comPort"></param>
+            <param name="baudRate"></param>
+            <param name="timeout"></param>
+            <param name="asciiAddress"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Brainboxes.IO.ESDevice">
+            <summary>
+            Brainboxes Ethernet to Serial Device
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ESDevice._ports">
+            <summary>
+            List of serial ports on Ethernet to Serial Device indexed by port number
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ESDevice.NumberOfPorts">
+            <summary>
+            Number of Serial Ports on Brainboxes Ethernet to Serial Device
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ESDevice.PortType">
+            <summary>
+            The type of Serial ports on the Brainboxes Ethernet to Serial Port
+            Either RS232 or RS422/485
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ESDevice.IPAddress">
+            <summary>
+            The IP address of the Brainboxes Ethernet to Serial Device
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ESDevice._pingTimeout">
+            <summary>
+            The ping timeout used when determining if the device is available on the network
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ESDevice.#ctor(System.Int32,Brainboxes.IO.BBSerialPortType)">
+            <summary>
+            Create a Brainboxes Ethernet to Serial device with the specified number of
+            ports and port type
+            </summary>
+            <param name="numberOfPorts"></param>
+            <param name="portType"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ESDevice.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Create a generic ES Device uses the DefaultSerialProtocol and has its connection provided by the args
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="port1PortNumber"></param>
+            <param name="timeout"></param>
+            
+        </member>
+        <member name="M:Brainboxes.IO.ESDevice.#ctor(System.String,System.Int32,System.Int32,System.Int32,Brainboxes.IO.BBSerialPortType)">
+            <summary>
+            Create a generic ES Device uses the DefaultSerialProtocol and has its connection provided by the args
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="port1PortNumber"></param>
+            <param name="timeout"></param>
+            
+        </member>
+        <member name="M:Brainboxes.IO.ESDevice._initPorts">
+            <summary>
+            Initialized the serial ports on the Ethernet to Serial device
+            using the predefined properties NumberOfPorts and PortType
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ESDevice.Ports">
+            <summary>
+            List of Brainboxes Serial Ports on this Ethernet to Serial Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ESDevice.Connect">
+            <summary>
+            Connect the To All the serial ports on the brainboxes device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ESDevice.Disconnect">
+            <summary>
+            Disconnect from all the serial ports on the Brainboxes Device
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.ESDevice._deviceStatusChangedEvent">
+            <summary>
+            The event which describes when a device status change occurs
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.ESDevice.DeviceStatusChangedEvent">
+            <summary>
+            Event When the status of the devices connection changes
+            for example goes from Disconnected to Connected
+            or from Available to Unavailable
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ESDevice.Protocol">
+            <summary>
+            Get/Set the Serial Protocol Used when communicating
+            with all Serial ports of device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ESDevice.ToString">
+            <summary>
+            Returns a short description of the Brainboxes Ethernet to Serial Product
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Brainboxes.IO.ESDevice.IsConnected">
+            <summary>
+            If there is an open connection to any of the serial ports attached to the device
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ESDevice._ping">
+            <summary>
+            ping class used to determine whether end point is available when it is not already connected to
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ESDevice.IsAvailable">
+            <summary>
+            Whether the IP address is online or offline
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ESDevice.Create(System.String,System.Int32,System.Int32)">
+            <summary>
+            Connects to the IP Address given and determines what kind of
+            Brainboxes Ethernet to Serial Device is there, creates the object and returns it
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="port1PortNumber"></param>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ESDevice.Create(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Connects to the IP Address provided and determines what kind of Brainboxes
+            Ethernet to Serial Device is present, creates the object and sets all serial ports to
+            use the provided protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Brainboxes.IO.DeviceStatusChangedEventHandler`2">
+            <summary>
+            When the status of the devices' connection changes
+            </summary>
+            <param name="device">The device whose connection status has changed</param>
+            <param name="property">The property which has changed either IsConnected or IsAvailable</param>
+            <param name="newValue">The new value of the property </param>
+        </member>
+        <member name="T:Brainboxes.IO.IDevice`2">
+            <summary>
+            Interface to a Brainboxes Device
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IDevice`2.Connection">
+            <summary>
+            The connection to this device
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IDevice`2.Protocol">
+            <summary>
+            The protocol used to communicate which this device
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IDevice`2.IsConnected">
+            <summary>
+            Whether the connection to this device is open
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IDevice`2.IsAvailable">
+            <summary>
+            Whether the device is available, e.g. if the device is on the network it may go offline and become unavailable
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IDevice`2.DeviceStatusChangedEvent">
+            <summary>
+            Event called when the status of the device changes, either the IsConnected Property
+            or the IsAvailable property
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IDevice`2.Connect">
+            <summary>
+            Open Connection to a Brainboxes Device, must be called before SendCommand
+            Throws exception on connection failure
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IDevice`2.Disconnect">
+            <summary>
+            Disconnect from Brainboxes Device, will be automatically called when class is disposed
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.NamespaceDoc">
+            <summary>
+            For examples and sample code see <a href="http://www.brainboxes.com/faq/items/how-do-i-install-the-brainboxesio-net-api">Example Code and APIs</a>
+            
+            This is free and unencumbered software released into the public domain.
+            
+            Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means.
+            
+            In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright interest in the software to the public domain. We make this dedication for the benefit of the public at large and to the detriment of our heirs and successors. We intend this dedication to be an overt act of relinquishment in perpetuity of all present and future rights to this software under copyright law.
+            
+            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+            MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.ED588">
+            <summary>
+            ED-588: Ethernet to DIO 8 Digital Inputs and 8 Digital Outputs + Serial Gateway
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED588.#ctor">
+            <summary>
+            ED-588: Ethernet to DIO 8 Digital Inputs and 8 Digital Outputs + Serial Gateway
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED588.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            ED-588: Ethernet to DIO 8 Digital Inputs and 8 Digital Outputs + Serial Gateway
+            </summary>
+            <param name="connection">A connection to the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED588.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.IIOProtocol)">
+            <summary>
+            ED-588: Ethernet to DIO 8 Digital Inputs and 8 Digital Outputs + Serial Gateway
+            </summary>
+            <param name="connection">A connection to the device</param>
+            <param name="protocol">The protocol to use when communicating with the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED588._initLines">
+            <summary>
+            Initialize the IO Lines
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.ED538">
+            <summary>
+            ED-538: Ethernet to DIO 4 Digital Relays and 8 Digital Inputs + Serial Gateway
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED538.#ctor">
+            <summary>
+            ED-538: Ethernet to DIO 4 Digital Relays and 8 Digital Inputs + Serial Gateway
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED538.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            ED-538: Ethernet to DIO 4 Digital Relays and 8 Digital Inputs + Serial Gateway
+            </summary>
+            <param name="connection">A connection to the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED538.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.IIOProtocol)">
+            <summary>
+            ED-538: Ethernet to DIO 4 Digital Relays and 8 Digital Inputs + Serial Gateway
+            </summary>
+            <param name="connection">A connection to the device</param>
+            <param name="protocol">The protocol to use when communicating with the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED538._initLines">
+            <summary>
+            Initialize the IO Lines
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.ED516">
+            <summary>
+            ED-516: Ethernet to DIO 16 Digital Inputs + Serial Gateway
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED516.#ctor">
+            <summary>
+            ED-516: Ethernet to DIO 16 Digital Inputs + Serial Gateway
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED516.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            ED-516: Ethernet to DIO 16 Digital Inputs + Serial Gateway
+            </summary>
+            <param name="connection">A connection to the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED516.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.IIOProtocol)">
+            <summary>
+            ED-516: Ethernet to DIO 16 Digital Inputs + Serial Gateway
+            </summary>
+            <param name="connection">A connection to the device</param>
+            <param name="protocol">The protocol to use when communicating with the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED516._initLines">
+            <summary>
+            Initialize the IO Lines
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.ED527">
+            <summary>
+            ED-527: Ethernet to DIO 16 Digital Outputs + Serial Gateway
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED527.#ctor">
+            <summary>
+            ED-527: Ethernet to DIO 16 Digital Outputs + Serial Gateway
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED527.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            ED-527: Ethernet to DIO 16 Digital Outputs + Serial Gateway
+            </summary>
+            <param name="connection">A connection to the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED527.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.IIOProtocol)">
+            <summary>
+            ED-527: Ethernet to DIO 16 Digital Outputs + Serial Gateway
+            </summary>
+            <param name="connection">A connection to the device</param>
+            <param name="protocol">The protocol to use when communicating with the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED527._initLines">
+            <summary>
+            Initialize the IO Lines
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.ED004">
+            <summary>
+            ED-004: Ethernet to 4 DIO + Ethernet to RS232
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED004.#ctor">
+            <summary>
+            Create an ED-004: Ethernet to 4 DIO + Ethernet to RS232
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED004.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            Create an ED-004: Ethernet to 4 DIO + Ethernet to RS232
+            </summary>
+            <param name="connection">A connection to the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED004.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.IIOProtocol)">
+            <summary>
+            Create an ED-004: Ethernet to 4 DIO + Ethernet to RS232
+            </summary>
+            <param name="connection">A connection to the device</param>
+            <param name="protocol">The protocol to use when communicating with the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED004._initLines">
+            <summary>
+            Initialize the IO Lines
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.ED204">
+            <summary>
+            ED-204: Ethernet to 4 DIO + Ethernet to RS232
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED204.#ctor">
+            <summary>
+            Create an ED-204: Ethernet to 4 DIO + Ethernet to RS232
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED204.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            Create an ED-204: Ethernet to 4 DIO + Ethernet to RS232
+            </summary>
+            <param name="connection">A connection to the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED204.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.IIOProtocol)">
+            <summary>
+            Create an ED-204: Ethernet to 4 DIO + Ethernet to RS232
+            </summary>
+            <param name="connection">A connection to the device</param>
+            <param name="protocol">The protocol to use when communicating with the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED204._initLines">
+            <summary>
+            Initialize the IO Lines
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.ED008">
+            <summary>
+            ED-008: Ethernet to 8 Digital IO Ports
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED008.#ctor">
+            <summary>
+            ED-008: Ethernet to 8 Digital IO Ports
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED008.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            ED-008: Ethernet to 8 Digital IO Ports
+            </summary>
+            <param name="connection">A connection to the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED008.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.IIOProtocol)">
+            <summary>
+            ED-008: Ethernet to 8 Digital IO Ports
+            </summary>
+            <param name="connection">A connection to the device</param>
+            <param name="protocol">The protocol to use when communicating with the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED008._initLines">
+            <summary>
+            Initialize the IO Lines
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.ED038">
+            <summary>
+            ED-038: Ethernet to 3 x Relay + 3 Digital Inputs
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED038.#ctor">
+            <summary>
+            ED-038: Ethernet to 3 x Relay + 3 Digital Inputs
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ED038.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            ED-038: Ethernet to 3 x Relay + 3 Digital Inputs
+            </summary>
+            <param name="connection">A connection to the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED038.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.IIOProtocol)">
+            <summary>
+            ED-038: Ethernet to 3 x Relay + 3 Digital Inputs
+            </summary>
+            <param name="connection">A connection to the device</param>
+            <param name="protocol">The protocol to use when communicating with the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ED038._initLines">
+            <summary>
+            Initialize the IO Lines
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.ES246">
+            <summary>
+            Brainboxes ES-246 1 Port RS232 Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES246.#ctor">
+            <summary>
+            Create ES-246 with 1 Port which has uses the DefaultSerialProtocol and has its connection unassigned
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES246.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Create ES-246 with 1 Port which has uses the DefaultSerialProtocol and has its connection provided by the args
+            </summary>
+            <param name="ipOrComPort"></param>
+            <param name="portOrBaudRate"></param>
+            <param name="timeout"></param>
+            
+        </member>
+        <member name="M:Brainboxes.IO.ES246.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-246 with 1 Port which has uses the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ES246.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            Create ES-246 with 1 Port which has uses the DefaultSerialProtocol and has its connection provided by the arg
+            </summary>
+            <param name="PortConnection"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ES246.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-246 with 1 Port which has uses the supplied serial protocol and has its connection
+            </summary>
+            <param name="PortConnection"></param>
+            <param name="Protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES446">
+            <summary>
+            Brainboxes ES-446 1 Port RS232 PoE Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES446.#ctor">
+            <summary>
+            Create ES-446 with 1 Port which has uses the DefaultSerialProtocol and has its connection unassigned
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES446.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Create ES-246 with 1 Port which has uses the DefaultSerialProtocol and has its connection provided by the args
+            </summary>
+            <param name="ipOrComPort"></param>
+            <param name="portOrBaudRate"></param>
+            <param name="timeout"></param>
+            
+        </member>
+        <member name="M:Brainboxes.IO.ES446.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-446 with 1 Port which has uses the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ES446.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            Create ES-246 with 1 Port which has uses the DefaultSerialProtocol and has its connection provided by the arg
+            </summary>
+            <param name="PortConnection"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ES446.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-246 with 1 Port which has uses the supplied serial protocol and has its connection
+            </summary>
+            <param name="PortConnection"></param>
+            <param name="Protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES257">
+            <summary>
+            Brainboxes ES-257 2 Port RS232 Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES257.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-257 with 2 Ports which use the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES457">
+            <summary>
+            Brainboxes <see href="http://www.brainboxes.com/product/es-457">ES-457</see> 2 Port RS232 PoE Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES457.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create <see href="http://www.brainboxes.com/product/es-457">ES-457</see> with 2 Ports which use the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES320">
+            <summary>
+            Brainboxes ES-320 1 Port RS422/485 Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES320.#ctor">
+            <summary>
+            Create ES-246 with 1 Port which has uses the DefaultSerialProtocol and has its connection unassigned
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES320.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Create ES-320 with 1 Port which has uses the DefaultSerialProtocol and has its connection provided by the args
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="port1PortNumber"></param>
+            <param name="timeout"></param>
+            
+        </member>
+        <member name="M:Brainboxes.IO.ES320.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-320 with 1 Port which has uses the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ES320.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            Create ES-246 with 1 Port which has uses the DefaultSerialProtocol and has its connection provided by the arg
+            </summary>
+            <param name="PortConnection"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ES320.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-246 with 1 Port which has uses the supplied serial protocol and has its connection
+            </summary>
+            <param name="PortConnection"></param>
+            <param name="Protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES420">
+            <summary>
+            Brainboxes ES-420 1 Port RS422/485 PoE Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES420.#ctor">
+            <summary>
+            Create ES-446 with 1 Port which has uses the DefaultSerialProtocol and has its connection unassigned
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES420.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Create ES-420 with 1 Port which has uses the DefaultSerialProtocol and has its connection provided by the args
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="port1PortNumber"></param>
+            <param name="timeout"></param>
+            
+        </member>
+        <member name="M:Brainboxes.IO.ES420.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-446 with 1 Port which has uses the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ES420.#ctor(Brainboxes.IO.IConnection)">
+            <summary>
+            Create ES-246 with 1 Port which has uses the DefaultSerialProtocol and has its connection provided by the arg
+            </summary>
+            <param name="PortConnection"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ES420.#ctor(Brainboxes.IO.IConnection,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-420 with 1 Port which has uses the supplied serial protocol and has its connection
+            </summary>
+            <param name="PortConnection"></param>
+            <param name="Protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES357">
+            <summary>
+            Brainboxes ES-357 1 Port RS232 and 1 Port RS422/485 Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES357._initPorts">
+            <summary>
+            Initialized the serial ports on the Ethernet to Serial device
+            using the predefined properties NumberOfPorts and PortType
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES357.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-313 with 2 Ports which use the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES313">
+            <summary>
+            Brainboxes ES-313 2 Port RS422/485 Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES313.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-313 with 2 Ports which use the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES413">
+            <summary>
+            Brainboxes ES-413 2 Port RS422/485 PoE Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES413.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-413 with 2 Ports which use the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES701">
+            <summary>
+            Brainboxes ES-701 4 Port RS232 Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES701.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-701 with 4 Ports which use the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES346">
+            <summary>
+            Brainboxes ES-346 4 Port RS422/485 Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES346.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-701 with 4 Ports which use the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES279">
+            <summary>
+            Brainboxes ES-279 8 Port RS232 Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES279.#ctor">
+            <summary>
+            Brainboxes ES-279 8 Port RS232 Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES279.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Brainboxes ES-279 8 Port RS232 Ethernet to Serial Adapter
+            </summary>
+            <param name="ipAddress">IP address of the device</param>
+            <param name="port1PortNumber">the TCP port of port 1 of the device</param>
+            <param name="timeout">the timeout when connecting to the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ES279.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-279 with 8 Ports which use the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.ES842">
+            <summary>
+            Brainboxes ES-842 8 Port RS422/485 Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES842.#ctor">
+            <summary>
+            Brainboxes ES-279 8 Port RS232 Ethernet to Serial Adapter
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ES842.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Brainboxes ES-842 8 Port RS422/485 Ethernet to Serial Adapter
+            </summary>
+            <param name="ipAddress">IP address of the device</param>
+            <param name="port1PortNumber">the TCP port of port 1 of the device</param>
+            <param name="timeout">the timeout when connecting to the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ES842.#ctor(System.String,Brainboxes.IO.ISerialProtocol)">
+            <summary>
+            Create ES-842 with 8 Ports which use the given protocol
+            </summary>
+            <param name="ipAddress"></param>
+            <param name="protocol"></param>
+        </member>
+        <member name="T:Brainboxes.IO.IOLineChangedEventHandler">
+            <summary>
+            When the status of an IO line changes, this can happen in 1 of 6 ways:
+            ALL TYPES OF LINE:
+            (1) the previous sampled value was 0 and the current sampled value is 1, RISING EDGE
+            (2) the previous sampled value was 1 and the current sampled value is 0, FALLING EDGE
+            ONLY INPUT LINES:
+            (3) the previous sampled value was 1 and the current sampled value is 1, 
+            but between the 2 samplings the low latch has triggered which means the line has gone from 1 to 0 and back to 1 again, LATCHED (includes falling and rising edge)
+            (4) the previous sampled value was 0 and the current sampled value is 0, 
+            but between the 2 samplings the high latch has triggered which means the line has gone from 0 to 1 and back to 0 again, LATCHED (includes rising and falling edge)
+            ONLY OUTPUT LINES:
+            (5) When the line is set changing it from a 0 to a 1, RISING EDGE
+            (6) When the line is set changing it from a 1 to a 0, FALLING EDGE
+            </summary>
+            <param name="line"></param>
+            <param name="device"></param>
+            <param name="changeType">The type of change that occurred to cause this event to be fired</param>
+        </member>
+        <member name="T:Brainboxes.IO.IOLinesChangedEventHandler">
+            <summary>
+            When the status of a1 or more IO lines change on a device within a polling interval be notified of all the lines for which there is a change:
+            ALL TYPES OF LINE:
+            (1) the previous sampled value was 0 and the current sampled value is 1, RISING EDGE
+            (2) the previous sampled value was 1 and the current sampled value is 0, FALLING EDGE
+            ONLY INPUT LINES:
+            (3) the previous sampled value was 1 and the current sampled value is 1, 
+            but between the 2 samplings the low latch has triggered which means the line has gone from 1 to 0 and back to 1 again, LATCHED (includes falling and rising edge)
+            (4) the previous sampled value was 0 and the current sampled value is 0, 
+            but between the 2 samplings the high latch has triggered which means the line has gone from 0 to 1 and back to 0 again, LATCHED (includes rising and falling edge)
+            ONLY OUTPUT LINES:
+            (5) When the line is set changing it from a 0 to a 1, RISING EDGE
+            (6) When the line is set changing it from a 1 to a 0, FALLING EDGE
+            </summary>
+            <param name="lines">The list of IO Lines which have changed within a polling interval</param>
+            <param name="device"></param>
+        </member>
+        <member name="T:Brainboxes.IO.IEDDevice">
+            <summary>
+            Remote Ethernet IO interface
+            These devices use a command response protocol, almost every command sent to the device receives a response
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IEDDevice.SendCommand(System.String)">
+            <summary>
+            Send a command to the Brainboxes Remote IO device using the supplied protocol.
+            </summary>
+            <param name="command">command to send</param>
+            <returns>Response or null if no response</returns>
+        </member>
+        <member name="P:Brainboxes.IO.IEDDevice.IOLines">
+            <summary>
+            IOLines indexed by their logical line number as described on the brainboxes product label
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IEDDevice.Outputs">
+            <summary>
+            The devices output Lines (if it has any) indexed by IOLineNumber e.g. DOUT0, DOUT1, DOUT2
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IEDDevice.Inputs">
+            <summary>
+            The devices input Lines (if it has any) indexed by IOLineNumber e.g. DOUT0, DOUT1, DOUT2
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IEDDevice.IOLinesChanged">
+            <summary>
+            Register an event with this handler to be notified when the state of
+            one or more IOLines change within a polling interval
+            This is useful when a state in the program is dependent on 2 or more ioLine states 
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IEDDevice.IOLineChanged">
+            <summary>
+            Register an event with this handler to be notified when the state of
+            an input or output line changes
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IEDDevice.IOLineRisingEdge">
+            <summary>
+            Register an event with this handler to be notified when the state of
+            an input or output line goes from 0 -> 1 / low to high / closed to open
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IEDDevice.IOLineFallingEdge">
+            <summary>
+            Register an event with this handler to be notified when the state of
+            an input or output line goes from 1 -> 0 / high to low / open to closed
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IEDDevice.IOLineCount">
+            <summary>
+            Register an event with this handler to be notified when the state of
+            an input changes increment the count of the IOLine
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IESDevice.Ports">
+            <summary>
+            A list of the serial ports which the Ethernet to Serial
+            device has. E.g. an ES-257 has 2 RS232 ports, an ES-346 has 4 RS422/485 ports
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.IIOLineDelegate">
+            <summary>
+            Defines the contract with IOLine which the a delegate must implement
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IIOLineDelegate.IOLines">
+            <summary>
+            a collection of all the lines for which the delegate will act
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IIOLineDelegate.cacheTimeout">
+            <summary>
+            whether the Digital Input IO Line counter updates on a rising edge or a falling edge
+            </summary>
+            IOChangeTypes IOCounterUpdateDirection { get; }
+            <summary>
+            The time for which a cache value of an IO line is still valid
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IIOLineDelegate.getAllLineStates">
+            <summary>
+            Update the IOLine cache of all the IO line states
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IIOLineDelegate.setLineState(Brainboxes.IO.IOLine,System.Int32)">
+            <summary>
+            Set the state of an IOLine
+            </summary>
+            <param name="line"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Brainboxes.IO.IIOLineDelegate.getAllInputLowLatchedStatus">
+            <summary>
+            Read the status of the low latched digital input lines on the device and
+            update them all in the IOLines collection
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IIOLineDelegate.getAllInputHighLatchedStatus">
+            <summary>
+            Read the status of the high latched digital input line
+            update them all in the IOLines collection
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IIOLineDelegate.getLineCount(Brainboxes.IO.IOLine)">
+            <summary>
+            Get the Count of the digital input
+            </summary>
+            <param name="iOLine"></param>
+        </member>
+        <member name="M:Brainboxes.IO.IIOLineDelegate.ClearLineCount(Brainboxes.IO.IOLine)">
+            <summary>
+            Clear the count of the digital input
+            </summary>
+            <param name="iOLine"></param>
+        </member>
+        <member name="T:Brainboxes.IO.IOList`1">
+            <summary>
+            List to hold any number of IOLines. Provides convenience methods for register events to all lines in the list and setting values of all outputs
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.#ctor">
+            <summary>
+            Initialize a new instance of an IOList
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.#ctor(System.Int32)">
+            <summary>
+            Initialize a new instance of an IOList that is empty and has the specified capacity
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Initialize a new instance of an IOList that contains elements copied from the collection
+            </summary>
+            <param name="collection"></param>
+        </member>
+        <member name="P:Brainboxes.IO.IOList`1.Label">
+            <summary>
+            User definable label for the IOList to help identify/ when debugging
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.ToList">
+            <summary>
+            Convert to List&lt;T&gt;
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Brainboxes.IO.IOList`1.Values">
+            <summary>
+            set all output values in Collection, if there are not Outputs nothing will be set
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.ToString">
+            <summary>
+            ToString
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.Describe">
+            <summary>
+            Give a complete summary of the EDDevice
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Brainboxes.IO.IOList`1._numOfRegisteredEvents">
+            <summary>
+            can only be positive
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOList`1._numOfRegisteredChangeEvents">
+            <summary>
+            can only be positive
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOList`1._ioLineChangeHandlers">
+            <summary>
+            use dictionary t bool as an alternative to hashset (only available in .net 3.5+)
+            this means only unique events can be added and existing events removed
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOList`1._numOfRegisteredRisingEvents">
+            <summary>
+            can only be positive
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOList`1._ioLineRisingHandlers">
+            <summary>
+            use dictionary t bool as an alternative to hashset (only available in .net 3.5+)
+            this means only unique events can be added and existing events removed
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOList`1._numOfRegisteredFallingEvents">
+            <summary>
+            can only be positive
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOList`1._ioLineFallingHandlers">
+            <summary>
+            use dictionary t bool as an alternative to hashset (only available in .net 3.5+)
+            this means only unique events can be added and existing events removed
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IOList`1.IOLineChange">
+            <summary>
+            Add/remove IOLineChange event to all lines in the list, 
+            if IOLines are subsequently added or removed then the events will also be applied
+            The same event cannot be added twice (function will return and do nothing)
+            If events are removed which were not previously added, they will still be attempted to be removed from the IOLine
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IOList`1.IOLineRisingEdge">
+            <summary>
+            Add/remove IOLineRisingEdge event to all lines in the list, 
+            if IOLines are subsequently added or removed then the events will also be applied
+            The same event cannot be added twice (function will return and do nothing)
+            If events are removed which were not previously added, they will still be attempted to be removed from the IOLine
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IOList`1.IOLineFallingEdge">
+            <summary>
+            Add/remove IOLineFallingEdge event to all lines in the list, 
+            if IOLines are subsequently added or removed then the events will also be applied
+            The same event cannot be added twice (function will return and do nothing)
+            If events are removed which were not previously added, they will still be attempted to be removed from the IOLine
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1._applyListEvents(`0)">
+            <summary>
+            Apply any events which are currently added
+            </summary>
+            <param name="line"></param>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1._removeListEvents(`0)">
+            <summary>
+            Remove any events which are currently added
+            </summary>
+            <param name="line"></param>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.IndexOf(`0)">
+            <summary>
+            Determine the index of a specific IOLine
+            </summary>
+            <param name="line"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.Insert(System.Int32,`0)">
+            <summary>
+            Insert an IOLine at a specific index
+            </summary>
+            <param name="index"></param>
+            <param name="line"></param>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.RemoveAt(System.Int32)">
+            <summary>
+            Removes the IOLine at the specific index
+            </summary>
+            <param name="index"></param>
+        </member>
+        <member name="P:Brainboxes.IO.IOList`1.Item(System.Int32)">
+            <summary>
+            Get the IOLine at a particular index
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.Add(`0)">
+            <summary>
+            Adds an IOLine to the List
+            </summary>
+            <param name="line"></param>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.Clear">
+            <summary>
+            Removes all IOLines from the list
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.Contains(`0)">
+            <summary>
+            Determines whether the list contains a specific IOLine
+            </summary>
+            <param name="line"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.CopyTo(`0[],System.Int32)">
+            <summary>
+            Copies the IOLine(s) starting at a particular index to the supplied array
+            </summary>
+            <param name="array"></param>
+            <param name="arrayIndex"></param>
+        </member>
+        <member name="P:Brainboxes.IO.IOList`1.Count">
+            <summary>
+            Gets the number of IOLines in the List
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IOList`1.IsReadOnly">
+            <summary>
+            Gets the value indicating whether the IOList is read-only
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.Remove(`0)">
+            <summary>
+            Removes the first occurrence of a specific IOLine from the list
+            </summary>
+            <param name="line"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.GetEnumerator">
+            <summary>
+            Returns the IOList enumerator that iterates through the collection
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IOList`1.AsReadOnly">
+            <summary>
+            Converts the IOList to a Read-only List
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Brainboxes.IO.ExtensionMethods">
+            <summary>
+            Cast IEnumerable&lt;IOLine&gt; to IOList so that we can easy add and remove events from the list
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ExtensionMethods.AsIOList(System.Collections.Generic.IEnumerable{Brainboxes.IO.IOLine})">
+            <summary>
+            Convert IEnumerable&lt;IOLine&gt; to an IOList&lt;IOLine&gt;
+            </summary>
+            <param name="lineList"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Brainboxes.IO.ModbusTCPProtocol">
+            <summary>
+            The ModBus TCP Protocol for more information on supported commands see http://www.brainboxes.com/modbus
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.#ctor">
+            <summary>
+            Create an Modbus TCP Protocol object,
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ModbusTCPProtocol.LastRequest">
+            <summary>
+            The last Modbus TCP Request sent
+            encoded as string
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ModbusTCPProtocol.LastResponse">
+            <summary>
+            The  Modbus TCP Response for the last Request sent
+            note this could be null as the request may not have completed
+            at time of asking
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetRequestForTransactionId(System.Int32)">
+            <summary>
+            Get Modbus TCP Request for a particular TransactionId
+            </summary>
+            <param name="transId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetResponseForTransactionId(System.Int32)">
+            <summary>
+            Get Modbus TCP response for particular TransactionId
+            </summary>
+            <param name="transId"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Brainboxes.IO.ModbusTCPProtocol._requestHistory">
+            <summary>
+            The last 64 requests sent to the device
+            indexed by transactionId % 64
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ModbusTCPProtocol._responseHistory">
+            <summary>
+            The responses which match the last 64 requests sent to the device
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ModbusTCPProtocol.TransactionId">
+            <summary>
+            The ModbusTCP transaction Id starts at one and should be incremented each time
+            from Modbus.org: Transaction Identifier - 
+            It is used for transaction pairing, the MODBUS server copies
+            in the response the transaction identifier of the request.
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ModbusTCPProtocol.ProtocolId">
+            <summary>
+            The ModbusTCP protocol, always 0
+            From Modbus.org: Protocol Identifier – It is used for intra-system multiplexing. 
+            The MODBUS protocol is identified by the value 0. 
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ModbusTCPProtocol.UnitId">
+            <summary>
+            The ModbusTCP Unit identifier, 
+            From Modbus.org: Unit Identifier – 
+            This field is used for intra-system routing purpose. It is typically
+            used to communicate to a MODBUS+ or a MODBUS serial line slave through a
+            gateway between an Ethernet TCP-IP network and a MODBUS serial line.This field is
+            set by the MODBUS Client in the request and must be returned with the same value in
+            the response by the server.
+            For our purposes: always 0xff
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ModbusTCPProtocol.RequestLength">
+            <summary>
+            The Modbus TCP Length of Request
+            From Modbus.rog: Length - 
+            The length field is a byte count of the following fields, including the Unit
+            Identifier and data fields.
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ModbusTCPProtocol.ResponseLength">
+            <summary>
+            The Modbus TCP Length of Response
+            From Modbus.rog: Length - 
+            The length field is a byte count of the following fields, including the Unit
+            Identifier and data fields.
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ModbusTCPProtocol._transactionId">
+            <summary>
+            The ModbusTCP transaction Id starts at one and should be incremented each time
+            from Modbus.org: Transaction Identifier - 
+            It is used for transaction pairing, the MODBUS server copies
+            in the response the transaction identifier of the request.
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ModbusTCPProtocol._protocolId">
+            <summary>
+            The ModbusTCP protocol, always 0
+            From Modbus.org: Protocol Identifier – It is used for intra-system multiplexing. 
+            The MODBUS protocol is identified by the value 0. 
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ModbusTCPProtocol._unitId">
+            <summary>
+            The ModbusTCP Unit identifier, 
+            From Modbus.org: Unit Identifier – This field is used for intra-system routing purpose. It is typically
+            used to communicate to a MODBUS+ or a MODBUS serial line slave through a
+            gateway between an Ethernet TCP-IP network and a MODBUS serial line.This field is
+            set by the MODBUS Client in the request and must be returned with the same value in
+            the response by the server.
+            For our purposes: always 0xff
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ModbusTCPProtocol._reqLength">
+            <summary>
+            The Modbus TCP Length of Request
+            From Modbus.rog: Length - 
+            The length field is a byte count of the following fields, including the Unit
+            Identifier and data fields.
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ModbusTCPProtocol._resLength">
+            <summary>
+            The Modbus TCP Length of Response
+            From Modbus.rog: Length - 
+            The length field is a byte count of the following fields, including the Unit
+            Identifier and data fields.
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.PrettyPrintModbusADU(System.String)">
+            <summary>
+            Take a Modbus Command written in ASCII as a hex representation and
+            prettifies it. e.g. 
+            006600000006ff0100000010
+            0066 0000 0006 ff 01 0000 0010
+            TranID|ProtID|Len|UnitID|Func|DATA
+            there is a space every 4 characters, and also a space at the 14 char
+            between the UnitID and the Function code
+            </summary>
+            <param name="adu">Application Data Unit as defined by ModbusTCP spec, encoded in ASCII as hex</param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.PrettyPrintModbusADU(System.Byte[])">
+            <summary>
+            Take a Modbus Command written in a hex byte array representation and
+            prettifies it. e.g. 
+            0x006600000006ff0100000010
+            0066 0000 0006 ff 01 0000 0010
+            TranID|ProtID|Len|UnitID|Func|DATA
+            there is a space every 4 characters, and also a space at the 15 char
+            between the UnitID and the Function code
+            </summary>
+            <param name="adu">Application Data Unit as defined by ModbusTCP spec</param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.SendCommand(System.String)">
+            <summary>
+            Send a ModbusTCP command (ADU) to a Brainboxes Device and return response
+            <b>The MBAP header is handled internally by this class, only the function and data need to be sent as a command</b>
+            Any spacing is ignore, commands are hex encoded ASCII (e.g. "01 0000 0001")
+            Modbus TCP commands are defined as follows:
+            ADU - Application Data Unit, split into:
+            MBAP Header - the header contains 4 fields:
+             * transactionId (2 bytes) = id starting at 01 increments by 1 for each new ADU sent
+             * protocol Id (2 bytes) = always 0x00 = modbus for brainboxes devices
+             * Length (2 bytes) = the total length in bytes of rest of the ADU from that point
+             * Unit Id (1 byte)= set by the client in the request the response must contain the same data, always 0xff
+            Function Code (2 bytes)- the type of function requested can be:
+             * 0x01 = Read Coils
+             * 0x02 = Read Discrete Inputs
+             * 0x03 = Read Holding Registers
+             * 0x04 = Read Input Registers
+             * 0x05 = Write Single Coil
+             * 0x06 = Write Single Register
+            Data (variable length) -
+            The end of the modbusTCP command, which contains data relevant to the function code
+            The format of the command is hex encoded values in ASCII, 
+            </summary>
+            <param name="pdu">Protocol Data Unit: Function Code and Data of the Modbus TCP command, spaces and dashes are ignored</param>
+            <returns>response from the ED device without modbus header MBAP</returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.SendCommand(System.Byte[])">
+            <summary>
+            Send a ModbusTCP command (ADU) to a Brainboxes Device and return response
+            <b>The MBAP header is handled internally by this class, only the function and data need to be sent as a command</b>
+            Any spacing is ignore, commands as encoded hex byte array e.g. 0x0100000001
+            Modbus TCP commands are defined as follows:
+            ADU: Application Data Unit, split into: MBAP and PDU
+            MBAP Header - the header contains 4 fields:
+             * transactionId (2 bytes) = id starting at 01 increments by 1 for each new ADU sent
+             * protocol Id (2 bytes) = always 0x00 = modbus for brainboxes devices
+             * Length (2 bytes) = the total length in bytes of rest of the ADU from that point
+             * Unit Id (1 byte) = set by the client in the request the response must contain the same data, always 0xff
+            PDU: Protocol Data Unit, consists of 2 fields:
+            Function Code (2 bytes)- the type of function requested can be:
+             * 0x01 = Read Coils
+             * 0x02 = Read Discrete Inputs
+             * 0x03 = Read Holding Registers
+             * 0x04 = Read Input Registers
+             * 0x05 = Write Single Coil
+             * 0x06 = Write Single Register
+            Data (variable length) -
+            The end of the modbusTCP command, which contains data relevant to the function code
+            The format of the command is hex encoded values in ASCII, 
+            </summary>
+            <param name="pdu">Protocol Data Unit: Function Code and Data of the Modbus TCP command</param>
+            <returns>response from the ED device without modbus header MBAP</returns>
+        </member>
+        <member name="F:Brainboxes.IO.ModbusTCPProtocol._ioCounterUpdateDirection">
+            <summary>
+            The update direction of the digital input counter
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ModbusTCPProtocol.Brainboxes#IO#IIOProtocol#IOCounterUpdateDirection">
+            <summary>
+            whether the Digital Input IO Line counter updates on a rising edge or a falling edge
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.SetOutputLineState(System.Int32,System.Int32)">
+            <summary>
+            Set an individual output line state open (0) or closed (1)s
+            </summary>
+            <param name="line"></param>
+            <param name="state"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.SetAllOutputLineStates(System.Int32,System.Int32)">
+            <summary>
+            set all output lines on the device open (0) or closed (1)
+            The bit position represents the line number
+            </summary>
+            <param name="states">The bit position represents the line number</param>
+            <param name="numberOfOutputs">The number of outputs on the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetLineState(System.Int32,System.Boolean)">
+            <summary>
+            Get the state of an IO Line
+            </summary>
+            <param name="line"></param>
+            <param name="isInput"></param>
+            <returns>1: Line closed/High/On, 0: Line Open/Low/Off</returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetAllInputStates">
+            <summary>
+            Get the state of the inputs on the device
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetAllOutputStates">
+            <summary>
+            Get all output line states
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetAllLineStates">
+            <summary>
+            Get the state of all the IOLines of the device as an integer
+            the top 16 bits are the outputs, the bottom 16 bits are the inputs
+            </summary>
+            <returns>Each bit in the integer represents an IOLine state</returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol._sendCommand(System.Byte[])">
+            <summary>
+            Any command sent to the ED Device is sent by this function
+            </summary>
+            <param name="command">correctly encoded modbusTCP command</param>
+            <returns>response from the ED device</returns>
+        </member>
+        <member name="F:Brainboxes.IO.ModbusTCPProtocol._deviceName">
+            <summary>
+            The name of the Brainboxes ED Device
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ModbusTCPProtocol.DeviceName">
+            <summary>
+            The name of the ED Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetDeviceName">
+            <summary>
+            Get the name of the Device
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.ResetToFactoryDefaultSettings">
+            <summary>
+            Reset the ED device to factory default settings
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.Restart">
+            <summary>
+            Power Off and the On the ED Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetAllLatchedHighInputStates">
+            <summary>
+            Get the HIGH LATCH states of all the Inputs
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetAllLatchedLowInputStates">
+            <summary>
+            Get the LOW LATCH state of all the INPUTS
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetAllLatchedInputStates(System.Boolean)">
+            <summary>
+            Get the LATCH state of the INPUTS
+            </summary>
+            <param name="isHigh">Whether to get the HIGH or LOW LATCH</param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.ClearAllLatchedInputs">
+            <summary>
+            Clear the INPUT latches
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetLineCount(System.Int32)">
+            <summary>
+            Reads the digital input counter of the specified channel
+            </summary>
+            <param name="line"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.ClearLineCount(System.Int32)">
+            <summary>
+            Clears the digital input counter of the specified line.
+            </summary>
+            <param name="line"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ModbusTCPProtocol.GetDeviceConfiguration">
+            <summary>
+            Read the device configuration
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.DefaultSerialProtocol._encoding">
+            <summary>
+            default encoding
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.DefaultSerialProtocol.Encoding">
+            <summary>
+            The uft8 character encoding used to send and receive data
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.DefaultSerialProtocol._terminatingChars">
+            <summary>
+            default terminating character \r CARRIAGE RETURN
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.DefaultSerialProtocol.receiveBuffer">
+            <summary>
+            The receive buffer stores the inbound stream data before it is converted to the char encoding
+            the underlying stream has a default receive buffer size of 8192 see:
+            https://msdn.microsoft.com/en-us/library/system.net.sockets.socket.receivebuffersize%28v=vs.110%29.aspx
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.DefaultSerialProtocol.TerminatingCharacters">
+            <summary>
+            The character or sequence of characters that define the end of a data transmission, 
+            this will be automatically added to the end of sent data and stripped from
+            the end of a received data
+            The default terminating-character is \r CARRIAGE RETURN
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.DefaultSerialProtocol.DataAvailable">
+            <summary>
+            Whether there is data available, returns 0 for no data and 1 more 1 or more characters
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.DefaultSerialProtocol.Send(System.String)">
+            <summary>
+            Send data down the serial port encoded in the set encoding
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Brainboxes.IO.DefaultSerialProtocol.Receive">
+            <summary>
+            Receive data from the serial port decoded in the set encoding
+            Will block until: the timeout is reached in which case an exception is thrown
+            or until the terminating character is found
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.DefaultSerialProtocol.Clone">
+            <summary>
+            Make a shallow copy of the DefaultSerialProtocol
+            This means when it is assigned to each port the instance is not shared
+            so each port maintains its own state
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Brainboxes.IO.IIOProtocol">
+            <summary>
+            The protocol which describes the interface to an Input Output device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.SendCommand(System.String)">
+            <summary>
+            send a command using the given protocol
+            </summary>
+            <param name="command">The command to send to the Brainboxes Device</param>
+            <returns>The response returned from the Brainboxes device, null if no response</returns>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.GetAllLineStates">
+            <summary>
+            Get All Line States, where each bit represents the state of the corresponding line number
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.SetAllOutputLineStates(System.Int32,System.Int32)">
+            <summary>
+            Set All Output Line States, where each bit represents the state of the corresponding line number
+            </summary>
+            <param name="states"></param>
+            <param name="numberOfOutputs"></param>
+        </member>
+        <member name="P:Brainboxes.IO.IIOProtocol.IOCounterUpdateDirection">
+            <summary>
+            Signifies whether an Input counter changes on a rising edge or falling edge
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.GetLineCount(System.Int32)">
+            <summary>
+            Reads the input counter of the specified line. 
+            The count can be 16 bits or 32 bits, by default int in .NET is 32bits
+            however to be safe we are explicitly setting the return type to 32 bit int
+            </summary>
+            <param name="line"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.ClearLineCount(System.Int32)">
+            <summary>
+            Clears the digital input counter of the specified channel.
+            </summary>
+            <param name="line"></param>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.SetOutputLineState(System.Int32,System.Int32)">
+            <summary>
+            Set an individual output Line
+            </summary>
+            <param name="line"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.GetLineState(System.Int32,System.Boolean)">
+            <summary>
+            Get an individual line state
+            </summary>
+            <param name="line"></param>
+            <param name="isInput">Defaults true</param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.GetAllLatchedHighInputStates">
+            <summary>
+            Get ALL Latched High Input States, where each bit represents whether the corresponding line is latched high
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.GetAllLatchedLowInputStates">
+            <summary>
+            Get ALL Latched Low Input States, where each bit represents whether the corresponding line is latched low
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.ClearAllLatchedInputs">
+            <summary>
+            Clear the Latches
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IIOProtocol.DeviceName">
+            <summary>
+            The name of the Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.GetDeviceName">
+            <summary>
+            Uncached version of Property
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.GetDeviceConfiguration">
+            <summary>
+            Get various aspects of the device configuration and cache them locally
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.ResetToFactoryDefaultSettings">
+            <summary>
+            Reset to factory default settings
+            Be sure to clear any cached state
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IIOProtocol.Restart">
+            <summary>
+            Restart the device to power on setting
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.ASCIIProtocol">
+            <summary>
+            The ASCII Protocol for more information on supported commands see http://www.brainboxes.com/faq/items/ascii-protocol-and-commands
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.#ctor(System.Int32)">
+            <summary>
+            Create an ASCII Protocol object,
+            </summary>
+            <param name="address">The ASCII address of the ED Device</param>
+        </member>
+        <member name="F:Brainboxes.IO.ASCIIProtocol._address">
+            <summary>
+            The ASCII address of the device
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ASCIIProtocol.Address">
+            <summary>
+            default ASCII DCON device address can be set in constructor to specific value
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.SendCommand(System.String)">
+            <summary>
+            Send a command to a Brainboxes Device and optionally receive a response back from the device
+            </summary>
+            <param name="command">command to send to device</param>
+            <returns>response from device, null if there is no response</returns>
+        </member>
+        <member name="P:Brainboxes.IO.ASCIIProtocol.Brainboxes#IO#IIOProtocol#IOCounterUpdateDirection">
+            <summary>
+            whether the Digital Input IO Line counter updates on a rising edge or a falling edge
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.SetOutputLineState(System.Int32,System.Int32)">
+            <summary>
+            Set an individual output line state open (0) or closed (1)s
+            </summary>
+            <param name="line"></param>
+            <param name="state"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.SetAllOutputLineStates(System.Int32,System.Int32)">
+            <summary>
+            set all output lines on the device open (0) or closed (1)
+            The bit position represents the line number
+            </summary>
+            <param name="states"></param>
+            <param name="numberOfOutputs">The number of outputs on the device</param>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.GetLineState(System.Int32,System.Boolean)">
+            <summary>
+            Get the state of an IO Line
+            </summary>
+            <param name="line"></param>
+            <param name="isInput">ignored by ASCII protocol</param>
+            <returns>1: Line closed/High/On, 0: Line Open/Low/Off</returns>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.GetAllLineStates">
+            <summary>
+            Get the state of all the IOLines of the device as an integer
+            </summary>
+            <returns>Each bit in the integer represents an IOLine state</returns>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.CommandDoesNotHaveResponse(System.String)">
+            <summary>
+            Test whether the command does not have an ASCII response from the ED Device
+            </summary>
+            <param name="command"></param>
+            <returns>true if not response</returns>
+        </member>
+        <member name="F:Brainboxes.IO.ASCIIProtocol._commsEncoding">
+            <summary>
+            ASCII character encoding is used to send and receive data to/from the EDDevice
+            Windows-28591 = ISO-8859-1 = ASCII
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ASCIIProtocol._newLine">
+            <summary>
+            New line character used by the ASCII protocol to signal end of message
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ASCIIProtocol._newLineCode">
+            <summary>
+            New line character code 13
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.ASCIIProtocol._commandsWithoutResponse">
+            <summary>
+            commands which have no response
+            #** Synchronized Sampling Command
+            ~** Host is OK Command
+            $AARS Restart the device to power on setting
+            SendCommand returns null for these commands
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol._sendCommand(System.String)">
+            <summary>
+            Any command sent to the ED Device is sent by this function
+            </summary>
+            <param name="command">The ASCII command</param>
+            <returns>response from the ED device</returns>
+        </member>
+        <member name="P:Brainboxes.IO.ASCIIProtocol.DeviceName">
+            <summary>
+            The name of the ED Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.GetDeviceName">
+            <summary>
+            Get the name of the Device
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.ResetToFactoryDefaultSettings">
+            <summary>
+            Reset the ED device to factory default settings
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.Restart">
+            <summary>
+            Power Off and the On the ED Device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.GetAllLatchedHighInputStates">
+            <summary>
+            Get the HIGH LATCH states of all the Inputs
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.GetAllLatchedLowInputStates">
+            <summary>
+            Get the LOW LATCH state of all the INPUTS
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.GetAllLatchedInputStates(System.Boolean)">
+            <summary>
+            Get the LATCH state of the INPUTS
+            </summary>
+            <param name="isHigh">Whether to get the HIGH or LOW LATCH</param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.ClearAllLatchedInputs">
+            <summary>
+            Clear the INPUT latches
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.GetLineCount(System.Int32)">
+            <summary>
+            Reads the digital input counter of the specified channel
+            </summary>
+            <param name="line"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.ClearLineCount(System.Int32)">
+            <summary>
+            Clears the digital input counter of the specified line.
+            </summary>
+            <param name="line"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ASCIIProtocol.GetDeviceConfiguration">
+            <summary>
+            Read the device configuration
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.IODirection">
+            <summary>
+            IODirection either input or output, for lines which can be both input and output the flags can be combined e.g. IODirection.Input | IODirection.Output
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IODirection.Input">
+            <summary>
+            Input
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IODirection.Output">
+            <summary>
+            Output
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.IOChangeTypes">
+            <summary>
+            A type of change which can occur to an IOLine
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOChangeTypes.NoChange">
+            <summary>
+            No Change occurred
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOChangeTypes.RisingEdge">
+            <summary>
+            Rising Edge
+            Digital Input went from low to high or 0 to 1
+            Digital Output/Relay went from open to closed or 0 to 1
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOChangeTypes.FallingEdge">
+            <summary>
+            Falling Edge
+            Digital Input went from high to low or 1 to 0
+            Digital Output/Relay went from closed to open or 1 to 0
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOChangeTypes.Latched">
+            <summary>
+            Within the sample interval the IOLine has had 1 or more falling edges and 1 or more rising edges
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOChangeTypes.Undefined">
+            <summary>
+            undefined
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.IOType">
+            <summary>
+            The type of IOLine
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOType.Digital">
+            <summary>
+            Digital IOLine
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOType.Analogue">
+            <summary>
+            Analog IOLine
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOType.Relay">
+            <summary>
+            Relay, note from a programming perspective this is the same as a digital input line
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.IOLine">
+            <summary>
+            An IOLine on a Brainboxes Remote IO Device
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IOLine.Label">
+            <summary>
+            User definable label for the io line to help when debugging
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine.LogicalNumber">
+            <summary>
+            The IO Line Number from 0 to 15 as defined on the case
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine.IONumber">
+            <summary>
+            The IO Number from 0 to 15 e.g DOUT2, DIN1, Relay3
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine.IODirection">
+            <summary>
+            Whether the IO line is an input or an output
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine.IOType">
+            <summary>
+            Whether the line is digital or analogue
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IOLine.MostRecentChangeType">
+            <summary>
+            The most recent type of change to occur to the IOLine examples:
+            a. if the previous value seen was 1 and the current value is 0 then the change type will be IOChangeType.FallingEdge.
+            b. if the device has just been turned on then the change type will be IOChangeType.Undefined
+            c. if the line has gone from 1 to 0 and back to 1 within the <see cref="P:Brainboxes.IO.EDDevice.IOLineCacheTimeout"/> the change type will be IOChangeType.Latched
+            d. if the line has not changed within the last <see cref="P:Brainboxes.IO.EDDevice.IOLineCacheTimeout"/> the change type will be IOChangeType.NoChange
+            
+            The method will only return meaningful results if there are event handlers attached to the EDDevice
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._ioLineDelegate">
+            <summary>
+            Any getting or setting of IOLine states is handled by the delegate
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._previousValue">
+            <summary>
+            The last known previous value of the IO line
+            default -1 means unknown
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._value">
+            <summary>
+            The last known value of the IO line
+            default -1 means unknown
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._valueCacheTime">
+            <summary>
+            The date-time the last known value was checked on the device
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._previousCount">
+            <summary>
+            The previous count value, -2 if unknown (so its not the same as _count)
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._count">
+            <summary>
+            The last known count of the IO line
+            default -1 means unknown
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._countCacheTime">
+            <summary>
+            The date-time the last known count was checked on the device
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._highLatchedCacheTime">
+            <summary>
+            The date-time the last known high-latch was checked on the device
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._lowLatchedCacheTime">
+            <summary>
+            The date-time the last known lowLatch was checked on the device
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IOLine.ToString">
+            <summary>
+            ToString
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Brainboxes.IO.IOLine.Describe">
+            <summary>
+            Give a complete summary of the IOLine
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Brainboxes.IO.IOLine.Value">
+            <summary>
+            Whether the line is:
+            Digital Input : HIGH (1) or LOW(0) 
+            Output/Relay : CLOSED (1) or OPEN (0)
+            NOTE: only Outputs can be set, inputs will throw InvalidOperationException
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IOLine.Toggle">
+            <summary>
+            If the line is an output this function will invert the state of the line
+            e.g. if the line was closed (1) it will become open (0)
+            or if the line was open (0) it will become closed (1)
+            only valid for Digital outputs
+            </summary>
+            <returns>The new line Value, 1 or 0</returns>
+        </member>
+        <member name="P:Brainboxes.IO.IOLine.Count">
+            <summary>
+            Get the count of the input, that is the number of times the input has latched since
+            the counter has been reset
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IOLine.ClearCount">
+            <summary>
+            Clear the count currently recorded on the line
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IOLine.LowLatchedStatus">
+            <summary>
+            Whether this IOLine has had its Low Latch set since the last latch reset
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IOLine.HighLatchedStatus">
+            <summary>
+            Whether this IOLine has had its High Latch set since the last latch reset
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._ioLineChangedEvents">
+            <summary>
+            List of registered IOLine Change Event handlers
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._ioLineRisingEdgeEvents">
+            <summary>
+            List of registered IOLine Rising Edge Event handlers
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._ioLineFallingEdgeEvents">
+            <summary>
+            List of registered IOLine Falling Edge Event handlers
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.IOLine._ioLineCountEvents">
+            <summary>
+            List of registered IOLine Count Event handlers
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.IOLine.thisIOLineChanged(Brainboxes.IO.IOLine,Brainboxes.IO.EDDevice,Brainboxes.IO.IOChangeTypes)">
+            <summary>
+            wrapper function calls all events handlers in the _ioLineChangedEvents list
+            </summary>
+            <param name="line"></param>
+            <param name="device"></param>
+            <param name="changeType"></param>
+        </member>
+        <member name="M:Brainboxes.IO.IOLine.thisIOLineRisingEdge(Brainboxes.IO.IOLine,Brainboxes.IO.EDDevice,Brainboxes.IO.IOChangeTypes)">
+            <summary>
+            wrapper function calls all events handlers in the _ioLineRisingEdgeEvents list
+            </summary>
+            <param name="line"></param>
+            <param name="device"></param>
+            <param name="changeType"></param>
+        </member>
+        <member name="M:Brainboxes.IO.IOLine.thisIOLineFallingEdge(Brainboxes.IO.IOLine,Brainboxes.IO.EDDevice,Brainboxes.IO.IOChangeTypes)">
+            <summary>
+            wrapper function calls all events handlers in the _ioLineFallingEdgeEvents list
+            </summary>
+            <param name="line"></param>
+            <param name="device"></param>
+            <param name="changeType"></param>
+        </member>
+        <member name="M:Brainboxes.IO.IOLine.thisIOLineCount(Brainboxes.IO.IOLine,Brainboxes.IO.EDDevice,Brainboxes.IO.IOChangeTypes)">
+            <summary>
+            wrapper function calls all events handlers in the _ioLineCountEvents list
+            </summary>
+            <param name="line"></param>
+            <param name="device"></param>
+            <param name="changeType"></param>
+        </member>
+        <member name="E:Brainboxes.IO.IOLine.IOLineChanged">
+            <summary>
+            register an event for this IOLine
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IOLine.IOLineRisingEdge">
+            <summary>
+            register a rising edge event for this IOLine
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IOLine.IOLineFallingEdge">
+            <summary>
+            register a rising edge event for this IOLine
+            </summary>
+        </member>
+        <member name="E:Brainboxes.IO.IOLine.IOLineCount">
+            <summary>
+            register a count event for this IOLine
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.IProtocol">
+            <summary>
+            Protocol Interface
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.IProtocol.Stream">
+            <summary>
+            The stream on which the protocol acts
+            </summary>
+        </member>
+        <member name="T:Brainboxes.IO.ISerialProtocol">
+            <summary>
+            A basic serial protocol interface which has an encoding, data-available, send and receive method
+            It is also clonable so that it can be copied and assigned to multiple ports
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ISerialProtocol.Encoding">
+            <summary>
+            The character encoding used to send and receive data
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.ISerialProtocol.DataAvailable">
+            <summary>
+            Indicates whether data is available, can be 0, for no data, 1 for 1 or more bytes, 
+            or a number representing the precise number of bytes
+            </summary>
+        </member>
+        <member name="M:Brainboxes.IO.ISerialProtocol.Send(System.String)">
+            <summary>
+            Send data down the serial port
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Brainboxes.IO.ISerialProtocol.Receive">
+            <summary>
+            Receive data from the serial port
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Brainboxes.IO.Protocol">
+            <summary>
+            Abstract base class which represents the communication Protocol of a Brainboxes Device
+            </summary>
+        </member>
+        <member name="F:Brainboxes.IO.Protocol._stream">
+            <summary>
+            the stream which the protocol data is written and read from
+            </summary>
+        </member>
+        <member name="P:Brainboxes.IO.Protocol.Stream">
+            <summary>
+            Set the stream which the protocol data is written and read from
+            </summary>
+        </member>
+    </members>
+</doc>

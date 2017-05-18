@@ -1,0 +1,18 @@
+{
+  "plugins": [
+    "jscs-jsdoc"
+  ],
+  "jsDoc": {
+    "checkAnnotations": "closurecompiler",
+    "checkTypes": "strictNativeCase",
+    "checkParamExistence": true,
+    "checkParamNames": true,
+    "checkRedundantParams": true,
+    "checkReturnTypes": true,
+    "checkRedundantReturns": true,
+    "requireReturnTypes": true,
+    "enforceExistence": {
+      "allExcept": ["exports"]
+    }
+  }
+}

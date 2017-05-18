@@ -1,0 +1,46 @@
+<div class="panel panel-filter">
+  <div class="panel-heading" translate="ISSUE.SUSSGEST_ISSUE_DETAIL"></div>
+  <div class="panel-body issue-page">
+    <div class="row m-b">
+      <label class="col-sm-3 control-label colon text-right" translate="GENERAL.TITLE"></label>
+      <div class="col-sm-9">
+        <span ng-bind="vm.issueModel.title"></span>
+      </div>
+    </div>
+
+    <div class="row m-b">
+      <label class="col-sm-3 control-label colon text-right" translate="GENERAL.DESCRIPTION"></label>
+      <div class="col-sm-9">
+        <span ng-bind-html="vm.issueModel.description | newLines" ng-if="vm.issueModel.description"></span>
+        <span ng-bind="'N/A'" ng-if="!vm.issueModel.description"></span>
+      </div>
+    </div>
+
+    <div class="row m-b">
+      <label class="col-sm-3 control-label colon text-right" translate="GENERAL.STATUS"></label>
+      <div class="col-sm-9">
+        <span ng-bind="vm.issueModel.status.statusName"></span>
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="col-sm-3 control-label colon text-right" translate="GENERAL.SYMPTOM"></label>
+      <div class="col-sm-9">
+        <span ng-bind="vm.issueModel.symptom.description"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div class="form-group">
+      <div class="col-sm-12 text-right">
+        <button class="btn btn-sm" type="button" ng-click="vm.close()">
+          <i class="fa fa-times" aria-hidden="true"></i>
+          <span translate="GENERAL.CLOSE"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

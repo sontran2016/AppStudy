@@ -1,0 +1,42 @@
+{
+  "USER": {
+    "HEADING": "USERS MANAGEMENT",
+    "BTN_ADD": "Add New User",
+    "ADD_HEADING": "ADD NEW USER",
+    "EDIT_HEADING": "EDIT USER",
+
+    "USERNAME": "Username",
+    "PASSWORD": "Password",
+    "CONFIRM_PASSWORD": "Confirm password",
+    "FIRST_NAME": "First name",
+    "LAST_NAME": "Last name",
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "ROLE": "Role",
+    "DEPARTMENT": "Department",
+    "AREAS": "Area(s)",
+    "LINES": "Line(s)",
+    "MACHINES": "Machine(s)",
+    "TYPE_TO_SELECT_ROLE": "- Select Role -",
+    "NAME_EMAIL": "Name/ Email",
+    "ANY_ROLE": "Any Role",
+    "ENTER_KEYWORD": "- Enter the name or email keyword -",
+
+    "NO_SELECTED_AREA": "There is no selected area(s)",
+    "NO_SELECTED_LINE": "There is no selected line(s)",
+    "NO_SELECTED_MACHINE": "There is no selected machine(s)",
+    "CHOOSE_AREA": "to choose area(s) from existing list",
+    "CHOOSE_LINE": "to choose line(s) from existing list",
+    "CHOOSE_MACHINE": "to choose machine(s) from existing list",
+
+    "CHOOSE_AREA_HEADING": "User - Choose Area",
+    "CHOOSE_LINE_HEADING": "User - Choose Line",
+    "CHOOSE_MACHINE_HEADING": "User - Choose Machine",
+    "ALL_AREAS": "All Areas",
+    "ALL_LINES": "All Lines",
+    "ALL_MACHINES": "All Machines",
+    "ENTER_KEYWORD_AREA": "- Enter area name keyword -",
+    "ENTER_KEYWORD_LINE": "- Enter line name keyword -",
+    "ENTER_KEYWORD_MACHINE": "- Enter machine name keyword -"
+  }
+}

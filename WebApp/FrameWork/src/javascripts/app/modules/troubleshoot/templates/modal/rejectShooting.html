@@ -1,0 +1,35 @@
+<div class="panel panel-filter">
+  <div class="panel-heading" translate="TROUBLESHOOT.REJECT_SHOOTING"></div>
+  <div class="panel-body troubleshoot-details-page">
+    
+    <form class="form-horizontal" name="vm.formReject" novalidate>
+      <div class="form-group" ng-class="{'has-error': (vm.formReject.rejectDescription.$invalid && vm.formReject.rejectDescription.$dirty)}">
+        <label class="col-sm-2 control-label req" translate="TROUBLESHOOT.REJECT_REASON"></label>
+        <div class="col-sm-10">
+          <textarea rows="5" class="form-control no-resize" name="rejectDescription" required 
+                    ng-model="vm.rejectModel.rejectDescription" placeholder="{{'TROUBLESHOOT.REJECT_REASON' | translate}}"></textarea>
+          <div class="input-errors" ng-show="vm.formReject.rejectDescription.$invalid && vm.formReject.rejectDescription.$dirty">
+              <span ng-show="vm.formReject.rejectDescription.$error.required" translate="VALIDATION.REQUIRED"></span>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <div class="form-group">
+      <div class="col-sm-12 text-right">
+        <button class="btn btn-danger btn-sm" type="button" ng-click="vm.reject()" ng-disabled="vm.formReject.$invalid">
+          <i class="fa fa-ban" aria-hidden="true"></i>
+          <span translate="GENERAL.REJECT"></span>
+        </button>
+        <button class="btn btn-sm" type="button" ng-click="vm.close()">
+          <i class="fa fa-times" aria-hidden="true"></i>
+          <span translate="GENERAL.CANCEL"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

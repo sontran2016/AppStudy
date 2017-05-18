@@ -1,0 +1,13 @@
+{
+  "NOTIFICATION": {
+    "TROUBLE_HEADING": "ALL TROUBLESHOOT NOTIFICATIONS",
+    "ISSUE_HEADING": "ALL ISSUE NOTIFICATIONS",
+    "LIBRARY_HEADING": "ALL LIBRARY NOTIFICATIONS",
+    "ENTER_KEYWORD": "- Enter the notification keyword -",
+    "CLEAR": "Clear",
+    "ONLY_READ": "Clear only read notification(s)",
+    "ALL_NOTIFICATION": "Clear all notifications",
+    "FROM_DATE": "From date",
+    "TO_DATE": "To date"
+  }
+}

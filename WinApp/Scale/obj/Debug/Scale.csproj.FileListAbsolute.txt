@@ -1,0 +1,9 @@
+C:\SonTran\Example\ConsoleApp\Scale\bin\Debug\Scale.exe.config
+C:\SonTran\Example\ConsoleApp\Scale\bin\Debug\Scale.exe
+C:\SonTran\Example\ConsoleApp\Scale\bin\Debug\Scale.pdb
+C:\SonTran\Example\ConsoleApp\Scale\obj\Debug\Scale.csprojResolveAssemblyReference.cache
+C:\SonTran\Example\ConsoleApp\Scale\obj\Debug\Scale.Form1.resources
+C:\SonTran\Example\ConsoleApp\Scale\obj\Debug\Scale.Properties.Resources.resources
+C:\SonTran\Example\ConsoleApp\Scale\obj\Debug\Scale.csproj.GenerateResource.Cache
+C:\SonTran\Example\ConsoleApp\Scale\obj\Debug\Scale.exe
+C:\SonTran\Example\ConsoleApp\Scale\obj\Debug\Scale.pdb

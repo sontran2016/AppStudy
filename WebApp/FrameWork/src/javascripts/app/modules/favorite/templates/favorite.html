@@ -1,0 +1,36 @@
+<div class="favorite">
+  <div  class="page-header">
+    <h1 translate="FAVORITE.HEADING"></h1>
+  </div>
+
+  <div class="favorite-container" ng-if="vm.favoriteList.length">
+	  <div class="media-object favorite-item pointer" ng-class="{'odd': $index % 2 !== 0}" 
+	  		ng-repeat="item in vm.favoriteList | orderBy: '-updateOnDate'" ui-sref="app.troubleshootDetails({id: item.id})">
+	  	<div class="media-body">
+	  		<div class="remove-icon">
+	  			<i class="fa fa-times" aria-hidden="true" ng-click="$event.stopPropagation()" confirm-delete action="Are you sure you want to remove this trouble from my favorite troubleshoot list?" on-ok="vm.removeFavorite(item.id)"></i>
+	  		</div>
+		    <p class="bold-text" ng-bind="item.title"></p>
+		    <p class="text-justify" ng-bind-html="item.description | newLines | cut:true:400:' ...'"></p>
+		    <div class="row">
+		    	<div class="col-sm-6">
+		          <small><em>
+		          	<span class="colon" translate="GENERAL.POSTED_BY"></span> 
+		          	<span ng-bind="item.createdBy.firstName"></span> <span ng-bind="item.createdBy.lastName"></span> | 
+		          	<span class="colon" translate="GENERAL.LAST_UPDATED"></span> 
+		          	<span ng-bind="item.updateOnDate | date: 'dd-MM-yyyy hh:mm a'"></span>
+		          </em></small>
+		        </div>
+		        <div class="col-sm-6 text-right">
+		        	<span uib-rating ng-model="item.rate" enable-reset="false" ng-if="!item.isRated" ng-click="$event.preventDefault(); $event.stopPropagation()" ng-change="vm.setRating(item)"></span>
+		        	<span uib-rating ng-model="item.rate" read-only="true" ng-if="item.isRated" ng-click="$event.preventDefault(); $event.stopPropagation()"></span>
+		        </div>
+		    </div>
+	    </div>
+	  </div>
+	</div>
+
+	<p ng-if="!vm.favoriteList.length" class="text-center">
+		<em translate="FAVORITE.NO_FAVORITE_ITEM"></em>
+	</p>
+</div>

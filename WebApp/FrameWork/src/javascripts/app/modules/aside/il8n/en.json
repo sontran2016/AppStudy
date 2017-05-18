@@ -1,0 +1,29 @@
+{
+  "ASIDE": {
+    "DASHBOARD": "Dashboard",
+    "ISSUES": "Issues",
+    "TROUBLESHOOT": "Troubleshoot",
+    "AREA": "Areas",
+    "LINE": "Lines",
+    "MACHINE": "Machines",
+    "COMPONENT": "Components",
+    "SYMPTOM": "Symptoms",
+    "POTENTIAL_CAUSE": "Potential Causes",
+    "USER": "Users",
+    "TAG": "Tags",
+    "TREE_VIEW": "Tree View",
+    "MASTER_DATA": "Master Data",
+    "HOW_TO_USE": "How To Use",
+    "FORGOT_PASSWORD": "Forgot Password",
+    "AREA_MANAGEMENT": "Area Management",
+    "LINE_MANAGEMENT": "Line Management",
+    "MACHINE_MANAGEMENT": "Machine Management",
+    "COMPONENT_MANAGEMENT": "Component Management",
+    "SYMPTOM_MANAGEMENT": "Symptom Management",
+    "POTENTIAL_CAUSE_MANAGEMENT": "Potential Cause Management",
+    "TROUBLESHOOT_MANAGEMENT": "Troubleshoot Management",
+    "ISSUE_MANAGEMENT": "Issue Management",
+    "USER_MANAGEMENT": "User Management",
+    "TAG_MANAGEMENT": "Tag Management"
+  }
+}

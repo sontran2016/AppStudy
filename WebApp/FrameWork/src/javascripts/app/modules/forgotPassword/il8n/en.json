@@ -1,0 +1,7 @@
+{
+  "FORGOT_PASSWORD": {
+  	"HEADING": "Forgot Your Password",
+    "PLEASE_ENTER_EMAIL_CAPTION":"Please enter your email address and we will send you instruction on how to reset your password.",
+    "SUCCESS_MESSAGE":"Instruction has been sent to your email. Please check the email and follow the instruction to reset your password."
+  }
+}

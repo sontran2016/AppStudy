@@ -1,0 +1,12 @@
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\bin\Debug\EIPNET.exe.config
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\bin\Debug\EIPNET.exe
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\bin\Debug\EIPNET.pdb
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\bin\Debug\EIPNET.dll
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\obj\Debug\EIPNET.csprojResolveAssemblyReference.cache
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\obj\Debug\EIPNET.exe
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\obj\Debug\EIPNET.pdb
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\bin\Debug\Brainboxes.IO.dll
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\bin\Debug\Brainboxes.IO.xml
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\bin\Debug\IToolS.Data.dll
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\bin\Debug\IToolS.dll
+C:\SonTran\Example\ConsoleApp\EIPNET\EIPNET\bin\Debug\IToolS.IOServers.EthernetIP.Rockwell.exe

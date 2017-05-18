@@ -1,0 +1,8 @@
+C:\SonTran\Example\ConsoleApp\Facade\bin\Debug\Facade.exe.config
+C:\SonTran\Example\ConsoleApp\Facade\bin\Debug\Facade.exe
+C:\SonTran\Example\ConsoleApp\Facade\bin\Debug\Facade.pdb
+C:\SonTran\Example\ConsoleApp\Facade\bin\Debug\PureMVC.MultiCore.DotNet.dll
+C:\SonTran\Example\ConsoleApp\Facade\bin\Debug\PureMVC.MultiCore.DotNet.xml
+C:\SonTran\Example\ConsoleApp\Facade\obj\Debug\Facade.csprojResolveAssemblyReference.cache
+C:\SonTran\Example\ConsoleApp\Facade\obj\Debug\Facade.exe
+C:\SonTran\Example\ConsoleApp\Facade\obj\Debug\Facade.pdb

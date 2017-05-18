@@ -1,0 +1,14 @@
+{
+  "name": "nodejs1",
+  "version": "0.0.0",
+  "description": "Nodejs1",
+  "main": "app.js",
+  "author": {
+    "name": "sontran"
+  },
+  "dependencies": {
+    "express": "3.4.4",
+    "jade": "*",
+    "stylus": "*"
+  }
+}

@@ -1,0 +1,243 @@
+<div ng-init="vm.init()" class="page-user">
+
+  <div class="page-header">
+    <h1 translate="USER.EDIT_HEADING"></h1>
+  </div>
+
+  <form class="form-horizontal" name="vm.formEdit" ng-submit="vm.save()">
+    <div class="panel panel-default">
+      <div class="panel-body">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">
+              <span translate="USER.USERNAME"></span>
+            </label>
+
+            <div class="col-sm-10">
+              <input type="text" class="form-control"
+                     placeholder="{{'USER.USERNAME' | translate}}" disabled
+                     name="userName" ng-model="vm.userModel.userName">
+            </div>
+          </div>
+
+          <div class="form-group" ng-class="{'has-error': (vm.formEdit.firstName.$invalid && vm.formEdit.firstName.$dirty)}">
+            <label class="col-sm-2 control-label req">
+              <span translate="USER.FIRST_NAME"></span>
+            </label>
+
+            <div class="col-sm-10">
+              <input type="text" class="form-control"
+                     placeholder="{{'USER.FIRST_NAME' | translate}}"
+                     name="firstName" ng-model="vm.userModel.firstName" required>
+
+              <div class="input-errors" ng-show="vm.formEdit.firstName.$invalid && vm.formEdit.firstName.$dirty">
+                <span ng-show="vm.formEdit.firstName.$error.required" translate="VALIDATION.REQUIRED"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group"
+             ng-class="{'has-error': (vm.formEdit.lastName.$invalid && vm.formEdit.lastName.$dirty)}">
+          <label class="col-sm-2 control-label req">
+            <span translate="USER.LAST_NAME"></span>
+          </label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control"
+                   placeholder="{{'USER.LAST_NAME' | translate}}"
+                   name="lastName" ng-model="vm.userModel.lastName" required>
+
+            <div class="input-errors" ng-show="vm.formEdit.lastName.$invalid && vm.formEdit.lastName.$dirty">
+              <span ng-show="vm.formEdit.lastName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">
+            <span translate="USER.EMAIL"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <input type="email" class="form-control" disabled
+                   placeholder="{{'USER.EMAIL' | translate}}"
+                   name="email" ng-model="vm.userModel.email" required>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formEdit.phone.$invalid && vm.formEdit.phone.$dirty)}">
+          <label class="col-sm-2 control-label">
+            <span translate="USER.PHONE"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <input type="phone" numeric-only class="form-control"
+                   placeholder="{{'USER.PHONE' | translate}}"
+                   name="phone" ng-model="vm.userModel.phone">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label req">
+            <span translate="USER.ROLE"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <select class="form-control"
+                    k-ng-model="vm.userModel.role"
+                    ng-model="vm.userModel.role"
+                    k-change="'vm.changeRole()'"
+                    name="role"
+                    kendo-drop-down-list
+                    k-data-text-field="'label'"
+                    k-data-value-field="'value'"
+                    k-value-primitive="true"
+                    k-data-source="vm.roleList"
+                    ng-disabled="vm.roletmp === vm.roles.ADMIN.value">
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (!vm.userModel.areaIds.length && vm.formEdit.area.$dirty)}">
+          <label class="col-sm-2 control-label req">
+            <span translate="USER.AREAS"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <div ng-if="!vm.userModel.areaIds.length || vm.roletmp === vm.roles.ADMIN.value" class="line-height-md">
+              <span translate="USER.NO_SELECTED_AREA" ng-if="vm.userModel.role !== 'admin'"></span>
+              <div ng-if="vm.userModel.role === 'user'">
+                <span class="red-text" translate="TROUBLESHOOT.CLICK"></span>
+                <span class="word-has-function" translate="TROUBLESHOOT.HERE" ng-click="vm.openAreaModal()"></span> 
+                <span class="red-text" translate="USER.CHOOSE_AREA"></span>
+              </div>
+              <div ng-if="vm.userModel.role === 'admin'"> 
+                <label class="label label-default m-r-xs" translate="USER.ALL_AREAS" ></label>
+              </div>
+            </div>
+
+            <div class="m-b" ng-if="vm.userModel.areaIds.length && vm.roletmp !== vm.roles.ADMIN.value">
+              <div class="user-label label label-default m-r-xs" ng-repeat="area in vm.userModel.areaIds | limitTo: 10" ng-bind="area.name"></div>
+              <div class="user-label label label-default m-r-xs" ng-repeat="area in vm.userModel.areaIdsMore" ng-bind="area.name" ng-if="vm.showFullArea"></div>
+              <div class="user-label label label-primary m-r-xs pointer" ng-if="vm.userModel.areaIds.length > 10" ng-click="vm.showFullArea = !vm.showFullArea">
+                <span ng-bind="'.......'" ng-if="!vm.showFullArea"></span>
+                <span ng-bind="'- - - -'" ng-if="vm.showFullArea"></span>
+              </div>
+            </div>
+
+            <div class="row" ng-if="vm.userModel.areaIds.length && vm.roletmp !== vm.roles.ADMIN.value">
+              <div class="col-sm-12 text-right">
+                <button type="button" class="btn btn-small btn-warning" ng-click="vm.openAreaModal()">
+                  <i class="fa fa-list"></i> 
+                  <span translate="GENERAL.CHANGE"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">
+            <span translate="USER.LINES"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <div ng-if="!vm.userModel.lineIds.length || vm.roletmp === vm.roles.ADMIN.value" class="line-height-md">
+              <span translate="USER.NO_SELECTED_LINE" ng-if="vm.userModel.role !== 'admin'"></span>
+              <div ng-if="vm.userModel.areaIds.length && !vm.userModel.lineIds.length && vm.userModel.role === 'user'">
+                <span class="red-text" translate="TROUBLESHOOT.CLICK"></span>
+                <span class="word-has-function" translate="TROUBLESHOOT.HERE" ng-click="vm.openLineModal()"></span> 
+                <span class="red-text" translate="USER.CHOOSE_LINE"></span>
+              </div>
+              <div ng-if="vm.userModel.role === 'admin'"> 
+                <label class="label label-default m-r-xs" translate="USER.ALL_LINES" ></label>
+              </div>
+            </div>
+
+            <div class="m-b" ng-if="vm.userModel.lineIds.length && vm.roletmp !== vm.roles.ADMIN.value">
+              <div class="user-label label label-default m-r-xs" ng-repeat="line in vm.userModel.lineIds | limitTo: 10" ng-bind="line.name"></div>
+              <div class="user-label label label-default m-r-xs" ng-repeat="line in vm.userModel.lineIdsMore" ng-bind="line.name" ng-if="vm.showFullLine"></div>
+              <div class="user-label label label-primary m-r-xs pointer" ng-if="vm.userModel.lineIds.length > 10" ng-click="vm.showFullLine = !vm.showFullLine">
+                <span ng-bind="'.......'" ng-if="!vm.showFullLine"></span>
+                <span ng-bind="'- - - -'" ng-if="vm.showFullLine"></span>
+              </div>
+            </div>
+
+            <div class="row" ng-if="vm.userModel.lineIds.length && vm.roletmp !== vm.roles.ADMIN.value">
+              <div class="col-sm-12 text-right">
+                <button type="button" class="btn btn-small btn-warning" ng-click="vm.openLineModal()">
+                  <i class="fa fa-list"></i> 
+                  <span translate="GENERAL.CHANGE"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">
+            <span translate="USER.MACHINES"></span>
+          </label>
+
+          <div class="col-sm-10">
+            <div ng-if="!vm.userModel.machineIds.length || vm.roletmp === vm.roles.ADMIN.value" class="line-height-md">
+              <span translate="USER.NO_SELECTED_MACHINE" ng-if="vm.userModel.role !== 'admin'"></span>
+              <div ng-if="vm.userModel.lineIds.length && !vm.userModel.machineIds.length && vm.userModel.role === 'user'">
+                <span class="red-text" translate="TROUBLESHOOT.CLICK"></span>
+                <span class="word-has-function" translate="TROUBLESHOOT.HERE" ng-click="vm.openMachineModal()"></span> 
+                <span class="red-text" translate="USER.CHOOSE_MACHINE"></span>
+              </div>
+              <div ng-if="vm.userModel.role === 'admin'"> 
+                <label class="label label-default m-r-xs" translate="USER.ALL_MACHINES" ></label>
+              </div>
+            </div>
+
+            <div class="m-b" ng-if="vm.userModel.machineIds.length && vm.roletmp !== vm.roles.ADMIN.value">
+              <div class="user-label label label-default m-r-xs" ng-repeat="machine in vm.userModel.machineIds | limitTo: 10 track by $index" ng-bind="machine.name"></div>
+              <div class="user-label label label-default m-r-xs" ng-repeat="machine in vm.userModel.machineIdsMore track by $index" ng-bind="machine.name" ng-if="vm.showFullMachine"></div>
+              <div class="user-label label label-primary m-r-xs pointer" ng-if="vm.userModel.machineIds.length > 10" ng-click="vm.showFullMachine = !vm.showFullMachine">
+                <span ng-bind="'.......'" ng-if="!vm.showFullMachine"></span>
+                <span ng-bind="'- - - -'" ng-if="vm.showFullMachine"></span>
+              </div>
+            </div>
+
+            <div class="row" ng-if="vm.userModel.machineIds.length && vm.roletmp !== vm.roles.ADMIN.value">
+              <div class="col-sm-12 text-right">
+                <button type="button" class="btn btn-small btn-warning" ng-click="vm.openMachineModal()">
+                  <i class="fa fa-list"></i> 
+                  <span translate="GENERAL.CHANGE"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.ACTIVE"></label>
+
+          <div class="col-sm-10">
+            <input type="checkbox" icheck name="isActive" ng-model="vm.userModel.isActive" value="true">
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-6">
+            <a ui-sref="app.user" class="btn btn-default">
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+              <span translate="GENERAL.BACK"></span>
+            </a>
+          </div>
+
+          <div class="col-sm-6 text-right">
+            <button type="submit" class="btn btn-success btn-have-left" ng-disabled="(!vm.userModel.areaIds.length && vm.userModel.role !== 'admin') || vm.formEdit.$invalid">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              <span translate="GENERAL.SAVE"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+</div>

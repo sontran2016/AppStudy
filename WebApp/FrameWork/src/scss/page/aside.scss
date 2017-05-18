@@ -1,0 +1,57 @@
+.tree-view-menu {
+  .tree-parent {
+    padding: 15px !important;
+  }
+  .tree-child {
+    margin-left: 25px !important;
+  }
+  .collapsed {
+    .tree-child {
+      display: none;
+    }
+  }
+  li {
+    margin: 5px 0px;
+  }
+  .selected {
+    background: #aaddff;
+    font-weight: bold;
+    padding: 1px 5px;
+  }
+  .pd {
+    padding: 0px 5px;
+  }
+  .pd-r {
+    padding-right: 2px;
+  }
+  span {
+    color: #555;
+  }
+  .k-state-focused {
+    box-shadow: none;
+  }
+  .k-treeview span.k-in {
+    font-weight: bold;
+    width: 166px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .k-state-selected {
+    span {
+      color: white;
+    }
+  }
+  .type-icon {
+    border-radius: 20px;
+    border: 1px solid white;
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+    float: left;
+  }
+}
+
+.hr-aside {
+  margin: 0 !important;
+  border-top: 2px solid white !important;
+}

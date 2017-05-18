@@ -1,0 +1,12 @@
+[
+  {
+    "value": true,
+    "label": "Active",
+    "translate": "GENERAL.ACTIVE"
+  },
+  {
+    "value": false,
+    "label": "Inactive",
+    "translate": "GENERAL.INACTIVE"
+  }
+]

@@ -1,0 +1,12 @@
+node_modules
+.idea
+/src/bower_components
+/src/css/app.min.css
+/src/css/app.css
+/upload
+/dist/
+/src/javascripts/main.min.js
+/src/javascripts/main.min.js.main
+/src/upload/
+build/
+.sass-cache/

@@ -1,0 +1,6 @@
+{
+  "AREA": 0,
+  "LINE": 1,
+  "MACHINE": 2,
+  "COMPONENT": 3
+}

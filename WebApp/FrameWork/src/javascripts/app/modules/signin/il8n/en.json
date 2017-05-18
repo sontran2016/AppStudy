@@ -1,0 +1,9 @@
+{
+  "LOGIN": {
+    "HEADING": "Login",
+    "EMAIL": "Email",
+    "USERNAME": "Username",
+    "PASSWORD": "Password",
+    "FORGOT_PASSWORD": "Forgot password?"
+  }
+}

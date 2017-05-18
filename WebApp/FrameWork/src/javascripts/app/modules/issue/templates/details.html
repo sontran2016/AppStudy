@@ -1,0 +1,186 @@
+<div class="page-issue">
+
+  <div class="page-header">
+    <h1 translate="ISSUE.DETAIL_HEADING"></h1>
+  </div>
+
+  <form class="form-horizontal">
+    <div class="row">
+      <div ng-class="{'col-sm-8': (vm.detailsData.isShowSuggest && vm.permission === 'admin'), 'col-sm-12': (!vm.detailsData.isShowSuggest || vm.permission !== 'admin')}">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h3 class="text-center" translate="ISSUE.DETAIL_INFORMATION"></h3>
+            <div class="form-group">
+              <label class="col-sm-2 control-label colon" translate="ISSUE.ISSUE_DATE"></label>
+              <div class="col-sm-10" ng-bind="vm.detailsData.timestamp"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label colon" translate="GENERAL.TITLE"></label>
+              <div class="col-sm-10" ng-bind="vm.detailsData.title"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label colon" translate="GENERAL.DESCRIPTION"></label>
+              <div class="col-sm-10 text-justify">
+                <span ng-bind-html="vm.detailsData.description | newLines" ng-if="vm.detailsData.description"></span>
+                <span ng-bind="'N/A'" ng-if="!vm.detailsData.description"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label colon" translate="ISSUE.STATUS"></label>
+              <div class="col-sm-10">
+                <div ng-bind="vm.detailsData.status.statusName || 'N/A'" class="label" ng-class="{
+                          'label-primary': vm.detailsData.status.id==vm.statusConfig.OPENED,
+                          'label-default': vm.detailsData.status.id==vm.statusConfig.CLOSED,
+                          'label-info': vm.detailsData.status.id==vm.statusConfig.MAINTAINED,
+                          'label-success': vm.detailsData.status.id==vm.statusConfig.APPROVED,
+                          'label-warning': vm.detailsData.status.id==vm.statusConfig.NEED_APPROVE,
+                          'label-danger': vm.detailsData.status.id==vm.statusConfig.REJECTED}"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label colon" translate="ISSUE.CREATED_BY"></label>
+              <div class="col-sm-10">
+                <span ng-bind="vm.detailsData.createdBy.firstName"></span>
+                <span ng-bind="vm.detailsData.createdBy.lastName"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label colon" translate="GENERAL.AREA"></label>
+              <div class="col-sm-10">
+                <span class="label label-success" ng-if="vm.detailsData.area" ng-bind="vm.detailsData.area.name"></span>
+                <span ng-if="!vm.detailsData.area" ng-bind="'N/A'"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label colon" translate="GENERAL.LINE"></label>
+              <div class="col-sm-10">
+                <span class="label label-warning" ng-if="vm.detailsData.line" ng-bind="vm.detailsData.line.name"></span>
+                <span ng-if="!vm.detailsData.line" ng-bind="'N/A'"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label colon" translate="GENERAL.MACHINE"></label>
+              <div class="col-sm-10">
+                <span class="label label-info" ng-if="vm.detailsData.machine" ng-bind="vm.detailsData.machine.name"></span>
+                <span ng-if="!vm.detailsData.machine" ng-bind="'N/A'"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label colon" translate="GENERAL.COMPONENT"></label>
+              <div class="col-sm-10">
+                <span class="label label-purple" ng-if="vm.detailsData.component" ng-bind="vm.detailsData.component.name"></span>
+                <span ng-if="!vm.detailsData.component" ng-bind="'N/A'"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label colon" translate="GENERAL.SYMPTOM"></label>
+              <div class="col-sm-10 text-justify" ng-bind="vm.detailsData.symptom.description || 'N/A'">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label colon" translate="GENERAL.POTENTIAL_CAUSE"></label>
+              <div class="col-sm-10">
+                <div class="cause-list">
+                  <div class="media-object" ng-repeat="cause in vm.detailsData.potentialCauses">
+                    <span class="media-left cause-order" ng-bind="($index + 1)"></span>
+                    <div class="media-body potential-cause-item">
+                      <div class="potential-description pointer" ng-click="cause.showLog = !cause.showLog">
+                        <div class="col-sm-9">
+                          <span ng-bind="cause.description | cut:true:150:' ...'"></span>
+                        </div>
+                        <div class="col-sm-3">
+                          <button type="button" class="btn btn-sm pull-right" ng-class="{'btn-primary': !cause.trouble.isHaveShootingApproved, 'btn-success': cause.trouble.isHaveShootingApproved}" ng-click="vm.viewTroubleshoot(cause, $event)" 
+                                  ng-if="cause.trouble && ((vm.permission !== 'admin' && (cause.trouble.isHaveShootingApproved || cause.trouble.createdBy.id === vm.currentUser.id)) || vm.permission === 'admin')">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                            <span translate="ISSUE.BTN_VIEW_TROUBLESHOOT"></span>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="issue-log-container" ng-if="cause.showLog">
+                        <div class="issue-log" ng-repeat="item in cause.issueLogs">
+                          <span translate="ISSUE.ISSUE_DATE" class="colon"></span>
+                          <span ng-bind="item | date: 'dd/MM/yyyy hh:mm a'"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-6">
+                <a ui-sref="app.issue" class="btn btn-default">
+                  <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                  <span translate="GENERAL.BACK"></span>
+                </a>
+                <a ui-sref="app.issueEdit({id: vm.detailsData.id})" class="btn btn-success"
+                   ng-if="vm.permission === 'admin' || (vm.detailsData.status.id === vm.statusConfig.OPENED && vm.detailsData.createdBy.id === vm.currentUser.id && vm.permission !== 'admin')">
+                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                  <span translate="GENERAL.EDIT"></span>
+                </a>
+              </div>
+
+              <div class="col-sm-6 text-right">
+                <button type="button" class="btn"
+                        ng-if="vm.detailsData.canClose === true"
+                        ng-click="vm.close()">
+                        <i class="fa fa-times" aria-hidden="true"></i> <span translate="GENERAL.CLOSE"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-4" ng-if="vm.detailsData.isShowSuggest && vm.permission === 'admin'">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h3 class="text-center" translate="ISSUE.LIST_ISSUE_SUGGEST"></h3>
+            <div class="suggest-issue-container m-t" ng-if="vm.suggestIssueList.length">
+              <div class="suggest-item pointer" ng-repeat="item in vm.suggestIssueList" ng-click="vm.viewIssueDetail(item)">
+                <div class="media-left">
+                  <label class="radio-inline m-r-none">
+                    <input type="radio" icheck ng-model="item.selected" ng-change="vm.selectSuggestIssue(item, $index)"> 
+                  </label>
+                </div>
+                <div class="media-left">
+                  <span class="dot" ng-bind="($index + 1) | prefixNumber"></span>
+                </div>
+                <div class="media-body">
+                  <span ng-bind="item.title | cut:true:50:'...'"></span>
+                </div>
+              </div>
+            </div>
+            <div class="m-t text-center">
+              <em ng-if="!vm.suggestIssueList.length" translate="ISSUE.NO_SUGGEST_ISSUE"></em>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-sm-12">
+                <button type="button" class="btn btn-success" confirm-delete action="{{vm.getConfirmAssign()}}" on-ok="vm.assignIssue()" ng-disabled="!vm.selectedIssue">
+                  <i class="fa fa-share" aria-hidden="true"></i>
+                  <span translate="GENERAL.ASSIGN"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</div>

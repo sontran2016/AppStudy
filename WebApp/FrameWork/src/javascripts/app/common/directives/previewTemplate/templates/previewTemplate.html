@@ -1,0 +1,7 @@
+<a ng-if="vm.type === 'document'">{{vm.fileName}}</a>
+<a ng-if="vm.type === 'image'"><img class="media-object" alt="" ng-src="{{vm.url}}" width="100%" /></a>
+<a ng-if="vm.type === 'video'">
+	<video class="media-object" width="100%">
+		<source ng-src="{{vm.getSrc(vm.url)}}" type="video/mp4">
+	</video>
+</a>

@@ -1,0 +1,29 @@
+﻿<div class="tree-view">
+    <div class="tree-view-container">
+        <div ui-tree ng-if="vm.data.servers.length">
+            <ul ui-tree-nodes ng-model="vm.data.servers">
+                <li ng-repeat="server in vm.data.servers" class="list-style-none">
+                    <div class="tree-parent pointer" ng-click="server.isCollapsed = !server.isCollapsed">
+                        <i class="fa fa-home"></i>
+                        <span class="bold-text" ng-bind="server.name"></span>
+                        <span class="pull-right">
+                            <i class="fa fa-chevron-right" aria-hidden="true" ng-if="server.isCollapsed && server.groups.length"></i>
+                            <i class="fa fa-chevron-down" aria-hidden="true" ng-if="!server.isCollapsed && server.groups.length"></i>
+                        </span>
+                    </div>
+
+                    <ul ui-tree-nodes ng-model="server.groups" ng-if="!server.isCollapsed">
+                        <li ng-repeat="group in server.groups" class="list-style-none">
+                            <div class="tree-item" ng-click="group.isCollapsed = !group.isCollapsed">
+                                <i class="fa fa-magic"></i>
+                                <span ng-bind="group.name"></span>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <p><em ng-if="!vm.data.length" ng-bind="TREE_VIEW.NO_DATA"></em>
+        </p>
+    </div>
+</div>

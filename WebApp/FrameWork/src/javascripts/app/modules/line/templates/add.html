@@ -1,0 +1,91 @@
+<div class="page-area">
+
+  <div class="page-header">
+    <h1 translate="LINE.ADD_HEADING"></h1>
+  </div>
+
+  <form class="form-horizontal" name="vm.formAdd" ng-submit="vm.save()">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.lineCode.$invalid && vm.formAdd.lineCode.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="LINE.LINE_CODE"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="lineCode" ng-model="vm.addModel.lineCode" 
+                    placeholder="{{'LINE.LINE_CODE' | translate}}" required />
+            <div class="input-errors" ng-show="vm.formAdd.lineCode.$invalid && vm.formAdd.lineCode.$dirty">
+              <span ng-show="vm.formAdd.lineCode.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.lineName.$invalid && vm.formAdd.lineName.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="LINE.LINE_NAME"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="lineName" ng-model="vm.addModel.name"
+                      placeholder="{{'LINE.LINE_NAME' | translate}}" required />
+
+            <div class="input-errors" ng-show="vm.formAdd.lineName.$invalid && vm.formAdd.lineName.$dirty">
+              <span ng-show="vm.formAdd.lineName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.shortName.$invalid && vm.formAdd.shortName.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.SHORT_NAME"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="shortName" ng-model="vm.addModel.shortName" placeholder="{{'GENERAL.SHORT_NAME' | translate}}" required>
+            <div class="input-errors" ng-show="vm.formAdd.shortName.$invalid && vm.formAdd.shortName.$dirty">
+              <span ng-show="vm.formAdd.shortName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.areaId.$invalid && vm.formAdd.areaId.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.AREA"></label>
+          <div class="col-sm-10">
+            <select class="form-control"
+                    k-ng-model="vm.addModel.areaId"
+                    ng-model="vm.addModel.areaIdtmp"
+                    name="areaId"
+                    kendo-drop-down-list
+                    k-value-primitive="true"
+                    k-option-label="'- Select Area -'"
+                    k-filter="'contains'"
+                    k-data-text-field="'name'"
+                    k-data-value-field="'id'"
+                    k-data-source="vm.areas"
+                    required>
+            </select>
+            <div class="input-errors" ng-show="vm.formAdd.areaId.$invalid && vm.formAdd.areaId.$dirty">
+              <span ng-show="vm.formAdd.areaId.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-6">
+            <button type="button" ui-sref="app.line" class="btn btn-default">
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+              <span translate="GENERAL.BACK"></span>
+            </button>
+          </div>
+
+          <div class="col-sm-6 text-right">
+            <input type="checkbox" icheck name="isAnother" ng-model="vm.addAnother">
+            <span translate="GENERAL.ADD_ANOTHER"></span>
+
+            <button type="submit" class="btn btn-success btn-have-left" ng-disabled="vm.formAdd.$invalid">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              <span translate="GENERAL.SAVE"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+</div>

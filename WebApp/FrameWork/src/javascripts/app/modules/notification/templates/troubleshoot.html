@@ -1,0 +1,91 @@
+<div class="notification">
+  <div  class="page-header">
+    <h1 translate="NOTIFICATION.TROUBLE_HEADING"></h1>
+  </div>
+
+  <div class="panel panel-filter">
+		<div class="panel-heading" ng-click="vm.isCollapsed = !vm.isCollapsed">
+		    <div class="row">
+		      	<div class="col-sm-12">
+		        	<i class="fa fa-eraser" aria-hidden="true"></i> 
+		        	<span translate="GENERAL.CLEAR_NOTIFICATION"></span>
+		      	</div>
+		    </div>
+		</div>
+		<div class="panel-body" uib-collapse="vm.isCollapsed">
+			<form name="vm.clearForm" novalidate>
+				<div class="row">
+					<div class="col-sm-5 m-t-xs">
+						<br />
+						<label class="radio-inline">
+						  	<input type="radio" name="clearOption" value="0" icheck ng-model="vm.clearOption.type"> 
+						  	<span translate="NOTIFICATION.ONLY_READ"></span>
+						</label>
+						<label class="radio-inline">
+						  	<input type="radio" name="clearOption" value="1" icheck ng-model="vm.clearOption.type"> 
+						  	<span translate="NOTIFICATION.ALL_NOTIFICATION"></span>
+						</label>
+					</div>
+					<div class="col-sm-3 form-group">
+						<label translate="NOTIFICATION.FROM_DATE"></label>
+						<input type="text" c-kendo-datepicker instance="fromDate" name="fromDate"
+								options="{format: 'dd/MM/yyyy', showClearButton: true, max: vm.today}"
+								class="form-control" ng-model="vm.clearOption.fromDate" ng-change="vm.setToDate()" />
+					</div>
+					<div class="col-sm-3 form-group">
+						<label translate="NOTIFICATION.TO_DATE"></label>
+						<input type="text" c-kendo-datepicker instance="toDate" name="toDate"
+								options="{format: 'dd/MM/yyyy', showClearButton: true, min: vm.clearOption.fromDate, max: vm.today}"
+								class="form-control" ng-model="vm.clearOption.toDate" ng-change="vm.getNotificationList()" />
+					</div>
+					<div class="col-sm-1 m-t-xs">
+						<label></label>
+						<button type="button" class="btn btn-info btn-block" confirm-delete action="Are you sure you want to clear these notifications?" on-ok="vm.clearNotification()" ng-disabled="!vm.clearOption.fromDate || !vm.clearOption.toDate">
+							<i class="fa fa-eraser" aria-hidden="true"></i> 
+							<span translate="GENERAL.CLEAR"></span>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+  <div class="notification-container" ng-if="vm.notifications.length">
+	  <div class="media-object notification-item pointer" ng-class="{'odd': $index % 2 !== 0}"
+	  		ng-repeat="item in vm.notifications" ng-click="vm.viewDetail(item)">
+	  	<div class="media-body">
+		    <div class="media-object flex align-center">
+		    	<div class="media-left">
+		    		<img alt="" ng-src="{{item.sender.avatar | imageUrl}}" class="img-circle img-xs" title="{{item.sender.firstName + ' ' + item.sender.lastName}}" ng-if="item.sender.avatar" />
+		    		<img alt="" ng-if="!item.sender.avatar" ng-src="./img/no-image.png" class="img-circle img-xs" title="{{item.sender.firstName + ' ' + item.sender.lastName}}" />
+		    	</div>
+		    	<div class="media-body">
+		    		<p class="text-justify">
+		    			<span class="bold-text" ng-bind="item.sender.firstName + ' ' + item.sender.lastName"></span>
+		                <span translate="GENERAL.NOTIFY_COMMENT" ng-if="item.type === 12"></span>
+		                <span translate="GENERAL.NOTIFY_REQUEST_SHOOTING" ng-if="item.type === 1"></span>
+		                <span translate="GENERAL.NOTIFY_CONFIRM_SHOOTING" ng-if="item.type === 2"></span>
+		                <span translate="GENERAL.NOTIFY_REJECT_SHOOTING" ng-if="item.type === 3"></span>
+		                <span class="bold-text" ng-bind="item.message"></span>
+		    		</p>
+		          	<i class="fa fa-comments" aria-hidden="true" ng-if="item.type === 12"></i>
+                  	<i class="fa fa-share-square-o" aria-hidden="true" ng-if="item.type === 1"></i>
+                  	<i class="fa fa-check-circle-o" aria-hidden="true" ng-if="item.type === 2"></i>
+                  	<i class="fa fa-times-circle-o" aria-hidden="true" ng-if="item.type === 3"></i>
+		          	<span ng-bind="item.createOnDate | date: 'dd-MM-yyyy hh:mm a'"></span>
+		        </div>
+		    </div>
+	    </div>
+	  </div>
+	</div>
+
+	<p ng-if="!vm.notifications.length" class="text-center">
+		<em translate="GENERAL.NO_NOTIFICATION"></em>
+	</p>
+
+	<div class="row m-t" ng-if="vm.totalCount > vm.pageSize">
+		<div class="col-sm-12 text-right">
+			<ul uib-pagination total-items="vm.totalCount" ng-model="vm.page" max-size="5" num-pages="vm.numPages" class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="vm.getNotificationList(vm.page)" previous-text="«" next-text="»" ></ul>
+		</div>
+	</div>
+</div>

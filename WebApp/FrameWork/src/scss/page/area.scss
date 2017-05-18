@@ -1,0 +1,8 @@
+.page-area {
+	
+	@media (max-width: 399px) {
+		.custom-list thead tr th:nth-child(3), .custom-list tbody tr td:nth-child(3), .custom-list thead tr th:nth-child(4), .custom-list tbody tr td:nth-child(4)  {
+	      display: none;
+	    }
+	}
+}

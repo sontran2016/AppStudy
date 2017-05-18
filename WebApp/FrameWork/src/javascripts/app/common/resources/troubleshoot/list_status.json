@@ -1,0 +1,18 @@
+[
+  {
+    "id": 0,
+    "name": "Created"
+  },
+  {
+    "id": 1,
+    "name": "Need To Confirm"
+  },
+  {
+    "id": 2,
+    "name": "Confirmed"
+  },
+  {
+    "id": 3,
+    "name": "Rejected"
+  }
+]

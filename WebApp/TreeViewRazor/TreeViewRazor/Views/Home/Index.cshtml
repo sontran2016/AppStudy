@@ -1,0 +1,14 @@
+﻿@using WebApplication1.Models
+@model IEnumerable<TreeModel>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.Partial("_Tree", Model)
+    </div>
+</div>
+
+

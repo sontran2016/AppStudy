@@ -1,0 +1,14 @@
+{
+  "USER": {
+    "value": "user",
+    "label": "User"
+  },
+  "ADMIN": {
+    "value": "admin",
+    "label": "Admin"
+  },
+  "APPROVER": {
+    "value": "Approver",
+    "label": "Approver"
+  }
+}

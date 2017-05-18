@@ -1,0 +1,119 @@
+<div class="panel panel-filter">
+  <div class="panel-heading" ng-click="vm.isCollapsed = !vm.isCollapsed">
+    <div class="row">
+      <div class="col-sm-12 text-left">
+        <i class="fa fa-filter"></i> <span translate="GENERAL.SEARCH_FILTER"></span>
+        <i ng-if="!vm.isCollapsed" class="fa fa-angle-double-up pull-right"></i>
+        <i ng-if="vm.isCollapsed" class="fa fa-angle-double-down pull-right"></i>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body panel-filter" uib-collapse="vm.isCollapsed">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label translate="GENERAL.AREA"></label>
+          <select class="form-control"
+                  kendo-drop-down-list
+                  name="area"
+                  k-change="'vm.getSymptomLines()'"
+                  k-data-text-field="'name'"
+                  k-data-value-field="'id'"
+                  k-value-primitive="true"
+                  k-data-source="vm.areaList"
+                  k-option-label="'- Any Area -'"
+                  k-ng-model="vm.listModel.areaId">
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label translate="GENERAL.LINE"></label>
+          <select class="form-control"
+                  kendo-drop-down-list
+                  name="line"
+                  k-change="'vm.getSymptomMachines()'"
+                  k-data-text-field="'name'"
+                  k-data-value-field="'id'"
+                  k-value-primitive="true"
+                  k-data-source="vm.lineList"
+                  k-option-label="'- Any Line -'"
+                  k-ng-model="vm.listModel.lineId">
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label translate="GENERAL.MACHINE"></label>
+            <select class="form-control"
+                  kendo-drop-down-list
+                  name="machine"
+                  k-change="'vm.getSymptomComponents()'"
+                  k-data-text-field="'name'"
+                  k-data-value-field="'id'"
+                  k-value-primitive="true"
+                  k-data-source="vm.machineList"
+                  k-option-label="'- Any Machine -'"
+                  k-ng-model="vm.listModel.machineId">
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label translate="GENERAL.COMPONENT"></label>
+          <select class="form-control"
+                  kendo-drop-down-list
+                  name="component"
+                  k-change="'vm.search()'"
+                  k-data-text-field="'name'"
+                  k-data-value-field="'id'"
+                  k-value-primitive="true"
+                  k-data-source="vm.componentList"
+                  k-option-label="'- Any Component -'"
+                  k-ng-model="vm.listModel.componentId">
+          </select>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label translate="ISSUE.STATUS"></label>
+      <select class="form-control"
+              k-placeholder="'- Any Issue Status -'"
+              name="status"
+              kendo-multi-select
+              k-data-text-field="'name'"
+              k-data-value-field="'id'"
+              k-value-primitive="true"
+              k-data-source="vm.issueStatusList"
+              k-ng-model="vm.listModel.listStatus"
+              k-change="'vm.search()'">
+      </select>
+    </div>
+    <div class="form-group">
+      <label translate="GENERAL.SYMPTOM"></label>
+      <select class="form-control"
+              kendo-drop-down-list
+              name="symptom"
+              k-data-text-field="'description'"
+              k-data-value-field="'id'"
+              k-value-primitive="true"
+              k-data-source="vm.symptomList"
+              k-options="{optionLabel: '- Any Symptoms -', filter: 'contains'}"
+              k-ng-model="vm.listModel.symptomId"
+              k-change="'vm.search()'">
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label translate="GENERAL.ISSUE"></label>
+      <div class="input-group">
+        <input type="text" class="form-control"
+               name="keyword" ng-model="vm.keyword"
+               placeholder="{{'ISSUE.ENTER_KEYWORD' | translate}}" 
+               ng-model-options="{debounce: { 'default': 500} }" ng-change="vm.search()"/>
+      </div>
+    </div>
+  </div>
+</div>

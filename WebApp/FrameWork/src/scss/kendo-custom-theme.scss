@@ -1,0 +1,102 @@
+$background-color: #33c3e8;
+$border-color: #32cbf2;
+
+/* KENDO */
+.form-control.k-widget {
+  border: 0;
+}
+
+.k-multiselect.k-header {
+  border-radius: 0;
+}
+
+.k-textbox > input, .k-autocomplete .k-input, .k-picker-wrap .k-input, .k-numeric-wrap .k-input, .k-dropdown-wrap .k-input, .k-selectbox .k-input {
+  height: 2.3em;
+  line-height: 2.3em;
+}
+
+.k-autocomplete.k-state-default, .k-picker-wrap.k-state-default, .k-numeric-wrap.k-state-default, .k-dropdown-wrap.k-state-default {
+  border-radius: 0;
+}
+
+.k-input, input.k-textbox, textarea.k-textbox, input.k-textbox:hover, textarea.k-textbox:hover, .k-textbox > input, .k-multiselect-wrap {
+  color: #555555;
+}
+
+.k-textbox > input, .k-autocomplete .k-input, .k-multiselect-wrap {
+  border-radius: 0;
+}
+
+.k-button:active, .k-button.k-state-active {
+  background-color: $background-color;
+  border-color: $border-color;
+}
+
+.k-button:active, .k-button.k-state-active {
+  background-color: $background-color;
+  border-color: $border-color
+}
+
+.k-button:active:hover, .k-button.k-state-active:hover {
+  border-color: #8d8079;
+  background-color: #00c5f7;
+}
+
+.k-autocomplete .k-input, .k-dropdown-wrap .k-input, .k-numeric-wrap .k-input, .k-picker-wrap .k-input, .k-selectbox .k-input, .k-textbox > input {
+  height: 2.35em;
+  line-height: 2.35em;
+}
+
+.trv-parameter-editor-datetime {
+  height: 32px;
+}
+
+.k-state-selected, .k-state-selected:link, .k-state-selected:visited, .k-list > .k-state-selected, .k-list > .k-state-highlight, .k-panel > .k-state-selected, .k-ghost-splitbar-vertical, .k-ghost-splitbar-horizontal, .k-draghandle.k-state-selected:hover, .k-scheduler .k-scheduler-toolbar .k-state-selected, .k-scheduler .k-today.k-state-selected, .k-marquee-color {
+  background-color: $background-color;
+  border-color: $border-color
+}
+
+.k-multiselect-wrap {
+  min-height: 2.2em;
+}
+
+.k-combobox .k-dropdown-wrap:before, .k-picker-wrap:before, .k-numeric-wrap:before {
+  height: 2em;
+}
+
+.k-multiselect-wrap .k-input {
+  height: 1.71em;
+  line-height: 1.71em;
+}
+
+.k-editor-toolbar-wrap {
+  .k-combobox .k-dropdown-wrap:before,
+  .k-numeric-wrap:before,
+  .k-picker-wrap:before {
+    height: 1.65px;
+  }
+  .k-autocomplete .k-input,
+  .k-dropdown-wrap .k-input,
+  .k-numeric-wrap .k-input,
+  .k-picker-wrap .k-input,
+  .k-selectbox .k-input,
+  .k-textbox > input {
+    height: 1.65em;
+    line-height: 1.65em;
+  }
+}
+
+.trv-parameter-value {
+  .k-combobox .k-dropdown-wrap:before, .k-numeric-wrap:before, .k-picker-wrap:before {
+    height: 1.75em;
+  }
+  .k-textbox > input, .k-picker-wrap .k-input, .k-numeric-wrap .k-input, .k-combobox .k-input {
+    height: 1.75em;
+    line-height: 1.75em;
+  }
+}
+
+input.k-input.k-textbox[disabled=disabled] {
+  background: #eee;
+  cursor: not-allowed;
+}

@@ -1,0 +1,22 @@
+.favorite {
+
+	.favorite-container {
+		border: 2px solid #5FB7CD;
+		border-radius: 5px;
+	}
+	
+	.favorite-item {
+		padding: 10px;
+
+		.remove-icon {
+			position: absolute;
+			color: red;
+			right: 30px;
+			font-size: 1.4em;
+		}
+	}
+
+	.odd {
+		background: #f5f5f5;
+	}
+}

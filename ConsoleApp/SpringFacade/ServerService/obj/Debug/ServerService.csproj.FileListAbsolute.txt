@@ -1,0 +1,7 @@
+C:\SonTran\Example\ConsoleApp\SpringFacade\ServerService\bin\Debug\ServerService.dll
+C:\SonTran\Example\ConsoleApp\SpringFacade\ServerService\bin\Debug\ServerService.pdb
+C:\SonTran\Example\ConsoleApp\SpringFacade\ServerService\bin\Debug\PureMVC.MultiCore.DotNet.dll
+C:\SonTran\Example\ConsoleApp\SpringFacade\ServerService\bin\Debug\PureMVC.MultiCore.DotNet.xml
+C:\SonTran\Example\ConsoleApp\SpringFacade\ServerService\obj\Debug\ServerService.csprojResolveAssemblyReference.cache
+C:\SonTran\Example\ConsoleApp\SpringFacade\ServerService\obj\Debug\ServerService.dll
+C:\SonTran\Example\ConsoleApp\SpringFacade\ServerService\obj\Debug\ServerService.pdb

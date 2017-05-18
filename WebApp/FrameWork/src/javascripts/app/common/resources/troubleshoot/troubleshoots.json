@@ -1,0 +1,78 @@
+{
+  "pageIndex": 1,
+  "pageSize": 10,
+  "totalCount": 4,
+  "totalPages": 1,
+  "hasPreviousPage": true,
+  "hasNextPage": true,
+  "troubleshoots": [
+    {
+      "id": "troubleshootIdABC",
+      "title": " Aenean ut quam et quam suscipit tempor in efficitur lacus. Sed non ante ut neque bibendum accumsan sit amet vel diam. Nam ultrices vel nibh vel dictum",
+      "description": "Quisque dignissim nisl at justo fringilla, quis tempor sem lacinia. Nam nec ante ut ipsum elementum consequat. Proin sit amet condimentum felis. Vivamus tortor leo, gravida id pulvinar eu, venenatis ut purus. Integer ultrices fermentum condimentum. ",
+      "areaId": "areaIdABC",
+      "isActive": true,
+      "viewCount": 0,
+      "assignedCount": 0,
+      "isDDS": true,
+      "isApproved": true,
+      "isDeleted": true,
+      "approvedDate": "2016-06-16T03:13:34.381Z",
+      "symptomId": "symptomIdABC",
+      "approvedBy": "John Doe",
+      "createdBy": "John Doe"
+    },
+    {
+      "id": "troubleshootIdABC",
+      "title": " Aenean ut quam et quam suscipit tempor in efficitur lacus. Sed non ante ut neque bibendum accumsan sit amet vel diam. Nam ultrices vel nibh vel dictum",
+      "description": "Quisque dignissim nisl at justo fringilla, quis tempor sem lacinia. Nam nec ante ut ipsum elementum consequat. Proin sit amet condimentum felis. Vivamus tortor leo, gravida id pulvinar eu, venenatis ut purus. Integer ultrices fermentum condimentum. ",
+      "areaId": "areaIdABC",
+      "isActive": true,
+      "viewCount": 0,
+      "assignedCount": 0,
+      "isDDS": true,
+      "isApproved": true,
+      "isDeleted": true,
+      "approvedDate": "2016-06-16T03:13:34.381Z",
+      "symptomId": "symptomIdABC",
+      "approvedBy": "John Doe",
+      "createdBy": "John Doe"
+    },
+    {
+      "id": "troubleshootIdABC",
+      "title": " Aenean ut quam et quam suscipit tempor in efficitur lacus. Sed non ante ut neque bibendum accumsan sit amet vel diam. Nam ultrices vel nibh vel dictum",
+      "description": "Quisque dignissim nisl at justo fringilla, quis tempor sem lacinia. Nam nec ante ut ipsum elementum consequat. Proin sit amet condimentum felis. Vivamus tortor leo, gravida id pulvinar eu, venenatis ut purus. Integer ultrices fermentum condimentum. ",
+      "areaId": "areaIdABC",
+      "isActive": true,
+      "viewCount": 0,
+      "assignedCount": 0,
+      "isDDS": true,
+      "isApproved": true,
+      "isDeleted": true,
+      "approvedDate": "2016-06-16T03:13:34.381Z",
+      "symptomId": "symptomIdABC",
+      "approvedBy": "John Doe",
+      "createdBy": "John Doe"
+    },
+    {
+      "id": "troubleshootIdABC",
+      "title": " Aenean ut quam et quam suscipit tempor in efficitur lacus. Sed non ante ut neque bibendum accumsan sit amet vel diam. Nam ultrices vel nibh vel dictum",
+      "description": "Quisque dignissim nisl at justo fringilla, quis tempor sem lacinia. Nam nec ante ut ipsum elementum consequat. Proin sit amet condimentum felis. Vivamus tortor leo, gravida id pulvinar eu, venenatis ut purus. Integer ultrices fermentum condimentum. ",
+      "areaId": "areaIdABC",
+      "isActive": true,
+      "viewCount": 0,
+      "assignedCount": 0,
+      "isDDS": true,
+      "isApproved": true,
+      "isDeleted": true,
+      "approvedDate": "2016-06-16T03:13:34.381Z",
+      "symptomId": "symptomIdABC",
+      "approvedBy": "John Doe",
+      "createdBy": "John Doe"
+    }
+  ],
+  "success": true,
+  "errorMessages": [
+    "string"
+  ]
+}

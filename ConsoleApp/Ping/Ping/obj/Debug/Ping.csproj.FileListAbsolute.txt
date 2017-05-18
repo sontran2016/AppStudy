@@ -1,0 +1,6 @@
+C:\SonTran\Example\ConsoleApp\Ping\Ping\bin\Debug\Ping.exe.config
+C:\SonTran\Example\ConsoleApp\Ping\Ping\obj\Debug\Ping.csprojResolveAssemblyReference.cache
+C:\SonTran\Example\ConsoleApp\Ping\Ping\bin\Debug\Ping.exe
+C:\SonTran\Example\ConsoleApp\Ping\Ping\bin\Debug\Ping.pdb
+C:\SonTran\Example\ConsoleApp\Ping\Ping\obj\Debug\Ping.exe
+C:\SonTran\Example\ConsoleApp\Ping\Ping\obj\Debug\Ping.pdb

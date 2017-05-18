@@ -1,0 +1,26 @@
+{
+  "HOME": {
+    "HEADING": "DASHBOARD",
+    "LASTED_ISSUE_HEADING_ADMIN": "Lasted 10 Issues of Supply Chain",
+    "LASTED_ISSUE_HEADING_USER": "Lasted 10 Issues of Group",
+    "ISSUE_HEADING": "Issues",
+    "ISSUE_RESOLVED": "Solved",
+    "ISSUE_UNRESOLVED": "Unsolved",
+    "ISSUE_OPENED": "Opened",
+    "ISSUE_CLOSED": "Closed",
+    "ISSUE_NEED_APPROVE": "Need Confirm",
+    "ISSUE_NOT_HAVE_TROUBLE": "Not Have Trouble",
+    "TROUBLESHOOT_HEADING": "Troubleshoots",
+    "TROUBLESHOOT_REJECTED": "Rejected",
+    "TROUBLESHOOT_PUBLIC": "Public",
+    "TROUBLESHOOT_MY_TROUBLE": "My Troubleshoot",
+    "TROUBLESHOOT_NOT_CONFIRM": "Not Confirm",
+    "RECENTLY_TROUBLESHOOT_HEADING": "Recently Troubleshoots",
+    "TOP_TROUBLESHOOT_HEADING": "Top Troubleshoot Rating",
+    "MY_TROUBLESHOOT_HEADING": "My Troubleshoots",
+    "VIEW_MORE": "View more >>",
+    "TOP_TROUBLESHOOT_USER_CREATED_HEADING": "Top User Created Troubleshoot",
+    "ISSUE_TRACKING_HEADING": "Issues Tracking",
+    "ISSUE_SOLVED_UNSOLVED_HEADING": "Issues Solved/ Unsolved"
+  }
+}

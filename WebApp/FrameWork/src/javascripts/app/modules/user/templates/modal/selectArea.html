@@ -1,0 +1,52 @@
+<div class="panel panel-filter">
+  <div class="panel-heading" translate="USER.CHOOSE_AREA_HEADING"></div>
+  <div class="panel-body page-user">
+    
+    <div class="row">
+      <div class="col-sm-3">
+        <label>
+          <input type="checkbox" icheck class="form-control"
+                 ng-model="vm.selectedAll"
+                 name="selectAll"
+                 ng-change="vm.selectAll()" />
+          <span translate="GENERAL.SELECT_ALL"></span>
+        </label>
+      </div>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" name="keyword" ng-model="vm.keyword" 
+                placeholder="{{'USER.ENTER_KEYWORD_AREA' | translate}} " ng-keyup="vm.filterList()" />
+      </div>
+    </div>
+
+    <div class="m-t list-container">
+      <div class="media-object modal-select-item" ng-repeat="item in vm.itemList">
+        <div class="media-left">
+          <input type="checkbox" icheck class="form-control m-l"
+               ng-model="item.selected"
+               name="selected"
+               ng-change="vm.selectItem(item)" />
+        </div>
+        <div class="media-body">
+          <span ng-bind="item.name"></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <div class="form-group">
+      <div class="col-sm-12 text-right">
+        <button class="btn btn-success btn-sm" type="button" ng-disabled="!vm.selectedItems.length" ng-click="vm.setChoosenArea()">
+          <i class="fa fa-check-square-o" aria-hidden="true"></i>
+          <span translate="GENERAL.CHOOSE"></span>
+        </button>
+        <button class="btn btn-default btn-sm" type="button" ng-click="vm.close()">
+          <i class="fa fa-times" aria-hidden="true"></i>
+          <span translate="GENERAL.CANCEL"></span>
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>

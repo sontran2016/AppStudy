@@ -1,0 +1,12 @@
+{
+  "NAVBAR": {
+    "PROFILE": "Profile",
+    "FAVORITE_TROUBLESHOOT": "My Favorite Troubleshoots",
+    "CHANGE_PASSWORD": "Change Password",
+    "LOGOUT": "Log out",
+
+    "IMPORT_MASTER_DATA": "Import Master Data",
+    "UPLOAD_FILE_MASTER": "Please upload a master data spreadsheet (xlsx): ",
+    "NOTICE_IMPORT_MASTER_DATA": "Please include the columns in the following format: Area Name, Line Name, Machine Name, Component Name"
+  }
+}

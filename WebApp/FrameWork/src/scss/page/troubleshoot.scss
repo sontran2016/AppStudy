@@ -1,0 +1,170 @@
+.page-troubleshoot {
+
+  .step-item {
+    margin: 0 !important;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 5px 0px;
+  }
+
+  .symptom-selection {
+    color: red;
+    .selected-false {
+      color: red;
+    }
+    .item-chosen {
+      color: #000;
+    }
+  }
+
+  .troubleshoot-img {
+    width: 80px !important;
+    margin: 0px 5px 15px 5px;
+    border: 1px dotted #e5e5e5 !important;
+    height: 80px !important;
+    position: relative;
+    padding: 5px;
+
+    img, .media-object {
+      max-height: 80px !important;
+    }
+
+    .remove-icon {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      font-size: 1.5em;
+      color: red;
+      cursor: pointer;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .custom-list thead tr th:nth-child(6), .custom-list tbody tr td:nth-child(6), .custom-list thead tr th:nth-child(4), .custom-list tbody tr td:nth-child(4), .custom-list thead tr th:nth-child(5), .custom-list tbody tr td:nth-child(5), .custom-list thead tr th:nth-child(7), .custom-list tbody tr td:nth-child(7) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 399px) {
+    .custom-list thead tr th:nth-child(2), .custom-list tbody tr td:nth-child(2) {
+      display: none;
+    }
+  }
+}
+
+.troubleshoot-details-page {
+
+  .troubleshoot-img {
+    width: 80px !important;
+    margin: 0px 5px 15px 5px;
+    border: 1px dotted #e5e5e5 !important;
+    height: 80px !important;
+    position: relative;
+    padding: 5px;
+
+    img, .media-object {
+      max-height: 80px !important;
+    }
+
+  }
+
+  .ng-table th:first-child {
+    text-align: left;
+  }
+
+  .shooting-label {
+    color: red;  
+    line-height: 25px;
+  }
+
+  .comment-item {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 5px;
+    margin: 0px 0px 15px 0px;
+
+    .media-right {
+      width: 15% !important;
+    }
+  }
+
+  .btn-send-comment {
+    text-align: center;
+    font-weight: bold;
+    line-height: 35px;
+
+    .fa {
+      font-size: 3.5em;
+    }
+  }
+
+  .step-item {
+    border-bottom: 1px solid #e5e5e5;
+
+    .media-right {
+      width: 15% !important;
+      vertical-align: middle !important;
+      font-size: 2em;
+    }
+
+    .fa-pencil-square-o {
+      color: #50ccad;
+    }
+
+    .fa-trash {
+      color: #da4453;
+    }
+  }
+
+  .ng-table-pager {
+    display: none !important;
+  }
+
+  .step-container {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .table-version-shooting {
+    max-height: 510px;
+    overflow-y: auto;
+  }
+
+  .table-issue-trouble {
+    max-height: 430px;
+    overflow-y: auto;
+  }
+
+  .alert {
+    max-height: 180px;
+    overflow-y: auto;
+    
+    .fa-exclamation-triangle {
+      font-size: 3em;
+    }
+  }
+
+  .btn-comment {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .rating-info [class*=col-sm] {
+    float: left;
+  }
+
+  .rating-info .text-right {
+    float: right !important;
+  }
+
+  .btn-comment {
+    display: block !important;
+  }
+
+  .btn-send-comment {
+    display: none;
+  }
+
+  .file-content {
+    padding: 15px !important;
+  }
+}

@@ -1,0 +1,225 @@
+<!-- main menu -->
+<nav id="main_menu" ng-controller="AsideController as vm">
+  <div class="menu_wrapper" expand-menu malihu-scroll-bar="aside" malihu-scroll-bar-options="vm.scrollOptions">
+    <ul>
+      <li class="first_level no-submenu" permission="admin,user,Approver" ng-class="{'section_active':vm.$state.includes('app.home') || vm.$state.includes('app.issueDashboard') || vm.$state.includes('app.issueOpenDashboard') || vm.$state.includes('app.issueCloseDashboard') || vm.$state.includes('app.troubleNeedConfirmDashboard') || vm.$state.includes('app.troubleNotConfirmDashboard') || vm.$state.includes('app.troubleRejectedDashboard') || vm.$state.includes('app.troublePublicDashboard') || vm.$state.includes('app.troubleMyShootingDashboard')}">
+        <a ui-sref="app.home" title="{{'ASIDE.DASHBOARD' | translate}}">
+          <span class="fa fa-area-chart first_level_icon"></span>
+          <span class="menu-title" translate="ASIDE.DASHBOARD"></span>
+        </a>
+      </li>
+
+      <hr class="hr-aside"/>
+
+      <li class="first_level relative-position no-submenu" permission="admin,user,Approver"
+          ng-class="{'section_active':vm.$state.includes('app.issue') || vm.$state.includes('app.issueAdd') || vm.$state.includes('app.issueEdit') || vm.$state.includes('app.issueDetails') || vm.$state.includes('app.issueAddTroubleshoot') || vm.$state.includes('app.issueTroubleshootDetails')}">
+        <a ui-sref="app.issue" title="{{'ASIDE.ISSUES' | translate}}">
+          <span class="fa fa-exclamation-triangle first_level_icon"></span>
+          <span class="menu-title" translate="ASIDE.ISSUES"></span>
+        </a>
+      </li>
+
+      <li class="first_level relative-position no-submenu" permission="admin,user,Approver"
+          ng-class="{'section_active':vm.$state.includes('app.troubleshoot') || vm.$state.includes('app.troubleshootAdd') || vm.$state.includes('app.troubleshootDetails') || vm.$state.includes('app.troubleshootEdit') || vm.$state.includes('app.troubleshootIssueDetail')}">
+        <a ui-sref="app.troubleshoot" title="{{'ASIDE.TROUBLESHOOT' | translate}}">
+          <span class="fa fa-question-circle first_level_icon"></span>
+          <span class="menu-title" translate="ASIDE.TROUBLESHOOT"></span>
+        </a>
+      </li>
+
+      <li class="first_level has_submenu" permission="admin">
+        <a title="{{'ASIDE.MASTER_DATA' | translate}}">
+          <span class="fa fa-database first_level_icon"></span>
+          <span class="menu-title" translate="ASIDE.MASTER_DATA"></span>
+        </a>
+
+        <ul>
+          <li class="second_level" permission="admin"
+              ng-class="{'submenu_active':vm.$state.includes('app.symptom') || vm.$state.includes('app.symptomAdd') || vm.$state.includes('app.symptomEdit')}">
+            <a ui-sref="app.symptom" title="{{'ASIDE.SYMPTOM' | translate}}">
+              <span class="fa fa-map-signs first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.SYMPTOM"></span>
+            </a>
+          </li>
+
+           <li class="second_level" permission="admin"
+              ng-class="{'submenu_active':vm.$state.includes('app.potentialCause') || vm.$state.includes('app.potentialCauseAdd') || vm.$state.includes('app.potentialCauseEdit')}">
+            <a ui-sref="app.potentialCause" title="{{'ASIDE.POTENTIAL_CAUSE' | translate}}">
+              <span class="fa fa-list first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.POTENTIAL_CAUSE"></span>
+            </a>
+          </li>
+
+          <hr class="hr-aside" permission="admin"/>
+
+          <li class="second_level" permission="admin"
+              ng-class="{'submenu_active':vm.$state.includes('app.area') || vm.$state.includes('app.areaAdd') || vm.$state.includes('app.areaEdit')}">
+            <a ui-sref="app.area" title="{{'ASIDE.AREA' | translate}}">
+              <span class="fa fa-home first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.AREA"></span>
+            </a>
+          </li>
+
+          <li class="second_level" permission="admin"
+              ng-class="{'submenu_active':vm.$state.includes('app.line') || vm.$state.includes('app.lineAdd') || vm.$state.includes('app.lineEdit') || vm.$state.includes('app.lineDetail')}"
+              permission="admin">
+            <a ui-sref="app.line" title="{{'ASIDE.LINE' | translate}}">
+              <span class="fa fa-magic first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.LINE"></span>
+            </a>
+          </li>
+
+          <li class="second_level" permission="admin"
+              ng-class="{'submenu_active':vm.$state.includes('app.machine') || vm.$state.includes('app.machineAdd')|| vm.$state.includes('app.machineEdit')}">
+            <a ui-sref="app.machine" title="{{'ASIDE.MACHINE' | translate}}">
+              <span class="fa fa-mobile first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.MACHINE"></span>
+            </a>
+          </li>
+
+          <li class="second_level" permission="admin"
+              ng-class="{'submenu_active':vm.$state.includes('app.component') || vm.$state.includes('app.componentAdd') || vm.$state.includes('app.componentEdit')}">
+            <a ui-sref="app.component" title="{{'ASIDE.COMPONENT' | translate}}">
+              <span class="fa fa-desktop first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.COMPONENT"></span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <hr class="hr-aside" permission="admin"/>
+
+      <li class="first_level no-submenu"
+          ng-class="{'section_active':vm.$state.includes('app.user') || vm.$state.includes('app.userAdd') || vm.$state.includes('app.userEdit')}"
+          permission="admin">
+        <a ui-sref="app.user" title="{{'ASIDE.USER' | translate}}">
+          <span class="fa fa-user first_level_icon"></span>
+          <span class="menu-title" translate="ASIDE.USER"></span>
+        </a>
+      </li>
+
+      <hr class="hr-aside" permission="admin"/>
+
+      <li class="first_level no-submenu" permission="admin"
+          ng-class="{'section_active':vm.$state.includes('app.tag') || vm.$state.includes('app.tagAdd') || vm.$state.includes('app.tagEdit')}">
+        <a ui-sref="app.tag" title="{{'ASIDE.TAG' | translate}}">
+          <span class="fa fa-tag first_level_icon"></span>
+          <span class="menu-title" translate="ASIDE.TAG"></span>
+        </a>
+      </li>
+
+      <hr class="hr-aside" permission="admin,user,Approver"/>
+
+      <li class="first_level no-submenu" permission="admin,user,Approver"
+          ng-class="{'section_active':vm.$state.includes('app.treeView')}">
+        <a ui-sref="app.treeView" title="{{'ASIDE.TREE_VIEW' | translate}}">
+          <span class="fa fa-list-alt first_level_icon"></span>
+          <span class="menu-title" translate="ASIDE.TREE_VIEW"></span>
+        </a>
+      </li>
+
+       <hr class="hr-aside" permission="admin,user,Approver"/>
+
+      <li class="first_level has_submenu" permission="admin,user,Approver">
+        <a title="{{'ASIDE.HOW_TO_USE' | translate}}">
+          <span class="fa fa-question-circle-o first_level_icon"></span>
+          <span class="menu-title" translate="ASIDE.HOW_TO_USE"></span>
+        </a>
+
+        <ul>
+          <li class="second_level" permission="admin,user,Approver"
+              ng-class="{'submenu_active':vm.$state.includes('app.howToUseForgotPassword')}">
+            <a ui-sref="app.howToUseForgotPassword" title="{{'ASIDE.FORGOT_PASSWORD' | translate}}">
+              <span class="fa fa-folder-open-o first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.FORGOT_PASSWORD"></span>
+            </a>
+          </li>
+
+           <li class="second_level" permission="admin,user,Approver"
+              ng-class="{'submenu_active':vm.$state.includes('app.howToUseArea')}">
+            <a ui-sref="app.howToUseArea" title="{{'ASIDE.AREA_MANAGEMENT' | translate}}">
+              <span class="fa fa-folder-open-o first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.AREA_MANAGEMENT"></span>
+            </a>
+          </li>
+          
+          <li class="second_level" permission="admin,user,Approver"
+              ng-class="{'submenu_active':vm.$state.includes('app.howToUseLine')}">
+            <a ui-sref="app.howToUseLine" title="{{'ASIDE.LINE_MANAGEMENT' | translate}}">
+              <span class="fa fa-folder-open-o first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.LINE_MANAGEMENT"></span>
+            </a>
+          </li>
+
+          <li class="second_level" permission="admin,user,Approver"
+              ng-class="{'submenu_active':vm.$state.includes('app.howToUseMachine')}">
+            <a ui-sref="app.howToUseMachine" title="{{'ASIDE.MACHINE_MANAGEMENT' | translate}}">
+              <span class="fa fa-folder-open-o first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.MACHINE_MANAGEMENT"></span>
+            </a>
+          </li>
+
+          <li class="second_level" permission="admin,user,Approver"
+              ng-class="{'submenu_active':vm.$state.includes('app.howToUseComponent')}">
+            <a ui-sref="app.howToUseComponent" title="{{'ASIDE.COMPONENT_MANAGEMENT' | translate}}">
+              <span class="fa fa-folder-open-o first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.COMPONENT_MANAGEMENT"></span>
+            </a>
+          </li>
+
+          <li class="second_level" permission="admin,user,Approver"
+              ng-class="{'submenu_active':vm.$state.includes('app.howToUseSymptom')}">
+            <a ui-sref="app.howToUseSymptom" title="{{'ASIDE.SYMPTOM_MANAGEMENT' | translate}}">
+              <span class="fa fa-folder-open-o first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.SYMPTOM_MANAGEMENT"></span>
+            </a>
+          </li>
+
+          <li class="second_level" permission="admin,user,Approver"
+              ng-class="{'submenu_active':vm.$state.includes('app.howToUsePotentialCause')}">
+            <a ui-sref="app.howToUsePotentialCause" title="{{'ASIDE.POTENTIAL_CAUSE_MANAGEMENT' | translate}}">
+              <span class="fa fa-folder-open-o first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.POTENTIAL_CAUSE_MANAGEMENT"></span>
+            </a>
+          </li>
+
+          <li class="second_level" permission="admin,user,Approver"
+              ng-class="{'submenu_active':vm.$state.includes('app.howToUseTroubleshoot')}">
+            <a ui-sref="app.howToUseTroubleshoot" title="{{'ASIDE.TROUBLESHOOT_MANAGEMENT' | translate}}">
+              <span class="fa fa-folder-open-o first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.TROUBLESHOOT_MANAGEMENT"></span>
+            </a>
+          </li>
+
+          <li class="second_level" permission="admin,user,Approver"
+              ng-class="{'submenu_active':vm.$state.includes('app.howToUseIssue')}">
+            <a ui-sref="app.howToUseIssue" title="{{'ASIDE.ISSUE_MANAGEMENT' | translate}}">
+              <span class="fa fa-folder-open-o first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.ISSUE_MANAGEMENT"></span>
+            </a>
+          </li>
+
+          <li class="second_level" permission="admin,user,Approver"
+              ng-class="{'submenu_active':vm.$state.includes('app.howToUseUser')}">
+            <a ui-sref="app.howToUseUser" title="{{'ASIDE.USER_MANAGEMENT' | translate}}">
+              <span class="fa fa-folder-open-o first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.USER_MANAGEMENT"></span>
+            </a>
+          </li>
+
+          <li class="second_level" permission="admin,user,Approver"
+              ng-class="{'submenu_active':vm.$state.includes('app.howToUseTag')}">
+            <a ui-sref="app.howToUseTag" title="{{'ASIDE.TAG_MANAGEMENT' | translate}}">
+              <span class="fa fa-folder-open-o first_level_icon"></span>
+              <span class="menu-title" translate="ASIDE.TAG_MANAGEMENT"></span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+    </ul>
+    <div class="custom-aside" ui-view="aside"></div>
+  </div>
+
+  <menu-toggle></menu-toggle>
+</nav>

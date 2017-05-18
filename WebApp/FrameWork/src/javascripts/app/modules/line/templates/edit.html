@@ -1,0 +1,91 @@
+<div class="page-area">
+
+  <div class="page-header">
+    <h1 translate="LINE.EDIT_HEADING"></h1>
+  </div>
+
+  <form class="form-horizontal" name="vm.formEdit" ng-submit="vm.save()">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="LINE.LINE_CODE"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="lineCode" ng-model="vm.lineModel.lineCode" ng-disabled="!vm.lineModel.canEditCode" />
+            <em class="red-text" translate="LINE.CAN_NOT_EDIT_CODE" ng-if="!vm.lineModel.canEditCode"></em>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formEdit.lineName.$invalid && vm.formEdit.lineName.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="LINE.LINE_NAME"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="lineName" ng-model="vm.lineModel.name" required />
+
+            <div class="input-errors" ng-show="vm.formEdit.lineName.$invalid && vm.formEdit.lineName.$dirty">
+              <span ng-show="vm.formEdit.lineName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formEdit.shortName.$invalid && vm.formEdit.shortName.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.SHORT_NAME"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="shortName" ng-model="vm.lineModel.shortName" placeholder="{{'GENERAL.SHORT_NAME' | translate}}" required>
+            <div class="input-errors" ng-show="vm.formEdit.shortName.$invalid && vm.formEdit.shortName.$dirty">
+              <span ng-show="vm.formEdit.shortName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formEdit.areaId.$invalid && vm.formEdit.areaId.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.AREA"></label>
+          <div class="col-sm-10">
+            <select class="form-control"
+                    k-ng-model="vm.lineModel.areaId"
+                    ng-model="vm.areaIdtmp"
+                    name="areaId"
+                    kendo-drop-down-list
+                    k-value-primitive="true"
+                    k-option-label="'- Select Area -'"
+                    k-filter="'contains'"
+                    k-data-text-field="'name'"
+                    k-data-value-field="'id'"
+                    k-data-source="vm.areas"
+                    required>
+            </select>
+
+            <div class="input-errors" ng-show="vm.formEdit.areaId.$invalid && vm.formEdit.areaId.$dirty">
+              <span ng-show="vm.formEdit.areaId.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+     
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.ACTIVE"></label>
+          <div class="col-sm-10">
+            <input type="checkbox" icheck name="isActive" ng-model="vm.lineModel.isActive" value="true">
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-6">
+            <a ui-sref="app.line" class="btn btn-default">
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+              <span translate="GENERAL.BACK"></span>
+            </a>
+          </div>
+
+          <div class="col-sm-6 text-right">
+            <button type="submit" class="btn btn-success" ng-disabled="vm.formEdit.$invalid">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              <span translate="GENERAL.SAVE"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+</div>

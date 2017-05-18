@@ -1,0 +1,208 @@
+<div class="panel panel-filter">
+  <div class="panel-heading" translate="TROUBLESHOOT.MY_SHOOTING" ng-if="((vm.permission === vm.roleList.ADMIN.value || vm.permission === vm.roleList.APPROVER.value) && vm.shootingModel.createdBy.id === vm.currentUser.id) || (vm.permission !== vm.roleList.ADMIN.value && vm.permission !== vm.roleList.APPROVER.value)"></div>
+  <div class="panel-heading" translate="TROUBLESHOOT.VIEW_SHOOTING" ng-if="(vm.permission === vm.roleList.ADMIN.value || vm.permission === vm.roleList.APPROVER.value) && vm.shootingModel.createdBy.id !== vm.currentUser.id"></div>
+  <div class="panel-body troubleshoot-details-page">
+
+    <div class="alert alert-danger alert-dismissible" role="alert" ng-if="vm.shootingModel.status.id === vm.shootingStatus.REJECTED">
+      <div class="media-object">
+        <div class="media-left">
+          <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        </div>
+        <div class="media-body">
+          <strong translate="TROUBLESHOOT.SHOOTING_REJECTED"></strong>
+          <hr />
+          <div class="text-justify">
+            <span ng-bind-html="vm.shootingModel.rejectedDescription| newLines | cut:true:200:' '"></span>
+            <span ng-bind-html="vm.shootingModel.rejectedDescription.substring(201) | newLines" ng-if="vm.showFullReason"></span>
+            <div class="label label-primary m-r-xs pointer" ng-if="vm.shootingModel.rejectedDescription.length > 200" ng-click="vm.showFullReason = !vm.showFullReason">
+              <span ng-bind="'.......'" ng-if="!vm.showFullReason"></span>
+              <span ng-bind="'- - - -'" ng-if="vm.showFullReason"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add New Step -->
+    <div ng-if="vm.steps.length || vm.isAddStep">
+      <form class="form-horizontal" name="vm.formAddStep" novalidate
+            ng-if="vm.shootingModel.status.id === vm.shootingStatus.CREATED || vm.shootingModel.status.id === vm.shootingStatus.REJECTED">
+        <div class="form-group" ng-class="{'has-error': (!vm.stepModel.stepContent && vm.formAddStep.stepContent.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="TROUBLESHOOT.STEP_DESCRIPTION"></label>
+
+          <div class="col-sm-10">
+            <editor model="vm.stepModel.stepContent"></editor>
+            <div class="input-errors" ng-show="!vm.stepModel.stepContent && vm.formAddStep.stepContent.$dirty">
+                <span translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.IMAGE_VIDEO"></label>
+
+          <div class="col-sm-10">
+            <button type="button" class="btn btn-primary btn-sm" ng-if="!vm.stepModel.resource"
+                  ngf-select="vm.uploadFile(vm.typeFile.STEP)" ngf-multiple="false" ng-disabled="vm.isAddStepFile"
+                  ngf-keep="'distinct'" ngf-accept="'.png,.jpg,.gif,.jpeg,.bmp,.tiff,.mp4,.mov'" ng-model="vm.file">
+              <i class="fa fa-cloud-upload"></i>
+              <span translate="GENERAL.BROWSE_IMAGE_VIDEO"></span>
+            </button>
+            <div class="m-t flex align-center" ng-if="vm.stepModel.resource">
+              <img alt="" ng-src="{{vm.stepModel.resource.fileUrl}}" class="img-responsive pull-left" width="20%" ng-if="vm.getFileType(vm.getFileExtension(vm.stepModel.resource.fileName)) === 'image'" />
+              <video class="media-object" width="20%" ng-if="vm.getFileType(vm.getFileExtension(vm.stepModel.resource.fileName)) === 'video'">
+                <source ng-src="{{vm.getSrc(vm.stepModel.resource.fileUrl)}}" type="video/mp4">
+              </video>
+
+              <button type="button" class="btn btn-primary btn-sm pull-left m-l"
+                  ngf-select="vm.uploadFile(vm.typeFile.STEP)" ngf-multiple="false" ng-disabled="vm.isAddStepFile"
+                  ngf-keep="'distinct'" ngf-accept="'.png,.jpg,.gif,.jpeg,.bmp,.tiff,.mp4,.mov'" ng-model="vm.file">
+                <i class="fa fa-cloud-upload"></i>
+                <span translate="GENERAL.CHANGE_IMAGE_VIDEO"></span>
+              </button>
+              <button type="button" class="btn btn-danger btn-sm m-l-xs" ng-click="vm.removeFile(vm.typeFile.STEP)" ng-disabled="vm.isAddStepFile">
+                <i class="fa fa-trash"></i>
+                <span translate="GENERAL.REMOVE"></span>
+              </button>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 text-right">
+                <button type="button" class="btn btn-success btn-sm" ng-click="vm.addOrUpdateStep()" ng-disabled="!vm.stepModel.stepContent || vm.isAddStepFile">
+                  <i class="fa fa-floppy-o"></i>
+                  <span translate="GENERAL.ADD" ng-if="!vm.stepEditing"></span>
+                  <span translate="GENERAL.UPDATE" ng-if="vm.stepEditing"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+      </form>
+
+      <div class="row m-n" ng-if="vm.steps.length">
+        <h5 translate="TROUBLESHOOT.LIST_STEP" class="text-underline"></h5>
+      </div>
+
+      <div class="step-container">
+        <div class="media step-item" ng-repeat="step in vm.steps">
+          <div class="media-left">
+            <div class="troubleshoot-img flex align-center">
+              <preview-template url="step.resource.fileUrl" file-name="step.resource.fileName" type="'image'" ng-if="vm.getFileType(vm.getFileExtension(step.resource.fileName)) === 'image'"></preview-template>
+              <preview-template url="step.resource.fileUrl" file-name="step.resource.fileName" type="'video'" ng-if="vm.getFileType(vm.getFileExtension(step.resource.fileName)) === 'video'"></preview-template>
+              <img class="media-object img-thumb" ng-if="!step.resource" ng-src="./img/no-image.png" alt="">
+            </div>
+          </div>
+          <div class="media-body">
+              <h5 class="media-heading" ng-bind="'Step ' + ($index +1) + ':'"></h5>
+              <p class="text-justify" ng-bind-html="step.stepContent | newLines | trustedHtml"></p>
+          </div>
+          <div class="media-right text-right"
+                ng-if="vm.shootingModel.status.id === vm.shootingStatus.CREATED || vm.shootingModel.status.id === vm.shootingStatus.REJECTED">
+            <button type="button" class="btn btn-default" ng-click="vm.stepModel = step; vm.stepEditing = true" ng-disabled="vm.isAddStepFile">
+              <i class="fa fa-pencil-square-o" aria-hidden="true" ></i>
+            </button>
+            <button type="button" class="btn btn-default" ng-click="vm.removeStep(step)" ng-disabled="vm.isAddStepFile">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Add Step -->
+
+    <!-- Add New File -->
+    <div class="row" ng-if="vm.shootingModel.resource || vm.isAddFile">
+      <div class="col-sm-3">
+        <label translate="TROUBLESHOOT.ATTACHMENT_FILE"></label><br />
+        <em translate="TROUBLESHOOT.TYPE_SHOOTING_FILE"></em>
+      </div>
+      <div class="col-sm-9 file-content">
+        <div ng-if="!vm.shootingModel.resource">
+          <button type="button" class="btn btn-primary btn-sm"
+                ngf-select="vm.uploadFile(vm.typeFile.SHOOTING)" ngf-multiple="false"
+                ngf-keep="'distinct'" ngf-accept="'.pdf,.doc,.docx'" ng-model="vm.file">
+              <i class="fa fa-upload"></i>
+              <span translate="GENERAL.BROWSE_FILES"></span>
+          </button>
+        </div>
+
+        <div ng-if="vm.shootingModel.resource">
+          <i class="fa fa-paperclip" aria-hidden="true"></i>
+          <span class="file-name" ng-bind="vm.shootingModel.resource.fileName"></span><br />
+          <div class="m-t" ng-if="vm.shootingModel.status.id === vm.shootingStatus.APPROVED">
+            <a class="btn btn-primary btn-sm" href="javascript: void(0)"
+               ng-click="vm.downLoad(vm.shootingModel.resource.fileId)">
+              <i class="fa fa-cloud-download" aria-hidden="true"></i>
+              <span translate="GENERAL.DOWNLOAD"></span>
+            </a>
+          </div>
+          <div class="m-t">
+            <button type="button" class="btn btn-primary btn-sm"
+                ng-if="vm.shootingModel.status.id === vm.shootingStatus.CREATED || vm.shootingModel.status.id === vm.shootingStatus.REJECTED"
+                ngf-select="vm.uploadFile(vm.typeFile.SHOOTING)" ngf-multiple="false"
+                ngf-keep="'distinct'" ngf-accept="'.pdf,.doc,.docx'" ng-model="vm.file">
+              <i class="fa fa-upload"></i>
+              <span translate="GENERAL.CHANGE_FILE"></span>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" ng-click="vm.removeFile(vm.fileType.SHOOTING)"
+              ng-if="vm.shootingModel.status.id === vm.shootingStatus.CREATED || vm.shootingModel.status.id === vm.shootingStatus.REJECTED">
+              <i class="fa fa-trash"></i>
+              <span translate="GENERAL.REMOVE"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Add File -->
+
+    <!-- Not Have Step or File -->
+    <div class="row" ng-if="!vm.isAddStep && !vm.isAddFile">
+      <div class="col-sm-10 col-sm-offset-2 shooting-label">
+        <span translate="TROUBLESHOOT.CLICK"></span>
+        <span class="word-has-function" translate="TROUBLESHOOT.HERE"
+              ngf-select="vm.uploadFile(vm.typeFile.SHOOTING)" ngf-multiple="false"
+              ngf-keep="'distinct'" ngf-accept="'.pdf,.doc,.docx'" ng-model="vm.file"></span>
+        <span translate="TROUBLESHOOT.CLICK_ATTACH_FILE"></span>
+        <em translate="TROUBLESHOOT.TYPE_SHOOTING_FILE"></em><br />
+        <span class="bold-text" translate="GENERAL.OR"></span><br />
+        <span class="word-has-function" translate="TROUBLESHOOT.CLICK_ADD_NEW_STEP" ng-click="vm.isAddStep = true"></span>
+        <span translate="GENERAL.FROM_HERE"></span>
+      </div>
+    </div>
+    <!-- Not Have Step or File -->
+
+  </div>
+
+  <div class="modal-footer">
+    <div class="form-group">
+      <div class="col-sm-12 text-right">
+        <button type="button" class="btn btn-primary btn-sm" ng-click="vm.saveAndApprove()"
+          ng-if="(vm.permission === vm.roleList.ADMIN.value || vm.permission === vm.roleList.APPROVER.value) && (vm.isAddFile || vm.isAddStep) && (vm.shootingModel.status.id === vm.shootingStatus.CREATED)"
+          ng-disabled="(vm.isAddStep && (!vm.steps.length || vm.isAddStepFile)) || (vm.isAddFile && !vm.shootingModel.resource)">
+          <i class="fa fa-check-square-o" aria-hidden="true"></i>
+          <span translate="GENERAL.SAVE_APPROVE"></span>
+        </button>
+
+        <button type="button" class="btn btn-warning btn-sm" ng-click="vm.saveAndRequestToApprove()"
+          ng-if="vm.permission !== vm.roleList.ADMIN.value && vm.permission !== vm.roleList.APPROVER.value && (vm.isAddFile || vm.isAddStep) && (vm.shootingModel.status.id === vm.shootingStatus.CREATED || vm.shootingModel.status.id === vm.shootingStatus.REJECTED)"
+          ng-disabled="(vm.isAddStep && (!vm.steps.length || vm.isAddStepFile)) || (vm.isAddFile && !vm.shootingModel.resource)">
+          <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+          <span translate="GENERAL.SAVE_REQUEST_TO_APPROVE"></span>
+        </button>
+
+        <button class="btn btn-sm btn-danger" type="button" ng-click="vm.deleteShooting()" ng-disabled="vm.isAddStepFile" ng-if="vm.shootingModel.createdBy.id === vm.currentUser.id && (vm.shootingModel.status.id === vm.shootingStatus.CREATED || vm.shootingModel.status.id === vm.shootingStatus.REJECTED)">
+          <i class="fa fa-trash" aria-hidden="true"></i>
+          <span translate="TROUBLESHOOT.DELETE_SHOOTING"></span>
+        </button>
+
+        <button class="btn btn-sm" type="button" ng-click="vm.save()"
+          ng-disabled="(vm.isAddStep && vm.isAddStepFile) || (vm.isAddFile && !vm.shootingModel.resource)">
+          <i class="fa fa-times" aria-hidden="true"></i>
+          <span translate="GENERAL.CLOSE"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

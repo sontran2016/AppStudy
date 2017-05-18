@@ -1,0 +1,114 @@
+﻿<div class="profile">
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="user-profile-info">
+        <img class="profile-avatar" ng-src="{{vm.profileModel.avatarUrl.fileUrl}}" ng-if="vm.profileModel.avatarUrl" />
+        <img class="profile-avatar" ng-src="img/avatars/default-avatar.png" ng-if="!vm.profileModel.avatarUrl" />
+
+        <h2 class="user-name" ng-bind="(vm.profileModel.firstName || '') + ' ' + (vm.profileModel.lastName || '')"></h2>
+
+        <div class="m-t">
+          <button type="button" class="btn btn-primary" ngf-select="vm.uploadFile($file)" ngf-accept="'image/jpeg,image/pjpeg,image/png'">
+            <i class="fa fa-pencil"></i>
+            <span translate="PROFILE.CHANGE_AVATAR"></span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-sm-9">
+      <!--=================================================START: FORM GENERAL INFO===========================================================-->
+
+      <form name="vm.formProfile" novalidate="" ng-submit="vm.updateProfile(vm.profileModel)" class="form-horizontal">
+        <h3 class="heading_a"><span class="heading_text" translate="PROFILE.GENERAL_INFO"></span></h3>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="PROFILE.USERNAME"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control"
+                   placeholder="{{'PROFILE.USERNAME' | translate}}"
+                   name="userName" ng-model="vm.profileModel.userName"
+                   disabled />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.AREA"></label>
+          <div class="col-sm-10">
+            <ul class="inline-block">
+              <li ng-repeat="area in vm.profileModel.areas">
+                <label class="label label-default" ng-bind="area.name"></label>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formProfile.firstName.$invalid && vm.formProfile.firstName.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="PROFILE.FIRST_NAME"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control"
+                   placeholder="{{'PROFILE.FIRST_NAME' | translate}}"
+                   name="firstName" ng-model="vm.profileModel.firstName" required>
+
+            <div class="input-errors" ng-show="vm.formProfile.firstName.$invalid && vm.formProfile.firstName.$dirty">
+              <span ng-show="vm.formProfile.firstName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formProfile.lastName.$invalid && vm.formProfile.lastName.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="PROFILE.LAST_NAME"></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control"
+                   placeholder="{{'PROFILE.LAST_NAME' | translate}}"
+                   name="lastName" ng-model="vm.profileModel.lastName" required>
+
+            <div class="input-errors" ng-show="vm.formProfile.lastName.$invalid && vm.formProfile.lastName.$dirty">
+              <span ng-show="vm.formProfile.lastName.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (vm.formProfile.email.$invalid && vm.formProfile.email.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="PROFILE.EMAIL"></label>
+          <div class="col-sm-10">
+            <input auto-focus type="text" class="form-control" placeholder="Email" ng-model="vm.profileModel.email"
+                   name="email" ng-pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/"
+                   ng-disabled="vm.profileModel.role !== 'admin'"
+                   ng-required="vm.profileModel.role === 'admin'" />
+
+            <div class="input-errors" ng-show="vm.formProfile.email.$invalid && vm.formProfile.email.$dirty">
+              <span ng-show="vm.formProfile.email.$error.required" translate="VALIDATION.REQUIRED"></span>
+              <span ng-show="vm.formProfile.email.$error.pattern" translate="VALIDATION.EMAIL_INVALID"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="PROFILE.PHONE"></label>
+          <div class="col-sm-10">
+            <input type="phone"
+                   class="form-control"
+                   id="inputPhone"
+                   name="phone"
+                   placeholder="{{'PROFILE.PHONE' | translate}}"
+                   numeric-only
+                   ng-model="vm.profileModel.phone">
+
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-2">
+            <button type="submit" class="btn btn-primary" ng-disabled="vm.formProfile.$invalid">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              <span translate="GENERAL.SAVE_CHANGES"></span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+      <!--=================================================START: FORM GENERAL INFO===========================================================-->
+    </div>
+  </div>
+</div>

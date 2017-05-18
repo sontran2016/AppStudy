@@ -1,0 +1,12 @@
+{
+  "LINE": {
+    "HEADING": "LINES MANAGEMENT",
+    "ADD_HEADING": "ADD NEW LINE",
+    "EDIT_HEADING": "EDIT LINE",
+    "BTN_ADD": "New Line",
+    "LINE_CODE": "Line Code",
+    "LINE_NAME": "Line Name",
+    "ENTER_KEYWORD": "- Enter the line name keyword -",
+    "CAN_NOT_EDIT_CODE": "* This line has been assigned to issue(s) so you can not edit line code"
+  }
+}

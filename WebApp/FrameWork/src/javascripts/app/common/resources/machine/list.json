@@ -1,0 +1,58 @@
+{
+  "pageIndex": 1,
+  "pageSize": 10,
+  "totalCount": 8,
+  "totalPages": 1,
+  "hasPreviousPage": true,
+  "hasNextPage": true,
+  "machines": [
+    {
+      "name": "Machine 00001",
+      "description": "Machine 00001",
+      "lineId": 0,
+      "isActive": true
+    },
+    {
+      "name": "Machine 00002",
+      "description": "Machine 00002",
+      "lineId": 0,
+      "isActive": true
+    },
+    {
+      "name": "Machine 00003",
+      "description": "Machine 00003",
+      "lineId": 0,
+      "isActive": true
+    },
+    {
+      "name": "Machine 00004",
+      "description": "Machine 00004",
+      "lineId": 0,
+      "isActive": true
+    },
+    {
+      "name": "Machine 00005",
+      "description": "Machine 00005",
+      "lineId": 0,
+      "isActive": true
+    },
+    {
+      "name": "Machine 00006",
+      "description": "Machine 00006",
+      "lineId": 0,
+      "isActive": true
+    },
+    {
+      "name": "Machine 00007",
+      "description": "Machine 00007",
+      "lineId": 0,
+      "isActive": true
+    },
+    {
+      "name": "Machine 00008",
+      "description": "Machine 00008",
+      "lineId": 0,
+      "isActive": true
+    }
+  ]
+}

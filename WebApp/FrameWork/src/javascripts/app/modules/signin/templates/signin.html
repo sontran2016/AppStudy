@@ -1,0 +1,50 @@
+<div class="login_container">
+    <h3 class="sepH_c text-center">
+        <img src="img/logo-main.png" width="350" >
+        <img ng-src="img/tbs.png" alt="" style="margin-top: -7%;" />
+    </h3>
+
+    <form name="vm.frm" ng-submit="vm.sigin(vm.username, vm.password)" novalidate class="form-horizontal">
+        <h2 class="heading_a" translate="LOGIN.HEADING"></h2>
+
+        <!-- email -->
+        <div class="form-group" ng-class="{'has-error': !vm.frm.username.$valid && vm.frm.username.$dirty}">
+            <label class="col-sm-3 control-label" translate="LOGIN.USERNAME"></label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input auto-focus type="text" class="form-control" placeholder="Username" ng-model="vm.username" required
+                       name="username" aria-describedby="basic-addon2">
+                    <span class="input-group-addon" id="basic-addon2">@pg.com</span>
+                </div>
+                <div class="minH_A">
+                  <span class="help-block" ng-show="vm.frm.username.$dirty && vm.frm.username.$error.required" translate="VALIDATION.REQUIRED">
+                  </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- password -->
+        <div class="form-group" ng-class="{'has-error': !vm.frm.password.$valid && vm.frm.password.$dirty}">
+            <label class="col-sm-3 control-label" translate="LOGIN.PASSWORD"></label>
+            <div class="col-sm-9">
+                <input type="password" class="form-control" placeholder="Password" ng-model="vm.password"
+                       name="password" required>
+                <div class="minH_A">
+                  <span class="help-block" ng-show="vm.frm.password.$dirty && vm.frm.password.$error.required" translate="VALIDATION.REQUIRED">
+                  </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- button signin -->
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+                <button type="submit" class="btn btn-success" ng-disabled="vm.frm.$invalid">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                    <span translate="LOGIN.HEADING"></span>
+                </button> <br /><br />
+                <b><a ui-sref="page.forgotPassword" translate="LOGIN.FORGOT_PASSWORD"></a></b>
+            </div>
+        </div>
+    </form>
+</div>

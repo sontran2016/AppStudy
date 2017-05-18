@@ -1,0 +1,123 @@
+<div class="page-area">
+
+  <div class="page-header">
+    <h1 translate="SYMPTOM.ADD_HEADING"></h1>
+  </div>
+
+  <form class="form-horizontal" name="vm.formAdd" ng-submit="vm.save()">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group" ng-class="{'has-error': (vm.formAdd.description.$invalid && vm.formAdd.description.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="SYMPTOM.DESCRIPTION"></label>
+          <div class="col-sm-10">
+            <textarea rows="8" class="form-control no-resize" name="description"
+                      placeholder="{{'SYMPTOM.DESCRIPTION' | translate}}" 
+                      ng-model="vm.addModel.description" required></textarea>
+
+            <div class="input-errors" ng-show="vm.formAdd.description.$invalid && vm.formAdd.description.$dirty">
+              <span ng-show="vm.formAdd.description.$error.required" translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (!vm.addModel.areaIds.length && vm.formAdd.areaIds.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.AREA"></label>
+          <div class="col-sm-10">
+            <select class="form-control"
+                    kendo-multi-select
+                    name="areaIds"
+                    k-placeholder="'- Select Area(s) -'"
+                    k-data-text-field="'name'"
+                    k-data-value-field="'id'"
+                    k-data-source="vm.areas"
+                    k-ng-model="vm.addModel.areaIds"
+                    ng-model="vm.areaIdstmp"
+                    k-auto-bind="false"
+                    k-change="'vm.filterLines()'">
+            </select>
+            <div class="input-errors" ng-show="!vm.addModel.areaIds.length && vm.formAdd.areaIds.$dirty">
+              <span translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error': (!vm.addModel.lineIds.length && vm.formAdd.lineIds.$dirty)}">
+          <label class="col-sm-2 control-label req" translate="GENERAL.LINE"></label>
+          <div class="col-sm-10">
+            <select kendo-multi-select
+                    class="form-control"
+                    name="lineIds"
+                    k-placeholder="'- Select Line(s) -'"
+                    k-data-text-field="'name'"
+                    k-data-value-field="'id'"
+                    k-data-source="vm.lineList"
+                    k-ng-model="vm.addModel.lineIds"
+                    ng-model="vm.lineIdstmp"
+                    k-change="'vm.filterMachines()'">
+            </select>
+            <div class="input-errors" ng-show="!vm.addModel.lineIds.length && vm.formAdd.lineIds.$dirty">
+              <span translate="VALIDATION.REQUIRED"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.MACHINE"></label>
+          <div class="col-sm-10">
+            <select kendo-multi-select
+                    class="form-control"
+                    name="machineIds"
+                    k-placeholder="'- Select Machine(s) -'"
+                    k-data-text-field="'name'"
+                    k-data-value-field="'id'"
+                    k-data-source="vm.machineList"
+                    k-ng-model="vm.addModel.machineIds"
+                    k-change="'vm.filterComponents()'"
+                    ng-model="vm.machineIdstmp">
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" translate="GENERAL.COMPONENT"></label>
+          <div class="col-sm-10">
+            <select kendo-multi-select
+                    class="form-control"
+                    name="componentIds"
+                    k-placeholder="'- Select Component(s) -'"
+                    k-data-text-field="'name'"
+                    k-data-value-field="'id'"
+                    k-data-source="vm.componentList"
+                    k-ng-model="vm.addModel.componentIds"
+                    ng-model="vm.componentIdstmp">
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel-footer">
+        <div class="row">
+          <div class="col-sm-6">
+            <a ui-sref="app.symptom" class="btn btn-default">
+              <i class="fa fa-chevron-left" aria-hidden="true"></i>
+              <span translate="GENERAL.BACK"></span>
+            </a>
+          </div>
+
+          <div class="col-sm-6 text-right">
+            <input type="checkbox" icheck name="isAnother" ng-model="vm.addAnother">
+            <span translate="GENERAL.ADD_ANOTHER"></span>
+
+            <button type="submit" class="btn btn-success btn-have-left" ng-disabled="vm.formAdd.$invalid || !vm.addModel.areaIds.length || !vm.addModel.lineIds.length">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              <span translate="GENERAL.SAVE"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+</div>

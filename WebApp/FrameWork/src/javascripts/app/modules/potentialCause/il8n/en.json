@@ -1,0 +1,11 @@
+{
+  "POTENTIAL_CAUSE": {
+    "HEADING": "POTENTIAL CAUSES MANAGEMENT",
+    "ADD_HEADING": "ADD NEW POTENTIAL CAUSE",
+    "EDIT_HEADING": "EDIT POTENTIAL CAUSE",
+    "BTN_ADD": "New Potential Cause",
+    "CHOOSE_POTENTIAL_CAUSE": "New Issue - Choose Potential Cause",
+    "TYPE_TO_SELECT_SYMPTOMS": "- Select Symptom -",
+    "ENTER_KEYWORD": "- Enter the potential cause keyword -"
+  }
+}
