@@ -1,0 +1,14 @@
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\bin\Debug\WpfPureMvc.exe.config
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\bin\Debug\WpfPureMvc.exe
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\bin\Debug\WpfPureMvc.pdb
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\obj\Debug\WpfPureMvc.csprojResolveAssemblyReference.cache
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\obj\Debug\MainWindow.g.cs
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\obj\Debug\App.g.cs
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\obj\Debug\WpfPureMvc_MarkupCompile.cache
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\obj\Debug\WpfPureMvc_MarkupCompile.lref
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\obj\Debug\MainWindow.baml
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\obj\Debug\WpfPureMvc.g.resources
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\obj\Debug\WpfPureMvc.Properties.Resources.resources
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\obj\Debug\WpfPureMvc.csproj.GenerateResource.Cache
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\obj\Debug\WpfPureMvc.exe
+C:\SonTran\Example\WpfApp\WpfPureMvc\WpfPureMvc\obj\Debug\WpfPureMvc.pdb
