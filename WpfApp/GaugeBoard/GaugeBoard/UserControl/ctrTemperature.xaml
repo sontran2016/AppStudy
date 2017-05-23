@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="GaugeBoard.ctrTemperature"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GaugeBoard"
+             mc:Ignorable="d" SizeChanged="UserControl_SizeChanged" Width="120">
+    <Canvas>
+        <Grid HorizontalAlignment="Left" Margin="30,10,0,0">
+            <Canvas>
+                <StackPanel>
+                    <Ellipse Width="14" Height="14" Stroke="Black" StrokeThickness="1" Fill="Transparent" Margin="3,0,0,0" HorizontalAlignment="Left">
+                        <Ellipse.Clip>
+                            <RectangleGeometry Rect="0 0 17 7"/>
+                        </Ellipse.Clip>
+                    </Ellipse>
+                    <StackPanel Name="TempHeight" Orientation="Horizontal" Margin="0,-7,0,0" Height="200">
+                        <Rectangle Fill="Black" Width="1" Margin="3,0,0,0" Panel.ZIndex="1"></Rectangle>
+                        <Rectangle Fill="Black" Width="1" Margin="12,0,0,0" Panel.ZIndex="1"></Rectangle>
+                        <Rectangle Name="ValueFilter1" Width="14" Height="30" Fill="Green" Stroke="Transparent" StrokeThickness="1" VerticalAlignment="Bottom" Margin="-14,0,0,0"></Rectangle>
+
+                        <Rectangle Fill="Black" Width="1" Margin="12,0,0,0"></Rectangle>
+                        <Canvas Name="Rule1" Height="200" Width="20">
+                        </Canvas>
+                    </StackPanel>
+                    <Ellipse Name="ValueFilter2" Width="20" Height="20" Stroke="Black" StrokeThickness="1" Fill="Green" Margin="0,-4,0,0" HorizontalAlignment="Left">
+                        <Ellipse.Clip>
+                            <RectangleGeometry Rect="0 3 20 20" />
+                        </Ellipse.Clip>
+                    </Ellipse>
+                    <TextBlock Name="Value1" Text="49oC" FontWeight="Bold" Margin="0,4"></TextBlock>
+                </StackPanel>
+            </Canvas>
+        </Grid>
+
+    </Canvas>
+</UserControl>
