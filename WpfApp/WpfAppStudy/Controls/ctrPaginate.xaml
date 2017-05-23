@@ -10,7 +10,7 @@
             <Setter Property="MinWidth" Value="26"></Setter>
             <Setter Property="MinHeight" Value="26"></Setter>
             <Setter Property="Margin" Value="2"></Setter>
-            <Setter Property="BorderBrush" Value="#4CAF50"/>
+            <Setter Property="BorderBrush" Value="#8ebc00"/>
             <Style.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="13"/>
@@ -18,11 +18,11 @@
             </Style.Resources>
         </Style>
         <Style x:Key="styleButtonActive" TargetType="Button">
-            <Setter Property="Background" Value="#4CAF50"></Setter>
+            <Setter Property="Background" Value="#8ebc00"></Setter>
             <Setter Property="MinWidth" Value="26"></Setter>
             <Setter Property="MinHeight" Value="26"></Setter>
             <Setter Property="Margin" Value="2"></Setter>
-            <Setter Property="BorderBrush" Value="#4CAF50"/>
+            <Setter Property="BorderBrush" Value="#8ebc00"/>
             <Style.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="13"/>
