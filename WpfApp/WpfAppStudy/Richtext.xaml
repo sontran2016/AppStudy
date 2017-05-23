@@ -11,7 +11,7 @@
         <CommandBinding Command="ApplicationCommands.Save" Executed="Save_Executed" />
     </Window.CommandBindings>
     <DockPanel>
-        <ToolBar DockPanel.Dock="Top">
+        <ToolBar Name="bar1" DockPanel.Dock="Top" ToolBarTray.IsLocked="True" Loaded="bar1_Loaded">
             <Button Command="ApplicationCommands.Open">
                 <Image Source="/Image/folder-open.ico" Width="16" Height="16" />
             </Button>

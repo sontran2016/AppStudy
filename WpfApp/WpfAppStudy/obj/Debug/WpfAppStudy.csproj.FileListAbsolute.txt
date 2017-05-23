@@ -46,3 +46,7 @@ C:\SonTran\Example\WpfApp\WpfAppStudy\obj\Debug\DatagridDetail.g.cs
 C:\SonTran\Example\WpfApp\WpfAppStudy\obj\Debug\DatagridDetail.baml
 C:\SonTran\Example\WpfApp\WpfAppStudy\obj\Debug\Richtext.g.cs
 C:\SonTran\Example\WpfApp\WpfAppStudy\obj\Debug\Richtext.baml
+C:\SonTran\Example\WpfApp\WpfAppStudy\obj\Debug\Controls\ctrPaginate.g.cs
+C:\SonTran\Example\WpfApp\WpfAppStudy\obj\Debug\Paginate.g.cs
+C:\SonTran\Example\WpfApp\WpfAppStudy\obj\Debug\Controls\ctrPaginate.baml
+C:\SonTran\Example\WpfApp\WpfAppStudy\obj\Debug\Paginate.baml

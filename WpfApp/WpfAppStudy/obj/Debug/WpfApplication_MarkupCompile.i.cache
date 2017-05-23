@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\SonTran\Example\WpfApp\WpfAppStudy\App.xaml
-81238602675
+101111787927
 
-13-888071225
+17248513171
 15-1328873539
-Binding.xaml;Datagrid.xaml;DatagridDetail.xaml;Listview.xaml;ListviewSort.xaml;MainWindow.xaml;PingAsync.xaml;Richtext.xaml;
+Binding.xaml;Controls\ctrPaginate.xaml;Datagrid.xaml;DatagridDetail.xaml;Listview.xaml;ListviewSort.xaml;MainWindow.xaml;Paginate.xaml;PingAsync.xaml;Richtext.xaml;
 
 False
 

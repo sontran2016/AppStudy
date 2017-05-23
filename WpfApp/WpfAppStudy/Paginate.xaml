@@ -1,0 +1,36 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication"
+        xmlns:Controls="clr-namespace:WpfApplication.Controls" x:Class="WpfApplication.Paginate"
+        mc:Ignorable="d"
+        Title="Paginate" Height="389" Width="584" WindowStartupLocation="CenterScreen">
+    <StackPanel>
+        <ListView Name="lvData" Height="304">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="No" Width="50" DisplayMemberBinding="{Binding No}"></GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Name}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Name" Click="lvDataColumnHeader_Click">Name</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="80" DisplayMemberBinding="{Binding Age}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Age" Click="lvDataColumnHeader_Click">Age</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="80" DisplayMemberBinding="{Binding Sex}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Sex" Click="lvDataColumnHeader_Click">Sex</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Controls:CtrPaginate x:Name="CtrPaginate1"  HorizontalAlignment="Left" Margin="5" />
+        
+    </StackPanel>
+</Window>

@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="WpfApplication.Controls.CtrPaginate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApplication.Controls"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="MinWidth" Value="26"></Setter>
+            <Setter Property="MinHeight" Value="26"></Setter>
+            <Setter Property="Margin" Value="2"></Setter>
+            <Style.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="13"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style x:Key="styleButtonActive" TargetType="Button">
+            <Setter Property="Background" Value="CadetBlue"></Setter>
+            <Setter Property="MinWidth" Value="26"></Setter>
+            <Setter Property="MinHeight" Value="26"></Setter>
+            <Setter Property="Margin" Value="2"></Setter>
+            <Style.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="13"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel Orientation="Horizontal">
+        <Button Name="btnFirst" Click="Btn_OnClick" Focusable="False">
+            <StackPanel Focusable="False">
+                <Image Source="../Image/CaretFirst.png" Width="16" Height="16"/>
+            </StackPanel>
+        </Button>
+        <Button Name="btnPrevious" Click="Btn_OnClick">
+            <Image Source="../Image/CaretPrevious.png" Width="16" Height="16" />
+        </Button>
+        <Button Name="btnPreGroup" Click="Btn_OnClick">
+            <Image Source="../Image/CaretMore.png" Width="16" Height="16" />
+        </Button>
+        <StackPanel Name="panelNumber" Orientation="Horizontal">
+            <Button Content="4" Click="Btn_OnClick"></Button>
+            <Button Content="5" Click="Btn_OnClick" Style="{StaticResource styleButtonActive}"></Button>
+            <Button Content="6" Click="Btn_OnClick"></Button>
+        </StackPanel>
+        <Button Name="btnNextGroup" Click="Btn_OnClick">
+            <Image Source="../Image/CaretMore.png" Width="16" Height="16" />
+        </Button>
+        <Button Name="btnNext" Click="Btn_OnClick">
+            <Image Source="../Image/CaretNext.png" Width="16" Height="16" />
+        </Button>
+        <Button Name="btnLast" Click="Btn_OnClick">
+            <Image Source="../Image/CaretEnd.png" Width="16" Height="16" />
+        </Button>
+        <ComboBox Name="cboPageSize" Width="50" Height="26" IsEditable="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                  ToolTip="Rows per page" Margin="2,0" DropDownClosed="CboPageSize_OnDropDownClosed" KeyUp="cboPageSize_KeyUp" 
+                  LostFocus="cboPageSize_LostFocus" >
+            <ComboBox.Items>
+                <TextBlock>10</TextBlock>
+                <TextBlock>15</TextBlock>
+                <TextBlock>20</TextBlock>
+                <TextBlock>30</TextBlock>
+                <TextBlock>50</TextBlock>
+                <TextBlock>100</TextBlock>
+            </ComboBox.Items>
+        </ComboBox>
+        <TextBox Name="txtPageIndex" Width="50" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="2,0" 
+                 KeyUp="txtPageIndex_KeyUp" LostFocus="txtPageIndex_LostFocus">21</TextBox>
+        <TextBlock Name="tboxPages" Text="of 99 pages" VerticalAlignment="Center" Margin="2,0"></TextBlock>
+    </StackPanel>
+</UserControl>

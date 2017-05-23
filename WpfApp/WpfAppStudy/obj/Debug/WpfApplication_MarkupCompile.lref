@@ -1,11 +1,13 @@
 ﻿
 FC:\SonTran\Example\WpfApp\WpfAppStudy\App.xaml;;
 FC:\SonTran\Example\WpfApp\WpfAppStudy\Binding.xaml;;
+FC:\SonTran\Example\WpfApp\WpfAppStudy\Controls\ctrPaginate.xaml;;
 FC:\SonTran\Example\WpfApp\WpfAppStudy\Datagrid.xaml;;
 FC:\SonTran\Example\WpfApp\WpfAppStudy\DatagridDetail.xaml;;
 FC:\SonTran\Example\WpfApp\WpfAppStudy\Listview.xaml;;
 FC:\SonTran\Example\WpfApp\WpfAppStudy\ListviewSort.xaml;;
 FC:\SonTran\Example\WpfApp\WpfAppStudy\MainWindow.xaml;;
+FC:\SonTran\Example\WpfApp\WpfAppStudy\Paginate.xaml;;
 FC:\SonTran\Example\WpfApp\WpfAppStudy\PingAsync.xaml;;
 FC:\SonTran\Example\WpfApp\WpfAppStudy\Richtext.xaml;;
 

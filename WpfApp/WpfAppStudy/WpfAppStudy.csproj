@@ -66,10 +66,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ctrPaginate.xaml.cs">
+      <DependentUpon>ctrPaginate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IUser.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Paginate.xaml.cs">
+      <DependentUpon>Paginate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Richtext.xaml.cs">
       <DependentUpon>Richtext.xaml</DependentUpon>
     </Compile>
     <Page Include="Binding.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ctrPaginate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -116,6 +128,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Paginate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PingAsync.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -175,6 +191,15 @@
     <Resource Include="Image\TextBold.png" />
     <Resource Include="Image\TextItalic.png" />
     <Resource Include="Image\TextUnderline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\CaretEnd.png" />
+    <Resource Include="Image\CaretFirst.png" />
+    <Resource Include="Image\CaretNext.png" />
+    <Resource Include="Image\CaretPrevious.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\CaretMore.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

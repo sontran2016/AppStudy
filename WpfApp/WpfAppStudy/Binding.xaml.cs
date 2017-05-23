@@ -112,33 +112,34 @@ namespace WpfApplication
             var biding = txtName.GetBindingExpression(TextBox.TextProperty);
             biding.UpdateSource();
         }
-    }
-    public class User : INotifyPropertyChanged
-    {
-        public string Mail { get; set; }
-        public int Age { get; set; }
-
-        private string name;
-        public string Name
+        public class User : INotifyPropertyChanged
         {
-            get { return this.name; }
-            set
+            public string Mail { get; set; }
+            public int Age { get; set; }
+
+            private string name;
+            public string Name
             {
-                if (this.name != value)
+                get { return this.name; }
+                set
                 {
-                    this.name = value;
-                    this.NotifyPropertyChanged("Name");
+                    if (this.name != value)
+                    {
+                        this.name = value;
+                        this.NotifyPropertyChanged("Name");
+                    }
                 }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public void NotifyPropertyChanged(string propName)
+            {
+                if (this.PropertyChanged != null)
+                    this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void NotifyPropertyChanged(string propName)
-        {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
-        }
     }
 
 }
