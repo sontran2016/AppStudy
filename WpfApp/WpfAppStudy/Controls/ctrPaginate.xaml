@@ -17,7 +17,7 @@
             </Style.Resources>
         </Style>
         <Style x:Key="styleButtonActive" TargetType="Button">
-            <Setter Property="Background" Value="CadetBlue"></Setter>
+            <Setter Property="Background" Value="#4CAF50"></Setter>
             <Setter Property="MinWidth" Value="26"></Setter>
             <Setter Property="MinHeight" Value="26"></Setter>
             <Setter Property="Margin" Value="2"></Setter>
