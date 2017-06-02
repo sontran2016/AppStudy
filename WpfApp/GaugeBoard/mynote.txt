@@ -1,0 +1,24 @@
+https://www.codeproject.com/articles/38361/circular-gauge-custom-control-for-silverlight-3-an
+https://www.codeproject.com/Articles/274318/Line-Graph-Component-in-Csharp
+http://dashboarding.codeplex.com/
+{C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Silverlight and WPF Dashboards\Source}
+https://help.syncfusion.com/wpf/sfchart/legend
+http://www.ni.com/example/29739/en/
+https://www.essentialobjects.com
+
+http://nuget.syncfusion.com/wpf
+Syncfusion WPF Packages
+
+xmlns:gauges ="clr-namespace:Syncfusion.UI.Xaml.Gauges;assembly=Syncfusion.SfGauge.Wpf"
+<gauges:SfLinearGauge/>
+        
+xmlns:syncfusion="clr-namespace:WpfFeatureTour;assembly=WpfFeatureTour"
+StartAngle="-65" EndAngle="247"
+
+xmlns:sync="clr-namespace:Syncfusion.UI.Xaml.Charts;assembly=Syncfusion.SfChart.WPF"
+xmlns:sync="http://schemas.syncfusion.com/wpf"
+
+//
+xmlns:local="http://schemas.AvalonControls/AvalonControlsLibrary/Controls"
+xmlns:local="clr-namespace:WpfApp1"
+        
